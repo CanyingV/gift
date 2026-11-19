@@ -685,7 +685,7 @@
     function renderStats(app) {
         const people = data.people || [], expenses = data.expenses || [];
         const income = sum(people, 'amount'), out = sum(expenses, 'amount');
-        app.innerHTML = pageHead('INSIGHTS','收支统计','看看心意都流向了哪里。', `<button class="btn ghost" data-action="import">${icon('upload')} 导入 Excel</button><button class="btn primary" data-action="export">${icon('download')} 导出 Excel</button>`) + `
+        app.innerHTML = pageHead('INSIGHTS','收支统计','看看心意都流向了哪里。', `<button class="btn ghost" data-action="import">${icon('download')} 导入 Excel</button><button class="btn primary" data-action="export">${icon('upload')} 导出 Excel</button>`) + `
             <div class="summary-band">
                 <div class="summary-item"><span>收礼总额</span><b class="income">${money(income)}</b></div>
                 <div class="summary-item"><span>随礼总额</span><b class="expense">${money(out)}</b></div>
@@ -758,7 +758,7 @@
     }
 
     function exportDialog() {
-        showModal(`<div class="modal-head"><div class="modal-icon">${icon('download')}</div><div><h3>导出 Excel</h3><p>选择需要下载的数据文件</p></div></div>
+        showModal(`<div class="modal-head"><div class="modal-icon">${icon('upload')}</div><div><h3>导出 Excel</h3><p>选择需要下载的数据文件</p></div></div>
             <div class="export-list">
                 <a class="export-item" href="/api/export/bills" download="礼单.xlsx">
                     <div class="export-icon red">${icon('gift')}</div>
@@ -775,7 +775,7 @@
     }
 
     function importDialog() {
-        showModal(`<div class="modal-head"><div class="modal-icon">${icon('upload')}</div><div><h3>导入 Excel</h3><p>按导出文件的格式导入，重复记录会自动跳过</p></div></div>
+        showModal(`<div class="modal-head"><div class="modal-icon">${icon('download')}</div><div><h3>导入 Excel</h3><p>按导出文件的格式导入，重复记录会自动跳过</p></div></div>
             <div class="export-list">
                 <div class="export-item">
                     <div class="export-icon red">${icon('gift')}</div>
