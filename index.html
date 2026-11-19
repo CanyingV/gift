@@ -760,12 +760,12 @@
     function exportDialog() {
         showModal(`<div class="modal-head"><div class="modal-icon">${icon('upload')}</div><div><h3>导出 Excel</h3><p>选择需要下载的数据文件</p></div></div>
             <div class="export-list">
-                <a class="export-item" href="/api/export/bills" download="礼单.xlsx">
+                <a class="export-item" href="/api/export/bills" download="礼单.xlsx" data-action="dl" data-url="/api/export/bills" data-name="礼单.xlsx">
                     <div class="export-icon red">${icon('gift')}</div>
                     <div class="export-txt"><b>礼单.xlsx</b><small>礼单汇总 + 全部明细（按日期倒序）</small></div>
                     ${icon('chevron')}
                 </a>
-                <a class="export-item" href="/api/export/expenses" download="随礼.xlsx">
+                <a class="export-item" href="/api/export/expenses" download="随礼.xlsx" data-action="dl" data-url="/api/export/expenses" data-name="随礼.xlsx">
                     <div class="export-icon green">${icon('out')}</div>
                     <div class="export-txt"><b>随礼.xlsx</b><small>全部随礼记录（按日期倒序）</small></div>
                     ${icon('chevron')}
@@ -790,7 +790,7 @@
                     <input type="file" id="file-expenses" accept=".xlsx" hidden>
                 </div>
             </div>
-            <div class="import-tip">没有文件？<a href="/api/template/bills" download="礼单模板.xlsx">下载礼单模板</a> · <a href="/api/template/expenses" download="随礼模板.xlsx">下载随礼模板</a>（格式与导出一致）</div>
+            <div class="import-tip">没有文件？<a href="/api/template/bills" download="礼单模板.xlsx" data-action="dl" data-url="/api/template/bills" data-name="礼单模板.xlsx">下载礼单模板</a> · <a href="/api/template/expenses" download="随礼模板.xlsx" data-action="dl" data-url="/api/template/expenses" data-name="随礼模板.xlsx">下载随礼模板</a>（格式与导出一致）</div>
             <div class="modal-foot"><button class="btn ghost" data-close>关闭</button></div>`);
         ['bills', 'expenses'].forEach(kind => {
             const input = $('#file-' + kind);
@@ -834,6 +834,30 @@
             await load();
         } catch (e) {
             toast(e.message || '导入失败', true);
+        }
+    }
+
+    async function downloadFile(url, name) {
+        const api = window.pywebview && window.pywebview.api;
+        if (api && (api.save_file || api.saveFile)) {
+            try {
+                const r = await fetch(url);
+                const blob = await r.blob();
+                const buf = await blob.arrayBuffer();
+                const bytes = new Uint8Array(buf);
+                let bin = '', chunk = 0x8000;
+                for (let i = 0; i < bytes.length; i += chunk)
+                    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+                const res = await (api.save_file || api.saveFile)(name, btoa(bin));
+                if (res && res.ok) toast('已保存到下载目录：' + name);
+                else throw new Error((res && res.error) || '保存失败');
+            } catch (e) {
+                toast('导出失败：' + (e.message || e), true);
+            }
+        } else {
+            const a = document.createElement('a');
+            a.href = url; a.download = name;
+            document.body.appendChild(a); a.click(); a.remove();
         }
     }
 
@@ -957,6 +981,7 @@
 
         if (a === 'export') { exportDialog(); return; }
         if (a === 'import') { importDialog(); return; }
+        if (a === 'dl') { e.preventDefault(); downloadFile(el.dataset.url, el.dataset.name); return; }
         if (a === 'pick-file') { $('#file-' + el.dataset.kind).click(); return; }
         if (a === 'new-bill') addBill();
         else if (a === 'new-expense') addExpense();

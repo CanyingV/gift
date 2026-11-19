@@ -46,6 +46,29 @@ def pick_port():
     return port
 
 
+class Api:
+    """供前端 JS 调用：WKWebView 不支持 <a download>，改由 Python 落盘。"""
+
+    def save_file(self, filename, base64data):
+        import base64
+        try:
+            data = base64.b64decode(base64data)
+            name = os.path.basename(str(filename or '')) or 'export.xlsx'
+            home = os.path.expanduser('~')
+            downloads = os.path.join(home, 'Downloads')
+            if not os.path.isdir(downloads):
+                downloads = user_data_dir()
+            path = os.path.join(downloads, name)
+            with open(path, 'wb') as f:
+                f.write(data)
+            return {'ok': True, 'path': path}
+        except Exception as e:
+            return {'ok': False, 'error': str(e)}
+
+    # 兼容不同 pywebview 版本的方法名转换
+    saveFile = save_file
+
+
 def main():
     prepare()
     import app  # 必须在设置环境变量之后导入
@@ -57,7 +80,7 @@ def main():
 
     import webview
     webview.create_window('礼记', 'http://127.0.0.1:%d/' % port,
-                          width=1240, height=820, min_size=(900, 600))
+                          width=1240, height=820, min_size=(900, 600), js_api=Api())
     try:
         webview.start()
     finally:
