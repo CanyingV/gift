@@ -210,13 +210,27 @@ def norm_money(v):
         return 0.0
 
 
+def norm_date(v):
+    """把 2026/11/11、2026.11.11、2026年11月11日 等统一成 2026-11-11。"""
+    s = str(v or '').strip()
+    if not s:
+        return ''
+    m = re.match(r'^(\d{4})\s*[/\-.年]\s*(\d{1,2})\s*[/\-.月]\s*(\d{1,2})\s*日?$', s)
+    if m:
+        y, mo, d = m.groups()
+        return '%04d-%02d-%02d' % (int(y), int(mo), int(d))
+    return s
+
+
 def find_header(rows, keys):
-    """在前若干行里找同时包含 keys 的表头，返回 (行号, {列名: 列号})。"""
+    """在前若干行里找同时包含 keys 的表头，返回 (行号, {列名: 列号})。
+    cols 收集该行所有非空表头，便于按列名读取任意列（分类/关系/备注等），
+    keys 只用来判定哪一行是表头。"""
     for i, row in enumerate(rows[:12]):
         cols = {}
         for j, cell in enumerate(row):
             name = str(cell).strip()
-            if name in keys and name not in cols:
+            if name and name not in cols:
                 cols[name] = j
         if all(k in cols for k in keys):
             return i, cols
@@ -263,7 +277,7 @@ def import_bill_rows(data, c):
                 name = cell('礼单名称')
                 if not name or name.startswith('示例'):
                     continue
-                date = cell('日期')
+                date = norm_date(cell('日期'))
                 if c.execute('SELECT 1 FROM gift WHERE name=?', (name,)).fetchone():
                     stat['skipped'] += 1
                     continue
@@ -280,7 +294,7 @@ def import_bill_rows(data, c):
                 bill_name, guest = cell('礼单'), cell('来客')
                 if not bill_name or not guest or guest.startswith('示例'):
                     continue
-                date = cell('日期')
+                date = norm_date(cell('日期'))
                 bill = c.execute('SELECT id FROM gift WHERE name=?', (bill_name,)).fetchone()
                 if bill:
                     bid = bill[0]
@@ -327,7 +341,7 @@ def import_expense_rows(data, c):
         name = cell('姓名')
         if not name or name.startswith('示例'):
             continue
-        date = cell('日期')
+        date = norm_date(cell('日期'))
         amount = norm_money(cell('金额'))
         rid = get_or_create(c, 'relation', cell('关系'), rel_created)
         cid = get_or_create(c, 'cate', cell('分类'), cate_created)
