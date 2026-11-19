@@ -1,4 +1,4 @@
-"""礼单管家桌面版入口：用原生窗口承载本地 HTTP 服务。"""
+"""礼记桌面版入口：用原生窗口承载本地 HTTP 服务。"""
 import os
 import sys
 import shutil
@@ -13,7 +13,7 @@ def resource_path(rel=''):
 
 
 def user_data_dir():
-    name = '礼单管家'
+    name = '礼记'
     if sys.platform == 'win32':
         base = os.environ.get('APPDATA') or os.path.expanduser('~')
     elif sys.platform == 'darwin':
@@ -56,7 +56,7 @@ def main():
     threading.Thread(target=server.serve_forever, daemon=True).start()
 
     import webview
-    webview.create_window('礼单管家', 'http://127.0.0.1:%d/' % port,
+    webview.create_window('礼记', 'http://127.0.0.1:%d/' % port,
                           width=1240, height=820, min_size=(900, 600))
     try:
         webview.start()

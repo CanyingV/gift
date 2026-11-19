@@ -1,4 +1,4 @@
-"""在 Android 进程内启动礼单管家本地服务，立即返回监听端口。"""
+"""在 Android 进程内启动礼记本地服务，立即返回监听端口。"""
 import os
 import socket
 import threading

@@ -1,8 +1,17 @@
 # -*- mode: python ; coding: utf-8 -*-
 """PyInstaller 打包配置：Windows 生成 exe，macOS 生成 app bundle（再打 dmg）。"""
 import platform
+import os
 
 is_mac = platform.system() == 'Darwin'
+# 图标文件：优先按 spec 所在目录定位，若 __file__ 不可用则回退到当前工作目录
+try:
+    _base = os.path.dirname(os.path.abspath(__file__))
+except NameError:
+    _base = os.getcwd()
+ICON_DIR = os.path.join(_base, 'app_icons')
+ICO = os.path.join(ICON_DIR, 'icon.ico')
+ICNS = os.path.join(ICON_DIR, 'icon.icns')
 
 a = Analysis(
     ['desktop.py'],
@@ -24,19 +33,19 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='礼单管家',
+    name='礼记',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=False,
     console=False,
-    icon=None,
+    icon=ICNS if is_mac else ICO,
 )
 
 if is_mac:
     app = BUNDLE(
         exe,
-        name='礼单管家.app',
-        icon=None,
+        name='礼记.app',
+        icon=ICNS,
         bundle_identifier='com.giftmanager.desktop',
     )

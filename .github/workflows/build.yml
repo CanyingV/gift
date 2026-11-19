@@ -23,8 +23,8 @@ jobs:
       - name: 上传产物
         uses: actions/upload-artifact@v4
         with:
-          name: 礼单管家-Windows-exe
-          path: dist/礼单管家.exe
+          name: 礼记-Windows-exe
+          path: dist/礼记.exe
 
   build-dmg:
     name: macOS dmg
@@ -43,16 +43,16 @@ jobs:
           # 标准结构：App + 指向 /Applications 的软链接，打开后可拖入安装
           rm -rf dist/dmg-staging
           mkdir -p dist/dmg-staging
-          cp -R "dist/礼单管家.app" dist/dmg-staging/
+          cp -R "dist/礼记.app" dist/dmg-staging/
           ln -s /Applications dist/dmg-staging/Applications
-          hdiutil create -volname "礼单管家" \
+          hdiutil create -volname "礼记" \
             -srcfolder dist/dmg-staging \
-            -ov -format UDZO "dist/礼单管家.dmg"
+            -ov -format UDZO "dist/礼记.dmg"
       - name: 上传产物
         uses: actions/upload-artifact@v4
         with:
-          name: 礼单管家-macOS-dmg
-          path: dist/礼单管家.dmg
+          name: 礼记-macOS-dmg
+          path: dist/礼记.dmg
 
   build-apk:
     name: Android apk
@@ -79,8 +79,8 @@ jobs:
       - name: 上传产物
         uses: actions/upload-artifact@v4
         with:
-          name: 礼单管家-Android-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: 礼记-Android-apk
+          path: android/app/build/outputs/apk/debug/礼记.apk
 
   release:
     name: 发布 Release
@@ -100,20 +100,20 @@ jobs:
       - name: 发布到 Release（公开下载）
         uses: softprops/action-gh-release@v2
         with:
-          name: 礼单管家 ${{ github.ref_name }}
+          name: 礼记 ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
           body: |
-            ## 礼单管家 ${{ github.ref_name }}
+            ## 礼记 ${{ github.ref_name }}
 
             三个平台的安装包：
 
-            - **Windows**：下载 `礼单管家.exe` 双击安装
-            - **macOS**：下载 `礼单管家.dmg`，打开后拖入「应用程序」；首次打开若被拦截，去「系统设置 → 隐私与安全性」点「仍要打开」
-            - **Android**：下载 `app-debug.apk` 传到手机安装（需允许安装未知来源应用；debug 签名，仅供自行使用）
+            - **Windows**：下载 `礼记.exe` 双击安装
+            - **macOS**：下载 `礼记.dmg`，打开后拖入「应用程序」；首次打开若被拦截，去「系统设置 → 隐私与安全性」点「仍要打开」
+            - **Android**：下载 `礼记.apk` 传到手机安装（需允许安装未知来源应用；debug 签名，仅供自行使用）
 
             数据保存在本机，安装包内置初始示例数据。
           files: |
-            dist/礼单管家.exe
-            dist/礼单管家.dmg
-            dist/app-debug.apk
+            dist/礼记.exe
+            dist/礼记.dmg
+            dist/礼记.apk
           fail_on_unmatched_files: false
