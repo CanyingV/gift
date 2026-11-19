@@ -252,6 +252,15 @@
     .field input,.field select{font-size:14px;font-weight:500}
     .modal-foot{display:flex;justify-content:flex-end;gap:9px;padding:14px 24px 22px;border-top:1px solid var(--line)}
     .confirm-text{padding:8px 24px 4px;color:#5f6a61;font-size:13px;line-height:1.7}
+    .export-list{padding:6px 20px 14px;display:flex;flex-direction:column;gap:9px}
+    .export-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;text-decoration:none;color:inherit;background:var(--surface-2);transition:border-color .15s,transform .15s}
+    .export-item:hover{border-color:var(--primary);transform:translateY(-1px)}
+    .export-item > .ico:last-child{margin-left:auto;color:var(--muted)}
+    .export-icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none}
+    .export-icon.red{background:#f6e8e3;color:#b4533a}
+    .export-icon.green{background:#e4f0e9;color:#2f7a63}
+    .export-txt b{display:block;font-size:13px}
+    .export-txt small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
     .toast{
         position:fixed;left:50%;bottom:32px;transform:translateX(-50%);z-index:90;
         display:flex;align-items:center;gap:8px;padding:11px 17px;border-radius:12px;
@@ -353,6 +362,7 @@
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></symbol>
     <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></symbol>
     <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/><path d="M19 16l.7 1.8L21.5 18l-1.8.7L19 20.5l-.7-1.8-1.8-.7 1.8-.7L19 16Z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7.5 10.5 12 15l4.5-4.5"/><path d="M4 17.5V20h16v-2.5"/></symbol>
 </svg>
 
 <div class="app">
@@ -602,7 +612,7 @@
             <section class="card">
                 <div class="card-head"><div><div class="card-title">礼单明细</div><div class="card-sub">${ps.length} 条记录</div></div>
                     <div class="toolbar" style="margin:0">
-                        <div class="search" style="flex:0 0 200px">${icon('search')}<input class="input" id="person-search" placeholder="搜索姓名 / 关系 / 备注" value="${esc(state.personQ)}"></div>
+                        <div class="search" style="flex:0 0 200px">${icon('search')}<input class="input" id="person-search" placeholder="姓名 / 备注" value="${esc(state.personQ)}"></div>
                         <select class="select" id="person-rel"><option value="">全部关系</option>${(data.relations||[]).map(r => `<option value="${r.id}" ${state.personRel == r.id ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
                     </div>
                 </div>
@@ -683,7 +693,7 @@
     function renderStats(app) {
         const people = data.people || [], expenses = data.expenses || [];
         const income = sum(people, 'amount'), out = sum(expenses, 'amount');
-        app.innerHTML = pageHead('INSIGHTS','收支统计','看看心意都流向了哪里。','') + `
+        app.innerHTML = pageHead('INSIGHTS','收支统计','看看心意都流向了哪里。', `<button class="btn primary" data-action="export">${icon('download')} 导出 Excel</button>`) + `
             <div class="summary-band">
                 <div class="summary-item"><span>收礼总额</span><b class="income">${money(income)}</b></div>
                 <div class="summary-item"><span>随礼总额</span><b class="expense">${money(out)}</b></div>
@@ -753,6 +763,23 @@
             <div class="confirm-text">${esc(message)}</div>
             <div class="modal-foot"><button class="btn ghost" data-close>取消</button><button class="btn danger" id="confirm-ok">确认删除</button></div>`);
         $('#confirm-ok').addEventListener('click', onOk);
+    }
+
+    function exportDialog() {
+        showModal(`<div class="modal-head"><div class="modal-icon">${icon('download')}</div><div><h3>导出 Excel</h3><p>选择需要下载的数据文件</p></div></div>
+            <div class="export-list">
+                <a class="export-item" href="/api/export/bills" download="礼单.xlsx">
+                    <div class="export-icon red">${icon('gift')}</div>
+                    <div class="export-txt"><b>礼单.xlsx</b><small>礼单汇总 + 全部明细（按日期倒序）</small></div>
+                    ${icon('chevron')}
+                </a>
+                <a class="export-item" href="/api/export/expenses" download="随礼.xlsx">
+                    <div class="export-icon green">${icon('out')}</div>
+                    <div class="export-txt"><b>随礼.xlsx</b><small>全部随礼记录（按日期倒序）</small></div>
+                    ${icon('chevron')}
+                </a>
+            </div>
+            <div class="modal-foot"><button class="btn ghost" data-close>关闭</button></div>`);
     }
 
     function toast(msg, bad) {
@@ -873,6 +900,7 @@
         const a = el.dataset.action, id = Number(el.dataset.id);
         const one = (arr) => (arr || []).find(x => x.id === id);
 
+        if (a === 'export') { exportDialog(); return; }
         if (a === 'new-bill') addBill();
         else if (a === 'new-expense') addExpense();
         else if (a === 'open-bill') { state.billId = id; state.personQ = ''; state.personRel = ''; render(); }
