@@ -35,16 +35,6 @@ android {
         }
     }
 
-    // APK 输出文件名统一为「礼记.apk」（仅 debug，避免多渠道/多构建类型重名冲突）
-    applicationVariants.all {
-        if (name == "debug") {
-            outputs.all {
-                (this as com.android.build.gradle.internal.api.ApkVariantOutputImpl)
-                    .outputFileName = "礼记.apk"
-            }
-        }
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
