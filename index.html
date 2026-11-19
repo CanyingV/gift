@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="zh">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>礼单管家</title>
+<style>
+    * {
+        box-sizing: border-box
+    }
+
+    body {
+        margin: 0;
+        background: #f5f6f8;
+        color: #242a35;
+        font: 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif
+    }
+
+    header {
+        background: #fff;
+        padding: 18px max(calc((100% - 1100px) / 2), 20px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eee
+    }
+
+    header b {
+        font-size: 20px;
+        color: #20362d
+    }
+
+    .wrap {
+        max-width: 1100px;
+        margin: 28px auto;
+        padding: 0 18px
+    }
+
+    .tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 22px
+    }
+
+    .tabs button {
+        border: 0;
+        background: #e8ece9;
+        color: #53645a;
+        padding: 12px 22px;
+        border-radius: 12px;
+        cursor: pointer
+    }
+
+    .tabs .on, .primary {
+        background: #246b4c !important;
+        color: #fff !important
+    }
+
+    .cards {
+        display: flex;
+        gap: 14px;
+        margin-bottom: 20px
+    }
+
+    .card {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        flex: 1;
+        box-shadow: 0 5px 20px #263c3010
+    }
+
+    .label {
+        color: #7e8990;
+        font-size: 13px
+    }
+
+    .num {
+        font-size: 26px;
+        font-weight: 700;
+        margin-top: 8px
+    }
+
+    .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 18px 0
+    }
+
+    .primary {
+        border: 0;
+        border-radius: 10px;
+        padding: 11px 17px;
+        cursor: pointer
+    }
+
+    .panel {
+        background: white;
+        border-radius: 16px;
+        padding: 20px
+    }
+
+    .item {
+        padding: 15px 4px;
+        border-bottom: 1px solid #eff1f2;
+        display: grid;
+        grid-template-columns:2fr 1fr 1fr 1fr auto;
+        align-items: center;
+        gap: 10px
+    }
+
+    .item.head {
+        color: #899399;
+        font-size: 13px
+    }
+
+    .click {
+        cursor: pointer
+    }
+
+    .muted {
+        color: #828b92;
+        font-size: 13px
+    }
+
+    input, select {
+        padding: 10px;
+        border: 1px solid #dce2df;
+        border-radius: 9px;
+        background: #fff
+    }
+
+    input[type=search] {
+        width: 220px
+    }
+
+    .bar {
+        height: 8px;
+        background: #e9efeb;
+        border-radius: 8px;
+        margin: 10px 0 16px
+    }
+
+    .bar i {
+        height: 100%;
+        display: block;
+        background: #55a477;
+        border-radius: 8px
+    }
+
+    .danger {
+        border: 0;
+        background: none;
+        color: #bd6767;
+        cursor: pointer
+    }
+
+    .form {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap
+    }
+
+    .sectiontitle {
+        font-weight: 700;
+        margin: 20px 0 8px
+    }
+
+    .modal{position:fixed;inset:0;background:#17221d77;display:grid;place-items:center;padding:16px;z-index:5}
+    .dialog{background:#fff;width:min(460px,100%);padding:22px;border-radius:18px;box-shadow:0 18px 60px #0003}
+    .dialog h3{margin:0 0 16px}.dialog form{display:grid;gap:12px}.dialog label{display:grid;gap:6px;color:#65716a;font-size:13px}.dialog input,.dialog select{width:100%;font-size:16px}.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}.secondary{border:1px solid #dce2df;border-radius:10px;background:#fff;padding:10px 16px}
+
+    @media (max-width: 650px) {
+        .cards {
+            flex-wrap: wrap
+        }
+
+        .card {
+            min-width: 42%
+        }
+
+        .item {
+            grid-template-columns:1.4fr 1fr 1fr auto;
+            font-size: 13px
+        }
+
+        .item > *:nth-child(4) {
+            display: none
+        }
+
+        .wrap {
+            margin: 16px auto
+        }
+
+        .panel {
+            padding: 14px
+        }
+
+        .tabs button {
+            flex: 1;
+            padding: 11px 5px
+        }
+        body{padding-bottom:76px}.tabs{position:fixed;bottom:0;left:0;right:0;z-index:4;background:#fff;margin:0;padding:8px 10px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -4px 18px #1f332411;gap:4px}.tabs button{border-radius:10px}.wrap{padding-bottom:14px}
+    }
+</style>
+<header><b>🍃 礼单管家</b></header>
+<main class="wrap">
+    <nav class="tabs">
+        <button class="on" onclick="page='bills';render()">礼单</button>
+        <button onclick="page='expenses';render()">随礼</button>
+        <button onclick="page='stats';render()">统计</button>
+    </nav>
+    <div id="app"></div>
+</main>
+<script>
+    let data = {}, page = 'bills', bill = null, filter = '';
+    const money = n => '¥' + Number(n || 0).toLocaleString('zh-CN', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    });
+
+    async function load() {
+        data = await (await fetch('/api/data')).json();
+        render()
+    }
+
+    async function post(url, obj) {
+        await fetch(url, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(obj)});
+        load()
+    }
+
+    async function del(url) {
+        if (confirm('确定删除？')) {
+            await fetch(url, {method: 'DELETE'});
+            bill = null;
+            load()
+        }
+    }
+
+    function rel(id) {
+        return data.relations.find(x => x.id == id)?.name || '其他'
+    }
+
+    function cat(id) {
+        return data.categories.find(x => x.id == id)?.name || '其他'
+    }
+
+    function render() {
+        let a = document.querySelector('#app'), bills = data.bills || [], people = data.people || [],
+            expenses = data.expenses || [], sum = (xs, k) => xs.reduce((s, x) => s + Number(x[k] || 0), 0);
+        if (bill) {
+            let ps = people.filter(x => x.bill_id == bill.id), rs = data.relations.map(r => ({
+                name: r.name,
+                n: ps.filter(p => p.relation_id == r.id).length,
+                v: sum(ps.filter(p => p.relation_id == r.id), 'amount')
+            })).filter(x => x.n);
+            a.innerHTML = `<div class="row"><div><button onclick="bill=null;render()">← 返回</button><h2>${bill.name}</h2><span class="muted">${bill.date} · ${ps.length} 人 · ${money(sum(ps, 'amount'))}</span></div><div><button class="secondary" onclick='editBill(${JSON.stringify(bill)})'>编辑礼单</button> <button class="primary" onclick="addPerson(${bill.id})">＋ 添加人员</button></div></div><div class="panel"><div class="sectiontitle">关系汇总</div>${rs.map(x => `<div class="item"><b>${x.name}</b><span>${x.n} 人</span><b>${money(x.v)}</b></div>`).join('')}<div class="row"><b>礼单明细</b><input type="search" placeholder="搜索姓名或关系" oninput="filter=this.value;render()"></div><div class="item head"><span>姓名</span><span>关系</span><span>金额</span><span>备注</span><span>操作</span></div>${ps.filter(x => (x.name + rel(x.relation_id)).includes(filter)).map(x => `<div class="item"><b>${x.name}</b><span>${rel(x.relation_id)}</span><b>${money(x.amount)}</b><span>${x.note || '—'}</span><span><button class="secondary" onclick='editPerson(${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick="del('/api/person/${x.id}')">删除</button></span></div>`).join('')}</div>`;
+            return
+        }
+        if (page === 'bills') a.innerHTML = `<div class="cards"><div class="card"><div class="label">礼单总数</div><div class="num">${bills.length}</div></div><div class="card"><div class="label">礼金总额</div><div class="num">${money(sum(people, 'amount'))}</div></div></div><div class="row"><h2>我的礼单</h2><button class="primary" onclick="addBill()">＋ 创建礼单</button></div><div class="panel"><div class="item head"><span>礼单名称</span><span>人数</span><span>时间</span><span>操作</span></div>${bills.map(x => `<div class="item click" onclick="bill=${JSON.stringify(x).replaceAll('"', '&quot;')};render()"><b>${x.name}</b><span>${x.people} 人</span><span>${x.date}</span><span><button class="secondary" onclick='event.stopPropagation();editBill(${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick="event.stopPropagation();del('/api/bill/${x.id}')">删除</button></span></div>`).join('') || '<p class="muted">还没有礼单，点击“创建礼单”开始记录。</p>'}</div>`;
+        else if (page === 'expenses') a.innerHTML = `<div class="cards"><div class="card"><div class="label">随礼总金额</div><div class="num">${money(sum(expenses, 'amount'))}</div></div><div class="card"><div class="label">随礼人数</div><div class="num">${expenses.length}</div></div></div><div class="row"><h2>随礼记录</h2><button class="primary" onclick="addExpense()">＋ 记录随礼</button></div><div class="panel"><div class="item head"><span>姓名</span><span>分类</span><span>关系</span><span>金额</span><span>时间 / 操作</span></div>${expenses.map(x => `<div class="item"><b>${x.name}</b><span>${x.category || cat(x.cate_id)}</span><span>${x.relation || rel(x.relation_id)}</span><b>${money(x.amount)}</b><span>${x.date}<br><button class="secondary" onclick='editExpense(${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick="del('/api/expense/${x.id}')">删除</button></span></div>`).join('')}</div>`;
+        else if (page === 'stats') {
+            let total = sum(people, 'amount'), out = sum(expenses, 'amount');
+            a.innerHTML = `<h2>收支统计</h2><div class="cards"><div class="card"><div class="label">收礼总金额</div><div class="num">${money(total)}</div></div><div class="card"><div class="label">随礼总金额</div><div class="num">${money(out)}</div></div></div>${chart('收礼按关系统计', data.relations.map(r => [r.name, sum(people.filter(x => x.relation_id == r.id), 'amount')]))}${chart('随礼按关系统计', data.relations.map(r => [r.name, sum(expenses.filter(x => x.relation_id == r.id), 'amount')]))}${chart('随礼按类别统计', data.categories.map(c => [c.name, sum(expenses.filter(x => x.cate_id == c.id), 'amount')]))}<div class="panel" style="margin-top:18px"><h3>基础管理</h3><div class="sectiontitle">关系</div><div class="form">${data.relations.map(x => `<span class="card">${x.name}</span>`).join('')}<input id="rn" placeholder="新增关系"><button class="primary" onclick="manage('relation','rn')">添加</button></div><div class="sectiontitle">随礼分类</div><div class="form">${data.categories.map(x => `<span class="card">${x.name}</span>`).join('')}<input id="cn" placeholder="新增分类"><button class="primary" onclick="manage('category','cn')">添加</button></div></div>`
+        }
+    }
+
+    function chart(title, rows) {
+        let max = Math.max(...rows.map(x => x[1]), 1);
+        return `<div class="panel" style="margin:14px 0"><b>${title}</b>${rows.map(x => `<div class="row"><span>${x[0]}</span><b>${money(x[1])}</b></div><div class="bar"><i style="width:${x[1] / max * 100}%"></i></div>`).join('')}</div>`
+    }
+
+    function addBill() {
+        formDialog('创建礼单', `<label>礼单名称<input name="name" required placeholder="例如：爸爸生日"></label><label>日期<input name="date" type="date" required value="${new Date().toISOString().slice(0,10)}"></label>`, d=>post('/api/bill',d))
+    }
+
+    function editBill(x){formDialog('编辑礼单',`<label>礼单名称<input name="name" required value="${x.name||''}"></label><label>日期<input name="date" type="date" required value="${x.date||''}"></label>`,d=>put('/api/bill/'+x.id,d))}
+
+    function addPerson(id) {
+        formDialog('添加收礼明细', `<label>姓名<input name="name" required placeholder="请输入姓名"></label><label>关系<select name="relation_id" required>${data.relations.map(x=>`<option value="${x.id}">${x.name}</option>`).join('')}</select></label><label>金额（元）<input name="amount" type="number" min="0" step="0.01" required placeholder="0.00"></label><label>备注<input name="note" placeholder="选填"></label>`, d=>post('/api/person',{...d,bill_id:id,amount:Number(d.amount),relation_id:Number(d.relation_id)}))
+    }
+
+    function editPerson(x){formDialog('编辑收礼明细',`<label>所属礼单<select name="bill_id">${data.bills.map(b=>`<option value="${b.id}" ${b.id==x.bill_id?'selected':''}>${b.name}</option>`).join('')}</select></label><label>姓名<input name="name" required value="${x.name||''}"></label><label>关系<select name="relation_id">${data.relations.map(r=>`<option value="${r.id}" ${r.id==x.relation_id?'selected':''}>${r.name}</option>`).join('')}</select></label><label>金额（元）<input name="amount" type="number" min="0" step="0.01" required value="${x.amount}"></label><label>备注<input name="note" value="${x.note||''}"></label>`,d=>put('/api/person/'+x.id,{...d,bill_id:Number(d.bill_id),relation_id:Number(d.relation_id),amount:Number(d.amount)}))}
+
+    function addExpense() {
+        formDialog('记录随礼', `<label>姓名<input name="name" required placeholder="请输入姓名"></label><label>分类<select name="cate_id" required>${data.categories.map(x=>`<option value="${x.id}">${x.name}</option>`).join('')}</select></label><label>关系<select name="relation_id" required>${data.relations.map(x=>`<option value="${x.id}">${x.name}</option>`).join('')}</select></label><label>金额（元）<input name="amount" type="number" min="0" step="0.01" required placeholder="0.00"></label><label>日期<input name="date" type="date" required value="${new Date().toISOString().slice(0,10)}"></label>`, d=>post('/api/expense',{...d,amount:Number(d.amount),relation_id:Number(d.relation_id),cate_id:Number(d.cate_id)}))
+    }
+
+    function editExpense(x){formDialog('编辑随礼记录',`<label>姓名<input name="name" required value="${x.name||''}"></label><label>分类<select name="cate_id">${data.categories.map(c=>`<option value="${c.id}" ${c.id==x.cate_id?'selected':''}>${c.name}</option>`).join('')}</select></label><label>关系<select name="relation_id">${data.relations.map(r=>`<option value="${r.id}" ${r.id==x.relation_id?'selected':''}>${r.name}</option>`).join('')}</select></label><label>金额（元）<input name="amount" type="number" min="0" step="0.01" required value="${x.amount}"></label><label>日期<input name="date" type="date" required value="${x.date||''}"></label>`,d=>put('/api/expense/'+x.id,{...d,amount:Number(d.amount),relation_id:Number(d.relation_id),cate_id:Number(d.cate_id)}))}
+
+    async function put(url,obj){await fetch(url,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(obj)});load()}
+
+    function formDialog(title, fields, submit){
+        const host=document.createElement('div');host.className='modal';host.innerHTML=`<section class="dialog"><h3>${title}</h3><form>${fields}<div class="actions"><button type="button" class="secondary" data-cancel>取消</button><button class="primary">保存</button></div></form></section>`;document.body.append(host);host.addEventListener('click',e=>{if(e.target===host||e.target.closest('[data-cancel]'))host.remove()});host.querySelector('form').addEventListener('submit',e=>{e.preventDefault();submit(Object.fromEntries(new FormData(e.currentTarget)));host.remove()});host.querySelector('input')?.focus()
+    }
+
+    function manage(type, id) {
+        let name = document.getElementById(id).value.trim();
+        if (name) post('/api/manage', {type: type === 'relation' ? 'relation' : 'category', name})
+    }
+
+    load();
+</script>
+</html>
