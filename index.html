@@ -145,6 +145,7 @@
     .cell-meta{width:100px;text-align:right;font-size:12px;color:var(--muted)}
     .cell-count{width:66px;text-align:center;font-size:12px;color:var(--muted)}
     .cell-tags{width:158px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-start}
+    .cell-tags-mobile{display:none}
     .cell-actions{width:112px;display:flex;justify-content:flex-end;gap:6px}
     .avatar{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex:none;background:#eaf3ed;color:var(--primary);font-weight:780;font-size:14px}
     .avatar.gold{background:#f8f0e1;color:#a87932}
@@ -301,6 +302,8 @@
         .select{flex:1}
         select.select{flex:1 1 150px;max-width:220px}
         .cell-count,.cell-meta,.cell-tags{display:none}
+        .cell-tags-mobile{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+        .cell-tags-mobile .chip{padding:2px 8px;font-size:11px}
         .cell-amount{width:auto;min-width:86px;font-size:13px}
         .cell-actions{width:auto;gap:4px}
         .list-row{padding:12px 2px;gap:8px}
@@ -668,7 +671,7 @@
                 ${list.length ? `<div class="list">${list.map(e => `
                     <div class="row-wrap">
                         <div class="list-row">
-                            <div class="cell-main"><div class="avatar" style="${styleOf('category',e.cate_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(fmtDate(e.date))}</div></div></div>
+                            <div class="cell-main"><div class="avatar" style="${styleOf('category',e.cate_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(fmtDate(e.date))}</div><div class="cell-tags-mobile"><span class="chip" style="${styleOf('category',e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span><span class="chip" style="${styleOf('relation',e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span></div></div></div>
                             <div class="cell-tags"><span class="chip" style="${styleOf('category',e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span><span class="chip" style="${styleOf('relation',e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span></div>
                             <div class="cell-amount money expense">${money(e.amount)}</div>
                         </div>
