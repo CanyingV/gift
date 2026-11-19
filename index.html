@@ -516,7 +516,7 @@
                     <div class="card-head"><div><div class="card-title">最近随礼</div><div class="card-sub">送出去的每一份祝福</div></div><button class="btn ghost sm" data-nav="expenses">全部 ${icon('chevron')}</button></div>
                     ${expenses.length ? `<div class="list">${expenses.slice(0,5).map(e => `
                         <div class="list-row">
-                            <div class="cell-main"><div class="avatar" style="${styleOf('category',e.cate_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(e.category || catName(e.cate_id))} · ${fmtDate(e.date)}</div></div></div>
+                            <div class="cell-main"><div class="avatar" style="${styleOf('relation',e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(e.category || catName(e.cate_id))} · ${fmtDate(e.date)}</div></div></div>
                             <div class="cell-amount money expense">${money(e.amount)}</div>
                         </div>`).join('')}</div>` : empty('还没有随礼记录。', `<button class="btn primary sm" data-action="new-expense">${icon('plus')} 记录随礼</button>`)}
                 </section>
@@ -611,7 +611,7 @@
                 ${shown.length ? `<div class="list">${shown.map(p => `
                     <div class="row-wrap">
                         <div class="list-row">
-                            <div class="cell-main"><div class="avatar" style="${styleOf('relation',p.relation_id)}">${esc(initial(p.name))}</div><div class="cell-body"><div class="cell-title">${esc(p.name)}</div><div class="cell-sub">${esc(relName(p.relation_id))}${p.note ? ' · ' + esc(p.note) : ''}</div></div></div>
+                            <div class="cell-main"><div class="avatar" style="${styleOf('relation',p.relation_id)}">${esc(initial(p.name))}</div><div class="cell-body"><div class="cell-title">${esc(p.name)}</div>${p.note ? `<div class="cell-sub">${esc(p.note)}</div>` : ''}</div></div>
                             <span class="chip" style="${styleOf('relation',p.relation_id)}">${esc(relName(p.relation_id))}</span>
                             <div class="cell-amount money income">${money(p.amount)}</div>
                         </div>
@@ -660,7 +660,7 @@
                 ${list.length ? `<div class="list">${list.map(e => `
                     <div class="row-wrap">
                         <div class="list-row">
-                            <div class="cell-main"><div class="avatar" style="${styleOf('category',e.cate_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(fmtDate(e.date))}</div><div class="cell-tags-mobile"><span class="chip" style="${styleOf('category',e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span><span class="chip" style="${styleOf('relation',e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span></div></div></div>
+                            <div class="cell-main"><div class="avatar" style="${styleOf('relation',e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(fmtDate(e.date))}</div><div class="cell-tags-mobile"><span class="chip" style="${styleOf('category',e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span><span class="chip" style="${styleOf('relation',e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span></div></div></div>
                             <div class="cell-tags"><span class="chip" style="${styleOf('category',e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span><span class="chip" style="${styleOf('relation',e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span></div>
                             <div class="cell-amount money expense">${money(e.amount)}</div>
                         </div>
