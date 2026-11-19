@@ -134,6 +134,219 @@ def build_xlsx(sheets):
 def head(*labels):
     return [(x, 'head') for x in labels]
 
+
+# ---------------- 轻量 xlsx 解析（标准库，兼容 inlineStr / sharedStrings） ----------------
+import re
+from xml.etree import ElementTree as ET
+
+XLS_M = '{' + XLS_NS + '}'
+XLS_R = '{' + REL_NS + '}'
+XLS_P = '{' + PKG_NS + '}'
+
+
+def parse_xlsx(data):
+    """把 xlsx 字节解析为 {sheet名: [[单元格文本, ...], ...]}。"""
+    z = zipfile.ZipFile(io.BytesIO(data))
+    try:
+        shared = []
+        if 'xl/sharedStrings.xml' in z.namelist():
+            root = ET.fromstring(z.read('xl/sharedStrings.xml'))
+            for si in root.findall(XLS_M + 'si'):
+                shared.append(''.join(t.text or '' for t in si.iter(XLS_M + 't')))
+        wb = ET.fromstring(z.read('xl/workbook.xml'))
+        rels = ET.fromstring(z.read('xl/_rels/workbook.xml.rels'))
+        rel_map = {r.get('Id'): r.get('Target') for r in rels.findall(XLS_P + 'Relationship')}
+        sheets = []
+        for sh in wb.findall(XLS_M + 'sheets/' + XLS_M + 'sheet'):
+            target = (rel_map.get(sh.get(XLS_R + 'id'), '') or '').lstrip('/')
+            if not target.startswith('xl/'):
+                target = 'xl/' + target
+            sheets.append((sh.get('name') or '', target))
+
+        def col_index(ref):
+            m = re.match(r'([A-Za-z]+)', ref or '')
+            if not m:
+                return 0
+            n = 0
+            for ch in m.group(1).upper():
+                n = n * 26 + (ord(ch) - 64)
+            return n - 1
+
+        out = {}
+        for name, path in sheets:
+            if path not in z.namelist():
+                continue
+            root = ET.fromstring(z.read(path))
+            rows = []
+            for row in root.findall(XLS_M + 'sheetData/' + XLS_M + 'row'):
+                cells = {}
+                for c in row.findall(XLS_M + 'c'):
+                    ci = col_index(c.get('r'))
+                    typ = c.get('t')
+                    if typ == 'inlineStr':
+                        node = c.find(XLS_M + 'is')
+                        val = ''.join(x.text or '' for x in node.iter(XLS_M + 't')) if node is not None else ''
+                    else:
+                        node = c.find(XLS_M + 'v')
+                        val = node.text or '' if node is not None else ''
+                        if typ == 's':
+                            try:
+                                val = shared[int(val)]
+                            except (ValueError, IndexError):
+                                val = ''
+                    cells[ci] = val
+                if cells:
+                    rows.append([cells.get(i, '') for i in range(max(cells) + 1)])
+            out[name] = rows
+        return out
+    finally:
+        z.close()
+
+
+def norm_money(v):
+    try:
+        return float(str(v).strip().replace(',', '').replace('¥', '').replace('￥', '') or 0)
+    except (ValueError, TypeError):
+        return 0.0
+
+
+def find_header(rows, keys):
+    """在前若干行里找同时包含 keys 的表头，返回 (行号, {列名: 列号})。"""
+    for i, row in enumerate(rows[:12]):
+        cols = {}
+        for j, cell in enumerate(row):
+            name = str(cell).strip()
+            if name in keys and name not in cols:
+                cols[name] = j
+        if all(k in cols for k in keys):
+            return i, cols
+    return -1, {}
+
+
+def get_or_create(c, table, name, counter):
+    """按名称查/建关系或分类，返回 id。"""
+    name = str(name).strip()
+    if not name:
+        return 0
+    row = c.execute('SELECT id FROM ' + table + ' WHERE name=?', (name,)).fetchone()
+    if row:
+        return row[0]
+    cur = c.execute('INSERT INTO ' + table + '(name) VALUES(?)', (name,))
+    counter[0] += 1
+    return cur.lastrowid
+
+
+def import_bill_rows(data, c):
+    """导入礼单 Excel（礼单汇总 + 礼单明细），按自然键去重。"""
+    sheets = parse_xlsx(data)
+    summary = detail = None
+    for name, rows in sheets.items():
+        if '汇总' in name:
+            summary = rows
+        elif '明细' in name:
+            detail = rows
+    if summary is None and detail is None and sheets:
+        rows = list(sheets.values())
+        summary = rows[0]
+        detail = rows[1] if len(rows) > 1 else None
+
+    stat = {'bills': 0, 'people': 0, 'relations': 0, 'skipped': 0}
+    rel_created = [0]
+
+    if summary:
+        hi, cols = find_header(summary, ['礼单名称', '日期'])
+        if hi >= 0:
+            for row in summary[hi + 1:]:
+                def cell(key, default=''):
+                    j = cols.get(key)
+                    return str(row[j]).strip() if j is not None and j < len(row) else default
+                name = cell('礼单名称')
+                if not name or name.startswith('示例'):
+                    continue
+                date = cell('日期')
+                if c.execute('SELECT 1 FROM gift WHERE name=?', (name,)).fetchone():
+                    stat['skipped'] += 1
+                    continue
+                c.execute('INSERT INTO gift(name,date) VALUES(?,?)', (name, date))
+                stat['bills'] += 1
+
+    if detail:
+        hi, cols = find_header(detail, ['礼单', '来客', '关系', '金额'])
+        if hi >= 0:
+            for row in detail[hi + 1:]:
+                def cell(key, default=''):
+                    j = cols.get(key)
+                    return str(row[j]).strip() if j is not None and j < len(row) else default
+                bill_name, guest = cell('礼单'), cell('来客')
+                if not bill_name or not guest or guest.startswith('示例'):
+                    continue
+                date = cell('日期')
+                bill = c.execute('SELECT id FROM gift WHERE name=?', (bill_name,)).fetchone()
+                if bill:
+                    bid = bill[0]
+                else:
+                    cur = c.execute('INSERT INTO gift(name,date) VALUES(?,?)', (bill_name, date))
+                    bid = cur.lastrowid
+                    stat['bills'] += 1
+                rid = get_or_create(c, 'relation', cell('关系'), rel_created)
+                amount = norm_money(cell('金额'))
+                note = cell('备注')
+                dup = c.execute(
+                    'SELECT 1 FROM income WHERE gift_id=? AND name=? AND relation_id=? '
+                    'AND CAST(amount AS REAL)=? AND coalesce("desc",\'\')=?',
+                    (bid, guest, str(rid), amount, note)).fetchone()
+                if dup:
+                    stat['skipped'] += 1
+                    continue
+                c.execute('INSERT INTO income(gift_id,name,relation_id,amount,"desc") VALUES(?,?,?,?,?)',
+                          (bid, guest, str(rid), str(amount), note))
+                stat['people'] += 1
+    stat['relations'] = rel_created[0]
+    return stat
+
+
+def import_expense_rows(data, c):
+    """导入随礼 Excel（随礼记录），按自然键去重。"""
+    sheets = parse_xlsx(data)
+    rows = None
+    for name, sheet in sheets.items():
+        if '随礼' in name:
+            rows = sheet
+            break
+    if rows is None and sheets:
+        rows = list(sheets.values())[0]
+    stat = {'expenses': 0, 'relations': 0, 'categories': 0, 'skipped': 0}
+    rel_created, cate_created = [0], [0]
+    hi, cols = find_header(rows or [], ['姓名', '日期', '金额'])
+    if hi < 0:
+        return stat
+    for row in rows[hi + 1:]:
+        def cell(key, default=''):
+            j = cols.get(key)
+            return str(row[j]).strip() if j is not None and j < len(row) else default
+        name = cell('姓名')
+        if not name or name.startswith('示例'):
+            continue
+        date = cell('日期')
+        amount = norm_money(cell('金额'))
+        rid = get_or_create(c, 'relation', cell('关系'), rel_created)
+        cid = get_or_create(c, 'cate', cell('分类'), cate_created)
+        dup = c.execute(
+            'SELECT 1 FROM ' + EXPENSE_TABLE +
+            ' WHERE name=? AND date=? AND CAST(amount AS REAL)=? AND relation_id=? AND cate_id=?',
+            (name, date, amount, rid, cid)).fetchone()
+        if dup:
+            stat['skipped'] += 1
+            continue
+        c.execute('INSERT INTO ' + EXPENSE_TABLE +
+                  '(name,amount,date,relation_id,cate_id) VALUES(?,?,?,?,?)',
+                  (name, amount, date, rid, cid))
+        stat['expenses'] += 1
+    stat['relations'] = rel_created[0]
+    stat['categories'] = cate_created[0]
+    return stat
+
+
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *a, **kw):
         super().__init__(*a, directory=BASE, **kw)
@@ -198,15 +411,42 @@ class Handler(SimpleHTTPRequestHandler):
                 out.append([x['name'], x['date'], x['category'] or '', x['relation'] or '',
                             (x['amount'], 'money')])
             self.send_xlsx(build_xlsx([('随礼记录', out, [20, 16, 16, 16, 16])]), '随礼.xlsx')
+        elif p == '/api/template/bills':
+            summary = [head('礼单名称', '日期', '人数', '礼金合计'),
+                       ['示例：张三乔迁', '2026-01-01', '', '']]
+            detail = [head('礼单', '日期', '来客', '关系', '金额', '备注'),
+                      ['示例：张三乔迁', '2026-01-01', '李四', '朋友', (200, 'money'), '示例行，可删除']]
+            self.send_xlsx(build_xlsx([('礼单汇总', summary, [28, 16, 10, 16]),
+                                       ('礼单明细', detail, [28, 16, 14, 14, 16, 30])]), '礼单模板.xlsx')
+        elif p == '/api/template/expenses':
+            out = [head('姓名', '日期', '分类', '关系', '金额'),
+                   ['王五', '2026-01-01', '结婚', '朋友', (300, 'money')]]
+            self.send_xlsx(build_xlsx([('随礼记录', out, [20, 16, 16, 16, 16])]), '随礼模板.xlsx')
         else:
             self.send_json({'ok': False})
         c.close()
 
     def do_POST(self):
+        import base64
         d = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))) or b'{}')
         c = sqlite3.connect(DB)
         c.execute('PRAGMA foreign_keys=ON')
         p = urlparse(self.path).path
+        if p in ('/api/import/bills', '/api/import/expenses'):
+            try:
+                raw = base64.b64decode(d.get('data', ''))
+                if not raw:
+                    raise ValueError('文件为空')
+                stat = (import_bill_rows(raw, c) if p == '/api/import/bills'
+                        else import_expense_rows(raw, c))
+                c.commit()
+                self.send_json({'ok': True, 'stat': stat})
+            except Exception as e:
+                c.rollback()
+                self.send_json({'ok': False, 'error': '导入失败：' + str(e)})
+            finally:
+                c.close()
+            return
         if p == '/api/bill':
             c.execute('INSERT INTO gift(name,date) VALUES(?,?)', (d['name'], d.get('date', '')))
         elif p == '/api/person':
