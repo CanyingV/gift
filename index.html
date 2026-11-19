@@ -660,8 +660,8 @@
                 ${list.length ? `<div class="list">${list.map(e => `
                     <div class="row-wrap">
                         <div class="list-row">
-                            <div class="cell-main"><div class="avatar" style="${styleOf('relation',e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(fmtDate(e.date))}</div><div class="cell-tags-mobile"><span class="chip" style="${styleOf('category',e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span><span class="chip" style="${styleOf('relation',e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span></div></div></div>
-                            <div class="cell-tags"><span class="chip" style="${styleOf('category',e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span><span class="chip" style="${styleOf('relation',e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span></div>
+                            <div class="cell-main"><div class="avatar" style="${styleOf('relation',e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(fmtDate(e.date))}</div><div class="cell-tags-mobile"><span class="chip" style="${styleOf('relation',e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span><span class="chip" style="${styleOf('category',e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span></div></div></div>
+                            <div class="cell-tags"><span class="chip" style="${styleOf('relation',e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span><span class="chip" style="${styleOf('category',e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span></div>
                             <div class="cell-amount money expense">${money(e.amount)}</div>
                         </div>
                         <div class="row-actions">
