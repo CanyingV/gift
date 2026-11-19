@@ -2,311 +2,928 @@
 <html lang="zh">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>礼单管家</title>
+<title>礼单管家 · 往来有据</title>
 <style>
-    * {
-        box-sizing: border-box
+    :root{
+        --bg:#f5f3ed;
+        --surface:#fffdf8;
+        --surface-2:#faf8f1;
+        --ink:#222a25;
+        --muted:#89928a;
+        --line:#e8e4d8;
+        --primary:#1f6149;
+        --primary-2:#2e7a5d;
+        --accent:#c08a3e;
+        --income:#b4533a;
+        --expense:#2f7a63;
+        --danger:#b85c5c;
+        --shadow:0 2px 10px rgba(35,45,38,.04);
+        --radius:18px;
     }
-
-    body {
-        margin: 0;
-        background: #f5f6f8;
-        color: #242a35;
-        font: 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%}
+    body{
+        background:radial-gradient(ellipse at 88% -10%,#eeeae0 0,transparent 42%),var(--bg);
+        color:var(--ink);
+        font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+        -webkit-font-smoothing:antialiased;
     }
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .ico{width:18px;height:18px;flex:none}
+    .app{display:flex;min-height:100vh}
 
-    header {
-        background: #fff;
-        padding: 18px max(calc((100% - 1100px) / 2), 20px);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #eee
+    /* ---------- 侧边栏 ---------- */
+    .sidebar{
+        width:244px;flex:0 0 244px;height:100vh;position:sticky;top:0;
+        padding:26px 16px 20px;display:flex;flex-direction:column;
+        background:linear-gradient(180deg,#fffdf8 0%,#faf7ef 100%);
+        border-right:1px solid var(--line);
     }
-
-    header b {
-        font-size: 20px;
-        color: #20362d
+    .brand{display:flex;align-items:center;gap:12px;padding:0 10px;margin-bottom:34px}
+    .brand-mark{
+        width:42px;height:42px;border-radius:14px;display:grid;place-items:center;
+        background:linear-gradient(145deg,var(--primary-2),var(--primary));color:#fff;
+        box-shadow:0 8px 18px rgba(31,97,73,.24);
     }
-
-    .wrap {
-        max-width: 1100px;
-        margin: 28px auto;
-        padding: 0 18px
+    .brand-mark .ico{width:22px;height:22px}
+    .brand-name{font-size:16px;font-weight:780;letter-spacing:.01em}
+    .brand-sub{font-size:10px;color:var(--muted);letter-spacing:.16em;margin-top:1px}
+    .nav-label{font-size:10px;letter-spacing:.18em;color:#b0b7ad;padding:0 14px;margin:0 0 10px;font-weight:700}
+    .nav{display:flex;flex-direction:column;gap:5px}
+    .nav button{
+        width:100%;border:0;background:transparent;color:#667169;border-radius:12px;
+        padding:11px 13px;display:flex;align-items:center;gap:11px;
+        font-weight:650;text-align:left;transition:background .16s,color .16s,transform .16s;
     }
+    .nav button:hover{background:#f1f4ed;color:var(--primary)}
+    .nav button.on{background:var(--primary);color:#fff;box-shadow:0 7px 16px rgba(31,97,73,.2)}
+    .nav button.on:hover{transform:translateX(2px)}
+    .side-foot{margin-top:auto;padding:14px;border-radius:13px;background:#f2f4ed;border:1px solid var(--line)}
+    .side-foot b{display:block;font-size:12px;color:#5f6d63;margin-bottom:3px}
+    .side-foot span{font-size:11px;color:var(--muted)}
 
-    .tabs {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 22px
+    /* ---------- 顶栏 & 主体 ---------- */
+    .main{flex:1;min-width:0}
+    .topbar{
+        height:70px;position:sticky;top:0;z-index:20;padding:0 38px;
+        display:flex;align-items:center;justify-content:space-between;gap:16px;
+        background:rgba(255,253,248,.88);backdrop-filter:blur(14px);
+        border-bottom:1px solid var(--line);
     }
+    .crumb{font-size:13px;color:var(--muted);white-space:nowrap}
+    .crumb b{color:var(--ink);font-weight:750}
+    .crumb .sep{margin:0 9px;color:#c9cfc6}
+    .top-right{display:flex;align-items:center;gap:14px}
+    .top-date{font-size:12px;color:var(--muted)}
+    .top-dot{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:#68746b;background:#f1f5ef;border:1px solid var(--line);padding:6px 11px;border-radius:99px}
+    .top-dot i{width:7px;height:7px;border-radius:50%;background:#55a477;box-shadow:0 0 0 3px #55a47722}
+    .content{max-width:1180px;margin:0 auto;padding:30px 38px 70px}
 
-    .tabs button {
-        border: 0;
-        background: #e8ece9;
-        color: #53645a;
-        padding: 12px 22px;
-        border-radius: 12px;
-        cursor: pointer
+    /* ---------- 通用组件 ---------- */
+    .btn{
+        border:1px solid transparent;border-radius:11px;padding:10px 15px;
+        display:inline-flex;align-items:center;justify-content:center;gap:7px;
+        font-weight:680;font-size:13px;white-space:nowrap;transition:transform .14s,background .14s,box-shadow .14s;
     }
-
-    .item.expense-row{grid-template-columns:1.3fr 1fr 1fr 1fr 1fr auto}
-
-    .tabs .on, .primary {
-        background: #246b4c !important;
-        color: #fff !important
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0) scale(.98)}
+    .btn.primary{background:var(--primary);color:#fff;box-shadow:0 6px 14px rgba(31,97,73,.18)}
+    .btn.primary:hover{background:var(--primary-2)}
+    .btn.ghost{background:#fff;color:#5d6a61;border-color:var(--line)}
+    .btn.ghost:hover{background:#f8faf6}
+    .btn.danger{background:#fbeeee;color:var(--danger);border-color:#f2dede}
+    .btn.sm{padding:7px 11px;font-size:12px;border-radius:9px}
+    .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+    .card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+    .card-title{font-size:15px;font-weight:760}
+    .card-sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px}
+    .eyebrow{font-size:10px;font-weight:800;letter-spacing:.18em;color:var(--accent);text-transform:uppercase}
+    h1{font-size:27px;letter-spacing:-.02em;line-height:1.25;margin:6px 0 0}
+    .page-sub{color:var(--muted);font-size:13px;margin-top:5px}
+    .muted{color:var(--muted)}
+    .money{font-weight:760;font-variant-numeric:tabular-nums;white-space:nowrap}
+    .income{color:var(--income)}
+    .expense{color:var(--expense)}
+    .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+    .search{position:relative;flex:0 1 260px}
+    .search .ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#a3aca3}
+    .input,.select,input.input,select.select{
+        width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;
+        background:#fff;color:var(--ink);outline:none;transition:border .15s,box-shadow .15s;
     }
+    .search input{padding-left:36px}
+    select.select{width:auto;min-width:148px;cursor:pointer}
+    .input:focus,.select:focus,input:focus,select:focus{border-color:#8bb9a0;box-shadow:0 0 0 3px rgba(31,97,73,.09)}
+    .chip{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:99px;background:#f3f2ec;color:#6b746c;font-size:12px;white-space:nowrap}
+    .chip.green{background:#eaf4ee;color:var(--primary)}
+    .chip.gold{background:#f8f0e1;color:#9a6d2d}
+    .chip.red{background:#f9ece7;color:var(--income)}
+    .empty{text-align:center;padding:42px 18px;color:var(--muted)}
+    .empty-icon{width:52px;height:52px;border-radius:17px;background:#f1f5ef;color:#98ab9e;display:grid;place-items:center;margin:0 auto 12px}
+    .empty p{margin:0 0 14px;font-size:13px}
+    .empty .ico{width:24px;height:24px}
 
-    .cards {
-        display: flex;
-        gap: 14px;
-        margin-bottom: 20px
+    /* ---------- 列表行 ---------- */
+    .list{display:flex;flex-direction:column}
+    .row-wrap{display:flex;align-items:center;position:relative;overflow:hidden;border-bottom:1px solid var(--line);border-radius:10px}
+    .row-wrap:last-child{border-bottom:0}
+    .list-row{
+        display:flex;align-items:center;gap:12px;padding:13px 8px;
+        flex:1;min-width:0;border-radius:10px;transition:background .15s,transform .22s ease;
     }
-
-    .card {
-        background: white;
-        border-radius: 16px;
-        padding: 20px;
-        flex: 1;
-        box-shadow: 0 5px 20px #263c3010
+    .row-wrap .list-row{border-bottom:0}
+    .list-row.click{cursor:pointer}
+    .list-row:hover{background:var(--surface-2)}
+    .row-actions{display:flex;justify-content:flex-end;align-items:center;gap:6px;flex:none;padding-left:6px}
+    .cell-main{display:flex;align-items:center;gap:11px;min-width:0;flex:1}
+    .cell-body{min-width:0}
+    .cell-title{font-weight:700;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .cell-sub{font-size:12px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .cell-amount{width:118px;text-align:right;font-size:14px}
+    .cell-meta{width:100px;text-align:right;font-size:12px;color:var(--muted)}
+    .cell-count{width:66px;text-align:center;font-size:12px;color:var(--muted)}
+    .cell-tags{width:158px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-start}
+    .cell-actions{width:112px;display:flex;justify-content:flex-end;gap:6px}
+    .avatar{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex:none;background:#eaf3ed;color:var(--primary);font-weight:780;font-size:14px}
+    .avatar.gold{background:#f8f0e1;color:#a87932}
+    .avatar.red{background:#f9ece7;color:var(--income)}
+    .icon-btn{
+        width:31px;height:31px;border-radius:9px;border:1px solid var(--line);
+        background:#fff;color:#6b766d;display:grid;place-items:center;transition:background .14s,color .14s;
     }
+    .icon-btn:hover{background:#f1f5ef;color:var(--primary)}
+    .icon-btn.danger:hover{background:#fbeeee;color:var(--danger)}
+    .icon-btn .ico{width:15px;height:15px}
 
-    .label {
-        color: #7e8990;
-        font-size: 13px
+    /* ---------- 总览 ---------- */
+    .hero{
+        position:relative;overflow:hidden;border-radius:22px;padding:30px 34px;
+        min-height:186px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+        background:linear-gradient(120deg,#1d5a44 0%,#2e7a5d 56%,#3d8b6b 100%);color:#fff;
+        box-shadow:0 16px 36px rgba(31,97,73,.17);
     }
+    .hero::after{content:"";position:absolute;width:290px;height:290px;border-radius:50%;background:rgba(255,255,255,.07);right:-70px;top:-130px}
+    .hero .eyebrow{color:#cfe7d8}
+    .hero h1{color:#fff;font-size:26px;margin:8px 0 6px}
+    .hero p{color:#dceee3;margin:0 0 18px;font-size:13px}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .hero .btn.ghost{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.24)}
+    .hero .btn.ghost:hover{background:rgba(255,255,255,.22)}
+    .hero-art{position:relative;width:190px;height:132px;display:grid;place-items:center;flex:none;z-index:1}
+    .hero-gift{width:86px;height:86px;border-radius:26px;display:grid;place-items:center;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.24);box-shadow:0 12px 30px rgba(0,0,0,.12)}
+    .hero-gift .ico{width:40px;height:40px}
+    .float-chip{position:absolute;background:#fff;color:var(--ink);font-size:11px;font-weight:700;padding:6px 11px;border-radius:99px;box-shadow:0 8px 18px rgba(0,0,0,.14)}
+    .float-chip.a{left:-8px;top:12px}
+    .float-chip.b{right:-12px;bottom:16px}
+    .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0}
+    .kpi{padding:18px 19px}
+    .kpi-top{display:flex;align-items:center;gap:9px}
+    .icon-box{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:#edf4ef;color:var(--primary)}
+    .icon-box.tone-in{background:#f9ece7;color:var(--income)}
+    .icon-box.tone-out{background:#e9f3ee;color:var(--expense)}
+    .icon-box.tone-gold{background:#f8f0e1;color:#a87932}
+    .icon-box .ico{width:17px;height:17px}
+    .kpi-label{font-size:12px;color:#6c766d;font-weight:650}
+    .kpi .value{font-size:25px;font-weight:780;letter-spacing:-.02em;margin-top:13px;font-variant-numeric:tabular-nums}
+    .kpi .value.tone-in{color:var(--income)}
+    .kpi .value.tone-out{color:var(--expense)}
+    .kpi .foot{font-size:11px;color:var(--muted);margin-top:3px}
+    .two-col{display:grid;grid-template-columns:1.12fr .88fr;gap:14px}
 
-    .num {
-        font-size: 26px;
-        font-weight: 700;
-        margin-top: 8px
+    /* ---------- 礼单详情 ---------- */
+    .detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
+    .back{border:0;background:transparent;color:var(--muted);font-size:12px;display:inline-flex;align-items:center;gap:5px;padding:0 0 9px}
+    .back:hover{color:var(--primary)}
+    .back .ico{width:15px;height:15px}
+    .detail-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .chips-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .segment{display:flex;height:11px;border-radius:99px;overflow:hidden;background:#eeece4;margin:4px 0 14px}
+    .segment i{display:block;height:100%}
+    .legend{display:flex;flex-wrap:wrap;gap:9px 18px}
+    .legend-item{display:flex;align-items:center;gap:7px;font-size:12px;color:#5f6a61}
+    .legend-item b{font-weight:730;color:var(--ink)}
+    .dot{width:9px;height:9px;border-radius:50%;flex:none}
+
+    /* ---------- 统计 ---------- */
+    .summary-band{
+        display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+        border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;
+        background:linear-gradient(105deg,#fffdf8,#f3f6ef);border:1px solid var(--line);
     }
+    .summary-item{display:flex;flex-direction:column;gap:3px;min-width:130px}
+    .summary-item span{font-size:12px;color:var(--muted)}
+    .summary-item b{font-size:22px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+    .summary-item b.income{color:var(--income)}
+    .summary-item b.expense{color:var(--expense)}
+    .chart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .chart-grid>:last-child{grid-column:1/-1}
+    .chart-row+.chart-row{margin-top:15px}
+    .chart-line{display:flex;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:7px}
+    .chart-line b{font-weight:720}
+    .bar-track{height:7px;background:#efeee8;border-radius:99px;overflow:hidden}
+    .bar-fill{height:100%;border-radius:99px;background:var(--primary);min-width:2px;transition:width .35s}
+    .bar-fill.gold{background:var(--accent)}
+    .bar-fill.red{background:var(--income)}
+    .manage-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+    .tag-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+    .tag{display:inline-flex;align-items:center;gap:3px;padding:5px 6px 5px 11px;border-radius:11px;background:#f6f7f2;border:1px solid var(--line);font-size:12px}
+    .tag .icon-btn{width:23px;height:23px;border:0;background:transparent;border-radius:7px}
+    .tag .icon-btn .ico{width:13px;height:13px}
+    .inline-add{display:flex;gap:8px}
+    .inline-add .input{flex:1}
 
-    .row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 18px 0
+    /* ---------- 弹窗 / 提示 ---------- */
+    .modal-mask{
+        position:fixed;inset:0;z-index:60;padding:18px;display:grid;place-items:center;
+        background:rgba(24,33,27,.46);backdrop-filter:blur(4px);
     }
-
-    .primary {
-        border: 0;
-        border-radius: 10px;
-        padding: 11px 17px;
-        cursor: pointer
+    .modal{width:min(520px,100%);background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:0 26px 70px rgba(17,30,22,.26);animation:pop .18s ease-out}
+    @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+    .modal-head{padding:23px 24px 0;display:flex;gap:12px;align-items:flex-start}
+    .modal-icon{width:38px;height:38px;border-radius:12px;background:#edf4ef;color:var(--primary);display:grid;place-items:center;flex:none}
+    .modal-icon.danger{background:#fbeeee;color:var(--danger)}
+    .modal-head h3{margin:1px 0 3px;font-size:17px}
+    .modal-head p{margin:0;color:var(--muted);font-size:12px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px 24px}
+    .field{display:flex;flex-direction:column;gap:7px;font-size:12px;color:#667168;font-weight:650}
+    .field.full{grid-column:1/-1}
+    .field input,.field select{font-size:14px;font-weight:500}
+    .modal-foot{display:flex;justify-content:flex-end;gap:9px;padding:14px 24px 22px;border-top:1px solid var(--line)}
+    .confirm-text{padding:8px 24px 4px;color:#5f6a61;font-size:13px;line-height:1.7}
+    .toast{
+        position:fixed;left:50%;bottom:32px;transform:translateX(-50%);z-index:90;
+        display:flex;align-items:center;gap:8px;padding:11px 17px;border-radius:12px;
+        background:#20372b;color:#fff;font-size:13px;font-weight:650;box-shadow:0 12px 30px rgba(16,35,25,.3);
+        animation:toastIn .2s ease-out;
     }
+    .toast.bad{background:#8e3f3f}
+    .toast.out{opacity:0;transform:translateX(-50%) translateY(8px);transition:.25s}
+    .toast .ico{width:16px;height:16px}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%)}}
 
-    .panel {
-        background: white;
-        border-radius: 16px;
-        padding: 20px
+    .bottom-nav{display:none}
+
+    /* ---------- 响应式 ---------- */
+    @media (max-width:1080px){
+        .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+        .two-col{grid-template-columns:1fr}
+        .content{padding:26px 26px 60px}
+        .topbar{padding:0 26px}
     }
-
-    .item {
-        padding: 15px 4px;
-        border-bottom: 1px solid #eff1f2;
-        display: grid;
-        grid-template-columns:2fr 1fr 1fr 1fr auto;
-        align-items: center;
-        gap: 10px
-    }
-
-    .item.head {
-        color: #899399;
-        font-size: 13px
-    }
-
-    .click {
-        cursor: pointer
-    }
-
-    .muted {
-        color: #828b92;
-        font-size: 13px
-    }
-
-    input, select {
-        padding: 10px;
-        border: 1px solid #dce2df;
-        border-radius: 9px;
-        background: #fff
-    }
-
-    input[type=search] {
-        width: 220px
-    }
-
-    .bar {
-        height: 8px;
-        background: #e9efeb;
-        border-radius: 8px;
-        margin: 10px 0 16px
-    }
-
-    .bar i {
-        height: 100%;
-        display: block;
-        background: #55a477;
-        border-radius: 8px
-    }
-
-    .danger {
-        border: 0;
-        background: none;
-        color: #bd6767;
-        cursor: pointer
-    }
-
-    .form {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap
-    }
-
-    .sectiontitle {
-        font-weight: 700;
-        margin: 20px 0 8px
-    }
-
-    .modal{position:fixed;inset:0;background:#17221d77;display:grid;place-items:center;padding:16px;z-index:5}
-    .dialog{background:#fff;width:min(460px,100%);padding:22px;border-radius:18px;box-shadow:0 18px 60px #0003}
-    .dialog h3{margin:0 0 16px}.dialog form{display:grid;gap:12px}.dialog label{display:grid;gap:6px;color:#65716a;font-size:13px}.dialog input,.dialog select{width:100%;font-size:16px}.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}.secondary{border:1px solid #dce2df;border-radius:10px;background:#fff;padding:10px 16px}
-
-    @media (max-width: 650px) {
-        .cards {
-            flex-wrap: wrap
+    @media (max-width:760px){
+        .sidebar{display:none}
+        .app{display:block}
+        .topbar{height:58px;padding:0 16px}
+        .top-right .top-date{display:none}
+        .content{padding:18px 14px 98px}
+        .hero{padding:23px;min-height:auto;border-radius:18px}
+        .hero h1{font-size:21px}
+        .hero-art{display:none}
+        .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+        .kpi{padding:14px 15px;border-radius:15px}
+        .kpi .value{font-size:20px;margin-top:10px}
+        .card{padding:16px;border-radius:16px}
+        .page-head{margin-bottom:16px;align-items:flex-start}
+        h1{font-size:22px}
+        .page-head .btn{padding:9px 11px;font-size:12px}
+        .search{flex:1 1 100%}
+        .select{flex:1}
+        select.select{flex:1 1 150px;max-width:220px}
+        .cell-count,.cell-meta,.cell-tags{display:none}
+        .cell-amount{width:auto;min-width:86px;font-size:13px}
+        .cell-actions{width:auto;gap:4px}
+        .list-row{padding:12px 2px;gap:8px}
+        .row-wrap{overflow:hidden;border-radius:12px}
+        .row-actions{
+            position:absolute;right:0;top:0;bottom:0;width:108px;padding:0 8px;
+            background:linear-gradient(90deg,rgba(255,253,248,0),var(--surface) 18%);
+            transform:translateX(100%);transition:transform .22s ease;
         }
-
-        .card {
-            min-width: 42%
+        .row-wrap.swiped .row-actions{transform:translateX(0)}
+        .row-actions .icon-btn{width:36px;height:36px;background:#fff;box-shadow:0 3px 8px rgba(28,44,34,.1)}
+        .cell-main{gap:9px}
+        .chart-grid,.manage-grid{grid-template-columns:1fr}
+        .chart-grid>:last-child{grid-column:auto}
+        .detail-head{flex-direction:column}
+        .detail-actions{justify-content:flex-start}
+        .summary-item{min-width:110px}
+        .summary-item b{font-size:18px}
+        .form-grid{grid-template-columns:1fr;gap:12px;padding:16px 20px}
+        .modal-foot{flex-direction:column-reverse}
+        .modal-foot .btn{width:100%}
+        .modal-head{padding:20px 20px 0}
+        .confirm-text{padding:6px 20px 0}
+        .bottom-nav{
+            display:flex;position:fixed;left:10px;right:10px;bottom:10px;z-index:30;
+            background:rgba(255,253,248,.96);backdrop-filter:blur(14px);
+            border:1px solid var(--line);border-radius:17px;padding:7px 5px calc(7px + env(safe-area-inset-bottom));
+            box-shadow:0 8px 26px rgba(28,44,34,.13);
         }
-
-        .item {
-            grid-template-columns:1.4fr 1fr 1fr auto;
-            font-size: 13px
+        .bottom-nav button{
+            flex:1;border:0;background:transparent;color:#8a948b;border-radius:12px;
+            padding:7px 2px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:650;
         }
-
-        .panel:has(.expense-row){overflow-x:auto}.item.expense-row,.item.expense-head{grid-template-columns:110px 80px 80px 85px 100px 130px;min-width:625px}.item.expense-row > *:nth-child(4){display:block}
-
-        .item > *:nth-child(4) {
-            display: none
-        }
-
-        .wrap {
-            margin: 16px auto
-        }
-
-        .panel {
-            padding: 14px
-        }
-
-        .tabs button {
-            flex: 1;
-            padding: 11px 5px
-        }
-        body{padding-bottom:76px}.tabs{position:fixed;bottom:0;left:0;right:0;z-index:4;background:#fff;margin:0;padding:8px 10px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -4px 18px #1f332411;gap:4px}.tabs button{border-radius:10px}.wrap{padding-bottom:14px}
+        .bottom-nav button .ico{width:19px;height:19px}
+        .bottom-nav button.on{background:transparent;color:var(--primary)}
+        .toast{bottom:88px}
     }
 </style>
-<header><b>🍃 礼单管家</b></header>
-<main class="wrap">
-    <nav class="tabs">
-        <button class="on" onclick="page='bills';render()">礼单</button>
-        <button onclick="page='expenses';render()">随礼</button>
-        <button onclick="page='stats';render()">统计</button>
-    </nav>
-    <div id="app"></div>
-</main>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.6 12 3.5l9 7.1"/><path d="M5.5 9.5V20h13V9.5"/><path d="M9.5 20v-5.5h5V20"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/></symbol>
+    <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16"/><rect x="6" y="11" width="3" height="7" rx="1"/><rect x="11" y="7" width="3" height="11" rx="1"/><rect x="16" y="13" width="3" height="5" rx="1"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13M10 11v5M14 11v5"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 20c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16 6.5a3 3 0 0 1 0 6M17 15c2 .6 3.5 2.3 3.5 5"/></symbol>
+    <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18M7 6V4.5h10"/><circle cx="16.5" cy="14" r="1"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="11" rx="2"/><path d="M3 13h18M12 9v11"/><path d="M12 9c-3.5 0-5-1.2-5-3 0-1.4 1.2-2.3 2.5-2.3C11 3.7 12 6 12 9Zm0 0c3.5 0 5-1.2 5-3 0-1.4-1.2-2.3-2.5-2.3C13 3.7 12 6 12 9Z"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12 12 3h8v8l-9 9-8-8Z"/><circle cx="16.5" cy="7.5" r="1.2"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/><path d="M19 16l.7 1.8L21.5 18l-1.8.7L19 20.5l-.7-1.8-1.8-.7 1.8-.7L19 16Z"/></symbol>
+</svg>
+
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-gift"></use></svg></div>
+            <div><div class="brand-name">礼单管家</div><div class="brand-sub">GIFT LEDGER</div></div>
+        </div>
+        <div class="nav-label">工作台</div>
+        <nav class="nav">
+            <button data-nav="dashboard"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-home"></use></svg>总览</button>
+            <button data-nav="bills"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-list"></use></svg>礼单</button>
+            <button data-nav="expenses"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out"></use></svg>随礼</button>
+            <button data-nav="stats"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chart"></use></svg>统计</button>
+        </nav>
+        <div class="side-foot"><b>数据保存在本机</b><span>页面 · 服务 · 数据库均在本地运行</span></div>
+    </aside>
+
+    <div class="main">
+        <header class="topbar">
+            <div class="crumb" id="crumb"></div>
+            <div class="top-right"><span class="top-date" id="top-date"></span><span class="top-dot"><i></i>本地运行</span></div>
+        </header>
+        <main class="content" id="app"></main>
+    </div>
+</div>
+
+<nav class="bottom-nav">
+    <button data-nav="dashboard"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-home"></use></svg>总览</button>
+    <button data-nav="bills"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-list"></use></svg>礼单</button>
+    <button data-nav="expenses"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out"></use></svg>随礼</button>
+    <button data-nav="stats"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chart"></use></svg>统计</button>
+</nav>
+
 <script>
-    let data = {}, page = 'bills', bill = null, filter = '';
-    const money = n => '¥' + Number(n || 0).toLocaleString('zh-CN', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-    });
+    const state = {page:'dashboard', billId:null, q:'', sort:'date-desc', personQ:'', personRel:'', expQ:'', expCate:'', expRel:'', expSort:'date-desc'};
+    let data = {};
+    let swipedWrap = null, touchStart = null;
 
-    async function load() {
-        data = await (await fetch('/api/data')).json();
-        render()
+    function closeSwipe() {
+        if (swipedWrap) { swipedWrap.classList.remove('swiped'); swipedWrap = null; }
     }
 
-    async function post(url, obj) {
-        await fetch(url, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(obj)});
-        load()
+    const $ = s => document.querySelector(s);
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const icon = n => `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-${n}"></use></svg>`;
+    const money = n => '¥' + Number(n || 0).toLocaleString('zh-CN', {minimumFractionDigits:0, maximumFractionDigits:2});
+    const sum = (xs, k) => (xs || []).reduce((s, x) => s + Number(x[k] || 0), 0);
+    const relName = id => (data.relations || []).find(x => x.id == id)?.name || '其他';
+    const catName = id => (data.categories || []).find(x => x.id == id)?.name || '其他';
+    const findBill = id => (data.bills || []).find(x => x.id == id);
+
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    $('#top-date').textContent = now.toLocaleDateString('zh-CN', {year:'numeric', month:'long', day:'numeric', weekday:'long'});
+
+    function fmtDate(s) {
+        if (!s) return '—';
+        const p = String(s).split('-');
+        return p.length >= 3 ? `${p[0]}.${p[1].padStart(2,'0')}.${p[2].padStart(2,'0')}` : String(s);
     }
 
-    async function del(url) {
-        if (confirm('确定删除？')) {
-            await fetch(url, {method: 'DELETE'});
-            bill = null;
-            load()
-        }
+    function dateKey(s) {
+        const p = String(s || '').split('-');
+        return p.length >= 3 ? `${p[0]}-${p[1].padStart(2,'0')}-${p[2].padStart(2,'0')}` : String(s || '');
     }
 
-    function rel(id) {
-        return data.relations.find(x => x.id == id)?.name || '其他'
+    const TONES = {
+        green:{bg:'#eaf3ed', fg:'#276b4d', solid:'#2f7a63'},
+        gold:{bg:'#f8f0e1', fg:'#9a6d2d', solid:'#c08a3e'},
+        rust:{bg:'#f9ece7', fg:'#a9503a', solid:'#b4533a'},
+        blue:{bg:'#eaf0f6', fg:'#4b6f92', solid:'#6c8fb3'},
+        purple:{bg:'#f1ecf7', fg:'#775ba0', solid:'#8d6e9f'},
+        teal:{bg:'#e9f4f3', fg:'#2f7a72', solid:'#4a9b91'}
+    };
+    const REL_ORDER = ['green','gold','rust','blue','purple','teal'];
+    const CAT_ORDER = ['gold','blue','purple','green','rust','teal'];
+    function toneOf(kind, id) {
+        const order = kind === 'category' ? CAT_ORDER : REL_ORDER;
+        return TONES[order[(Math.max(0, Number(id) - 1)) % order.length]];
+    }
+    const styleOf = (kind, id) => { const t = toneOf(kind, id); return `background:${t.bg};color:${t.fg}`; };
+    const initial = name => { const chars = Array.from(String(name || '').trim()); return chars.length ? chars[chars.length - 1] : '?'; };
+
+    function kpi(label, value, foot, ic, tone) {
+        return `<div class="card kpi"><div class="kpi-top"><span class="icon-box ${tone ? 'tone-'+tone : ''}">${icon(ic)}</span><span class="kpi-label">${label}</span></div><div class="value ${tone || ''}">${value}</div><div class="foot">${foot}</div></div>`;
     }
 
-    function cat(id) {
-        return data.categories.find(x => x.id == id)?.name || '其他'
+    function empty(text, action) {
+        return `<div class="empty"><div class="empty-icon">${icon('gift')}</div><p>${esc(text)}</p>${action || ''}</div>`;
+    }
+
+    function pageHead(eyebrow, title, sub, action) {
+        return `<div class="page-head"><div><div class="eyebrow">${eyebrow}</div><h1>${title}</h1><div class="page-sub">${sub}</div></div><div>${action || ''}</div></div>`;
+    }
+
+    function renderTop() {
+        const names = {dashboard:'总览', bills:'礼单', expenses:'随礼', stats:'统计'};
+        const active = state.billId ? 'bills' : state.page;
+        $('#crumb').innerHTML = `礼单管家 <span class="sep">/</span> <b>${state.billId ? '礼单详情' : names[active]}</b>`;
+        document.querySelectorAll('[data-nav]').forEach(b => b.classList.toggle('on', b.dataset.nav === active));
     }
 
     function render() {
-        let a = document.querySelector('#app'), bills = data.bills || [], people = data.people || [],
-            expenses = data.expenses || [], sum = (xs, k) => xs.reduce((s, x) => s + Number(x[k] || 0), 0);
-        document.querySelectorAll('.tabs button').forEach((btn,i)=>btn.classList.toggle('on', ['bills','expenses','stats'][i]===page));
-        if (bill) {
-            let ps = people.filter(x => x.bill_id == bill.id), rs = data.relations.map(r => ({
-                name: r.name,
-                n: ps.filter(p => p.relation_id == r.id).length,
-                v: sum(ps.filter(p => p.relation_id == r.id), 'amount')
-            })).filter(x => x.n);
-            a.innerHTML = `<div class="row"><div><button onclick="bill=null;render()">← 返回</button><h2>${bill.name}</h2><span class="muted">${bill.date} · ${ps.length} 人 · ${money(sum(ps, 'amount'))}</span></div><div><button class="secondary" onclick='editBill(${JSON.stringify(bill)})'>编辑礼单</button> <button class="primary" onclick="addPerson(${bill.id})">＋ 添加人员</button></div></div><div class="panel"><div class="sectiontitle">关系汇总</div>${rs.map(x => `<div class="item"><b>${x.name}</b><span>${x.n} 人</span><b>${money(x.v)}</b></div>`).join('')}<div class="row"><b>礼单明细</b><input type="search" placeholder="搜索姓名或关系" oninput="filter=this.value;render()"></div><div class="item head"><span>姓名</span><span>关系</span><span>金额</span><span>备注</span><span>操作</span></div>${ps.filter(x => (x.name + rel(x.relation_id)).includes(filter)).map(x => `<div class="item"><b>${x.name}</b><span>${rel(x.relation_id)}</span><b>${money(x.amount)}</b><span>${x.note || '—'}</span><span><button class="secondary" onclick='editPerson(${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick="del('/api/person/${x.id}')">删除</button></span></div>`).join('')}</div>`;
-            return
-        }
-        if (page === 'bills') a.innerHTML = `<div class="cards"><div class="card"><div class="label">礼单总数</div><div class="num">${bills.length}</div></div><div class="card"><div class="label">礼金总额</div><div class="num">${money(sum(people, 'amount'))}</div></div></div><div class="row"><h2>我的礼单</h2><button class="primary" onclick="addBill()">＋ 创建礼单</button></div><div class="panel"><div class="item head"><span>礼单名称</span><span>人数</span><span>金额</span><span>时间</span><span>操作</span></div>${bills.map(x => `<div class="item click" onclick="bill=${JSON.stringify(x).replaceAll('"', '&quot;')};render()"><b>${x.name}</b><span>${x.people} 人</span><b>${money(x.amount)}</b><span>${x.date}</span><span><button class="secondary" onclick='event.stopPropagation();editBill(${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick="event.stopPropagation();del('/api/bill/${x.id}')">删除</button></span></div>`).join('') || '<p class="muted">还没有礼单，点击“创建礼单”开始记录。</p>'}</div>`;
-        else if (page === 'expenses') a.innerHTML = `<div class="cards"><div class="card"><div class="label">随礼总金额</div><div class="num">${money(sum(expenses, 'amount'))}</div></div><div class="card"><div class="label">随礼人数</div><div class="num">${expenses.length}</div></div></div><div class="row"><h2>随礼记录</h2><button class="primary" onclick="addExpense()">＋ 记录随礼</button></div><div class="panel"><div class="item head expense-head"><span>姓名</span><span>分类</span><span>关系</span><span>金额</span><span>时间</span><span>操作</span></div>${expenses.map(x => `<div class="item expense-row"><b>${x.name}</b><span>${x.category || cat(x.cate_id)}</span><span>${x.relation || rel(x.relation_id)}</span><b>${money(x.amount)}</b><span>${x.date}</span><span><button class="secondary" onclick='editExpense(${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick="del('/api/expense/${x.id}')">删除</button></span></div>`).join('')}</div>`;
-        else if (page === 'stats') {
-            let total = sum(people, 'amount'), out = sum(expenses, 'amount');
-            a.innerHTML = `<h2>收支统计</h2><div class="cards"><div class="card"><div class="label">收礼总金额</div><div class="num">${money(total)}</div></div><div class="card"><div class="label">随礼总金额</div><div class="num">${money(out)}</div></div></div>${chart('收礼按关系统计', data.relations.map(r => [r.name, sum(people.filter(x => x.relation_id == r.id), 'amount')]))}${chart('随礼按关系统计', data.relations.map(r => [r.name, sum(expenses.filter(x => x.relation_id == r.id), 'amount')]))}${chart('随礼按类别统计', data.categories.map(c => [c.name, sum(expenses.filter(x => x.cate_id == c.id), 'amount')]))}<div class="panel" style="margin-top:18px"><h3>基础管理</h3><div class="sectiontitle">关系</div><div class="form">${data.relations.map(x => `<span class="card">${x.name} <button class="secondary" onclick='editManage("relation",${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick='deleteManage("relation",${x.id})'>删除</button></span>`).join('')}<input id="rn" placeholder="新增关系"><button class="primary" onclick="manage('relation','rn')">添加</button></div><div class="sectiontitle">随礼分类</div><div class="form">${data.categories.map(x => `<span class="card">${x.name} <button class="secondary" onclick='editManage("category",${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick='deleteManage("category",${x.id})'>删除</button></span>`).join('')}<input id="cn" placeholder="新增分类"><button class="primary" onclick="manage('category','cn')">添加</button></div></div>`
+        closeSwipe();
+        renderTop();
+        const app = $('#app');
+        if (state.billId) return renderBillDetail(app);
+        ({dashboard:renderDashboard, bills:renderBills, expenses:renderExpenses, stats:renderStats}[state.page] || renderDashboard)(app);
+    }
+
+    function rerenderKeepFocus() {
+        const el = document.activeElement;
+        const id = el && el.id, pos = el && el.selectionStart;
+        render();
+        if (id) {
+            const next = document.getElementById(id);
+            if (next) { next.focus(); try { next.setSelectionRange(pos, pos); } catch (_) {} }
         }
     }
 
-    function chart(title, rows) {
-        let max = Math.max(...rows.map(x => x[1]), 1);
-        return `<div class="panel" style="margin:14px 0"><b>${title}</b>${rows.map(x => `<div class="row"><span>${x[0]}</span><b>${money(x[1])}</b></div><div class="bar"><i style="width:${x[1] / max * 100}%"></i></div>`).join('')}</div>`
+    /* ---------------- 总览 ---------------- */
+    function renderDashboard(app) {
+        const bills = data.bills || [], people = data.people || [], expenses = data.expenses || [];
+        const income = sum(people, 'amount'), out = sum(expenses, 'amount'), net = income - out;
+        app.innerHTML = `
+            <section class="hero">
+                <div>
+                    <div class="eyebrow">OVERVIEW</div>
+                    <h1>每一份心意，都有迹可循</h1>
+                    <p>收礼、随礼、关系往来，都在这里安静地记着。</p>
+                    <div class="hero-actions">
+                        <button class="btn primary" data-action="new-bill">${icon('plus')} 创建礼单</button>
+                        <button class="btn ghost" data-action="new-expense">${icon('out')} 记录随礼</button>
+                    </div>
+                </div>
+                <div class="hero-art">
+                    <div class="hero-gift">${icon('gift')}</div>
+                    <div class="float-chip a">往来 · 清晰</div>
+                    <div class="float-chip b">心意 · 被记住</div>
+                </div>
+            </section>
+            <div class="kpis">
+                ${kpi('收礼总额', `<span class="income">${money(income)}</span>`, `共 ${people.length} 位来客`, 'wallet', 'in')}
+                ${kpi('礼单数量', bills.length, `最近 ${bills.length ? fmtDate(bills[0].date) : '暂无'}`, 'list')}
+                ${kpi('随礼总额', `<span class="expense">${money(out)}</span>`, `共 ${expenses.length} 笔记录`, 'out', 'out')}
+                ${kpi('往来结余', money(net), net >= 0 ? '收礼多于随礼' : '随礼多于收礼', 'chart', 'gold')}
+            </div>
+            <div class="two-col">
+                <section class="card">
+                    <div class="card-head"><div><div class="card-title">最近礼单</div><div class="card-sub">点开可查看每位来客的明细</div></div><button class="btn ghost sm" data-nav="bills">查看全部 ${icon('chevron')}</button></div>
+                    ${bills.length ? `<div class="list">${bills.slice(0,5).map(b => `
+                        <div class="list-row click" data-action="open-bill" data-id="${b.id}">
+                            <div class="cell-main"><div class="avatar">${icon('list')}</div><div class="cell-body"><div class="cell-title">${esc(b.name)}</div><div class="cell-sub">${fmtDate(b.date)} · ${b.people} 人</div></div></div>
+                            <div class="cell-amount money income">${money(b.amount)}</div><div class="icon-btn">${icon('chevron')}</div>
+                        </div>`).join('')}</div>` : empty('还没有礼单，先创建一份吧。', `<button class="btn primary sm" data-action="new-bill">${icon('plus')} 创建礼单</button>`)}
+                </section>
+                <section class="card">
+                    <div class="card-head"><div><div class="card-title">最近随礼</div><div class="card-sub">送出去的每一份祝福</div></div><button class="btn ghost sm" data-nav="expenses">查看全部 ${icon('chevron')}</button></div>
+                    ${expenses.length ? `<div class="list">${expenses.slice(0,5).map(e => `
+                        <div class="list-row">
+                            <div class="cell-main"><div class="avatar" style="${styleOf('category',e.cate_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(e.category || catName(e.cate_id))} · ${fmtDate(e.date)}</div></div></div>
+                            <div class="cell-amount money expense">${money(e.amount)}</div>
+                        </div>`).join('')}</div>` : empty('还没有随礼记录。', `<button class="btn primary sm" data-action="new-expense">${icon('plus')} 记录随礼</button>`)}
+                </section>
+            </div>`;
     }
+
+    /* ---------------- 礼单列表 ---------------- */
+    function renderBills(app) {
+        const bills = [...(data.bills || [])];
+        const q = state.q.trim().toLowerCase();
+        const sorted = bills.filter(b => String(b.name || '').toLowerCase().includes(q));
+        // 默认按后端返回的日期倒序；只有用户主动切换排序时才在前端重排
+        if (state.sort === 'amount-desc') sorted.sort((a,b) => Number(b.amount) - Number(a.amount));
+        else if (state.sort === 'amount-asc') sorted.sort((a,b) => Number(a.amount) - Number(b.amount));
+        else if (state.sort === 'date-asc') sorted.sort((a,b) => dateKey(a.date).localeCompare(dateKey(b.date)) || a.id - b.id);
+        const people = data.people || [];
+        app.innerHTML = pageHead('GIFT LEDGER','我的礼单','每一份收礼，都记在对应的人名下。', `<button class="btn primary" data-action="new-bill">${icon('plus')} 创建礼单</button>`) + `
+            <div class="kpis">
+                ${kpi('礼单总数', bills.length, '累计创建的礼单', 'list')}
+                ${kpi('收礼总额', `<span class="income">${money(sum(people,'amount'))}</span>`, '全部礼单合计', 'wallet', 'in')}
+                ${kpi('来客人数', people.length, '按明细条数统计', 'users')}
+                ${kpi('平均每单', money(bills.length ? sum(people,'amount') / bills.length : 0), '礼金均值', 'chart', 'gold')}
+            </div>
+            <section class="card">
+                <div class="toolbar">
+                    <div class="search">${icon('search')}<input class="input" id="bill-search" placeholder="搜索礼单名称" value="${esc(state.q)}"></div>
+                    <select class="select" id="bill-sort">
+                        <option value="date-desc" ${state.sort==='date-desc'?'selected':''}>时间↓</option>
+                        <option value="date-asc" ${state.sort==='date-asc'?'selected':''}>时间↑</option>
+                        <option value="amount-desc" ${state.sort==='amount-desc'?'selected':''}>金额↓</option>
+                        <option value="amount-asc" ${state.sort==='amount-asc'?'selected':''}>金额↑</option>
+                    </select>
+                    <span class="muted" style="font-size:12px;margin-left:auto">${sorted.length} 条记录</span>
+                </div>
+                ${sorted.length ? `<div class="list">${sorted.map(b => `
+                    <div class="row-wrap">
+                        <div class="list-row click" data-action="open-bill" data-id="${b.id}">
+                            <div class="cell-main"><div class="avatar">${icon('gift')}</div><div class="cell-body"><div class="cell-title">${esc(b.name)}</div><div class="cell-sub">${esc(fmtDate(b.date))}</div></div></div>
+                            <div class="cell-count">${b.people} 人</div>
+                            <div class="cell-meta">${esc(fmtDate(b.date))}</div>
+                            <div class="cell-amount money income">${money(b.amount)}</div>
+                        </div>
+                        <div class="row-actions">
+                            <button class="icon-btn" data-action="edit-bill" data-id="${b.id}" title="编辑">${icon('edit')}</button>
+                            <button class="icon-btn danger" data-action="del-bill" data-id="${b.id}" title="删除">${icon('trash')}</button>
+                        </div>
+                    </div>`).join('')}</div>` : empty(q ? '没有找到匹配的礼单。' : '还没有礼单，点击右上角创建一份。', q ? '' : `<button class="btn primary sm" data-action="new-bill">${icon('plus')} 创建礼单</button>`)}
+            </section>`;
+    }
+
+    /* ---------------- 礼单详情 ---------------- */
+    function renderBillDetail(app) {
+        const bill = findBill(state.billId);
+        if (!bill) { state.billId = null; return render(); }
+        const ps = (data.people || []).filter(x => x.bill_id == bill.id);
+        const q = state.personQ.trim().toLowerCase();
+        const shown = ps.filter(x => {
+            if (state.personRel && String(x.relation_id) !== state.personRel) return false;
+            return (String(x.name || '') + relName(x.relation_id) + String(x.note || '')).toLowerCase().includes(q);
+        });
+        const groups = (data.relations || []).map(r => ({
+            id:r.id, name:r.name, n:ps.filter(p => p.relation_id == r.id).length,
+            v:sum(ps.filter(p => p.relation_id == r.id), 'amount')
+        })).filter(x => x.n);
+        const total = sum(ps, 'amount') || 1;
+        app.innerHTML = `
+            <div class="detail-head">
+                <div>
+                    <button class="back" data-action="back-bills">${icon('left')} 返回</button>
+                    <h1>${esc(bill.name)}</h1>
+                    <div class="chips-row"><span class="chip">${icon('calendar')} ${esc(fmtDate(bill.date))}</span><span class="chip green">${icon('users')} ${ps.length} 位来客</span><span class="chip gold">${icon('wallet')} ${money(sum(ps,'amount'))}</span></div>
+                </div>
+                <div class="detail-actions">
+                    <button class="btn ghost" data-action="edit-bill" data-id="${bill.id}">${icon('edit')} 编辑礼单</button>
+                    <button class="btn primary" data-action="new-person" data-id="${bill.id}">${icon('plus')} 添加人员</button>
+                    <button class="btn danger" data-action="del-bill" data-id="${bill.id}">${icon('trash')}</button>
+                </div>
+            </div>
+            <section class="card" style="margin-bottom:14px">
+                <div class="card-head"><div><div class="card-title">关系汇总</div><div class="card-sub">按来客关系拆分的礼金占比</div></div></div>
+                ${groups.length ? `<div class="segment">${groups.map(g => `<i style="width:${g.v/total*100}%;background:${toneOf('relation',g.id).solid}"></i>`).join('')}</div>
+                    <div class="legend">${groups.map(g => `<div class="legend-item"><span class="dot" style="background:${toneOf('relation',g.id).solid}"></span>${esc(g.name)} · ${g.n} 人 <b>${money(g.v)}</b></div>`).join('')}</div>`
+                    : '<div class="muted" style="font-size:13px">添加人员后，这里会自动汇总各关系的礼金。</div>'}
+            </section>
+            <section class="card">
+                <div class="card-head"><div><div class="card-title">礼单明细</div><div class="card-sub">${ps.length} 条记录</div></div>
+                    <div class="toolbar" style="margin:0">
+                        <div class="search" style="flex:0 0 200px">${icon('search')}<input class="input" id="person-search" placeholder="搜索姓名 / 关系 / 备注" value="${esc(state.personQ)}"></div>
+                        <select class="select" id="person-rel"><option value="">全部关系</option>${(data.relations||[]).map(r => `<option value="${r.id}" ${state.personRel == r.id ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
+                    </div>
+                </div>
+                ${shown.length ? `<div class="list">${shown.map(p => `
+                    <div class="row-wrap">
+                        <div class="list-row">
+                            <div class="cell-main"><div class="avatar" style="${styleOf('relation',p.relation_id)}">${esc(initial(p.name))}</div><div class="cell-body"><div class="cell-title">${esc(p.name)}</div><div class="cell-sub">${esc(relName(p.relation_id))}${p.note ? ' · ' + esc(p.note) : ''}</div></div></div>
+                            <span class="chip" style="${styleOf('relation',p.relation_id)}">${esc(relName(p.relation_id))}</span>
+                            <div class="cell-amount money income">${money(p.amount)}</div>
+                        </div>
+                        <div class="row-actions">
+                            <button class="icon-btn" data-action="edit-person" data-id="${p.id}" title="编辑">${icon('edit')}</button>
+                            <button class="icon-btn danger" data-action="del-person" data-id="${p.id}" title="删除">${icon('trash')}</button>
+                        </div>
+                    </div>`).join('')}</div>` : empty(ps.length ? '没有找到匹配的人员。' : '这份礼单还没有人，添加第一位来客吧。', ps.length ? '' : `<button class="btn primary sm" data-action="new-person" data-id="${bill.id}">${icon('plus')} 添加人员</button>`)}
+            </section>`;
+    }
+
+    /* ---------------- 随礼 ---------------- */
+    function renderExpenses(app) {
+        let list = [...(data.expenses || [])];
+        const q = state.expQ.trim().toLowerCase();
+        list = list.filter(e => {
+            if (q && !String(e.name || '').toLowerCase().includes(q)) return false;
+            if (state.expCate && String(e.cate_id) !== state.expCate) return false;
+            if (state.expRel && String(e.relation_id) !== state.expRel) return false;
+            return true;
+        });
+        // 默认按后端返回的日期倒序；切换排序时仅在前端重排
+        if (state.expSort === 'amount-desc') list.sort((a,b) => Number(b.amount) - Number(a.amount));
+        else if (state.expSort === 'amount-asc') list.sort((a,b) => Number(a.amount) - Number(b.amount));
+        else if (state.expSort === 'date-asc') list.sort((a,b) => dateKey(a.date).localeCompare(dateKey(b.date)) || a.id - b.id);
+        app.innerHTML = pageHead('OUTGOING','随礼记录','送出去的每一份心意，也值得被好好记下。', `<button class="btn primary" data-action="new-expense">${icon('plus')} 记录随礼</button>`) + `
+            <div class="kpis">
+                ${kpi('随礼总额', `<span class="expense">${money(sum(data.expenses || [],'amount'))}</span>`, '累计送出', 'out', 'out')}
+                ${kpi('记录笔数', (data.expenses || []).length, '共多少笔随礼', 'list')}
+                ${kpi('平均每笔', money((data.expenses || []).length ? sum(data.expenses || [],'amount') / data.expenses.length : 0), '礼金均值', 'chart', 'gold')}
+                ${kpi('最大一笔', money(Math.max(0, ...(data.expenses || []).map(e => Number(e.amount || 0)))), '单笔最高', 'wallet')}
+            </div>
+            <section class="card">
+                <div class="toolbar">
+                    <div class="search">${icon('search')}<input class="input" id="exp-search" placeholder="搜索姓名" value="${esc(state.expQ)}"></div>
+                    <select class="select" id="exp-cate"><option value="">全部分类</option>${(data.categories||[]).map(c => `<option value="${c.id}" ${state.expCate == c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select>
+                    <select class="select" id="exp-rel"><option value="">全部关系</option>${(data.relations||[]).map(r => `<option value="${r.id}" ${state.expRel == r.id ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
+                    <select class="select" id="exp-sort">
+                        <option value="date-desc" ${state.expSort==='date-desc'?'selected':''}>时间↓</option>
+                        <option value="date-asc" ${state.expSort==='date-asc'?'selected':''}>时间↑</option>
+                        <option value="amount-desc" ${state.expSort==='amount-desc'?'selected':''}>金额↓</option>
+                        <option value="amount-asc" ${state.expSort==='amount-asc'?'selected':''}>金额↑</option>
+                    </select>
+                    <span class="muted" style="font-size:12px;margin-left:auto">${list.length} 条记录</span>
+                </div>
+                ${list.length ? `<div class="list">${list.map(e => `
+                    <div class="row-wrap">
+                        <div class="list-row">
+                            <div class="cell-main"><div class="avatar" style="${styleOf('category',e.cate_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(fmtDate(e.date))}</div></div></div>
+                            <div class="cell-tags"><span class="chip" style="${styleOf('category',e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span><span class="chip" style="${styleOf('relation',e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span></div>
+                            <div class="cell-amount money expense">${money(e.amount)}</div>
+                        </div>
+                        <div class="row-actions">
+                            <button class="icon-btn" data-action="edit-expense" data-id="${e.id}" title="编辑">${icon('edit')}</button>
+                            <button class="icon-btn danger" data-action="del-expense" data-id="${e.id}" title="删除">${icon('trash')}</button>
+                        </div>
+                    </div>`).join('')}</div>` : empty(q || state.expCate || state.expRel ? '没有找到匹配的记录。' : '还没有随礼记录，点击右上角添加一笔。', (q || state.expCate || state.expRel) ? '' : `<button class="btn primary sm" data-action="new-expense">${icon('plus')} 记录随礼</button>`)}
+            </section>`;
+    }
+
+    /* ---------------- 统计 ---------------- */
+    function chartCard(title, rows, tone, foot) {
+        const active = rows.filter(r => Number(r[1]) > 0);
+        return `<section class="card"><div class="card-head"><div><div class="card-title">${title}</div><div class="card-sub">${foot}</div></div></div>
+            ${active.length ? active.map((r,i) => {
+                const max = Math.max(...active.map(x => Number(x[1])), 1);
+                return `<div class="chart-row"><div class="chart-line"><span>${esc(r[0])}</span><b class="${tone === 'red' ? 'income' : tone === 'gold' ? '' : 'expense'}">${money(r[1])}</b></div><div class="bar-track"><div class="bar-fill ${tone || ''}" style="width:${Number(r[1])/max*100}%"></div></div></div>`;
+            }).join('') : '<div class="muted" style="font-size:12px;padding:14px 0">暂无数据</div>'}</section>`;
+    }
+
+    function renderStats(app) {
+        const people = data.people || [], expenses = data.expenses || [];
+        const income = sum(people, 'amount'), out = sum(expenses, 'amount');
+        app.innerHTML = pageHead('INSIGHTS','收支统计','看看心意都流向了哪里。','') + `
+            <div class="summary-band">
+                <div class="summary-item"><span>收礼总额</span><b class="income">${money(income)}</b></div>
+                <div class="summary-item"><span>随礼总额</span><b class="expense">${money(out)}</b></div>
+                <div class="summary-item"><span>往来结余</span><b>${money(income - out)}</b></div>
+                <span class="chip ${income >= out ? 'red' : 'green'}">${income >= out ? '收礼多于随礼' : '随礼多于收礼'}</span>
+            </div>
+            <div class="chart-grid">
+                ${chartCard('收礼按关系统计', (data.relations||[]).map(r => [r.name, sum(people.filter(x => x.relation_id == r.id),'amount')]), 'red', '哪些关系带来的礼金最多')}
+                ${chartCard('随礼按关系统计', (data.relations||[]).map(r => [r.name, sum(expenses.filter(x => x.relation_id == r.id),'amount')]), '', '按关系查看送出的礼金')}
+                ${chartCard('随礼按类别统计', (data.categories||[]).map(c => [c.name, sum(expenses.filter(x => x.cate_id == c.id),'amount')]), 'gold', '不同场合的随礼分布')}
+            </div>
+            <div class="manage-grid">
+                <section class="card">
+                    <div class="card-head"><div><div class="card-title">关系管理</div><div class="card-sub">用于礼单和随礼的关系分类</div></div></div>
+                    <div class="tag-list">${(data.relations||[]).map(x => `<span class="tag">${esc(x.name)}
+                        <button class="icon-btn" data-action="edit-relation" data-id="${x.id}" title="编辑">${icon('edit')}</button>
+                        <button class="icon-btn danger" data-action="del-relation" data-id="${x.id}" title="删除">${icon('trash')}</button></span>`).join('') || '<span class="muted" style="font-size:12px">暂无关系</span>'}</div>
+                    <div class="inline-add"><input class="input" id="relation-name" placeholder="新增关系名称"><button class="btn primary" data-action="add-relation">${icon('plus')} 添加</button></div>
+                </section>
+                <section class="card">
+                    <div class="card-head"><div><div class="card-title">随礼分类</div><div class="card-sub">例如结婚、生日、乔迁</div></div></div>
+                    <div class="tag-list">${(data.categories||[]).map(x => `<span class="tag">${esc(x.name)}
+                        <button class="icon-btn" data-action="edit-category" data-id="${x.id}" title="编辑">${icon('edit')}</button>
+                        <button class="icon-btn danger" data-action="del-category" data-id="${x.id}" title="删除">${icon('trash')}</button></span>`).join('') || '<span class="muted" style="font-size:12px">暂无分类</span>'}</div>
+                    <div class="inline-add"><input class="input" id="category-name" placeholder="新增分类名称"><button class="btn primary" data-action="add-category">${icon('plus')} 添加</button></div>
+                </section>
+            </div>`;
+    }
+
+    /* ---------------- 弹窗 / 表单 ---------------- */
+    function closeModal() {
+        const host = $('#modal-host');
+        if (host) host.remove();
+        document.removeEventListener('keydown', onEsc);
+    }
+    function onEsc(e) { if (e.key === 'Escape') closeModal(); }
+    function showModal(html) {
+        closeModal();
+        const host = document.createElement('div');
+        host.className = 'modal-mask'; host.id = 'modal-host';
+        host.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}</div>`;
+        document.body.appendChild(host);
+        host.addEventListener('click', e => { if (e.target === host || e.target.closest('[data-close]')) closeModal(); });
+        document.addEventListener('keydown', onEsc);
+    }
+
+    function openForm(title, subtitle, fields, submit, danger) {
+        const body = fields.map(f => {
+            let input;
+            if (f.type === 'select') {
+                input = `<select class="input" name="${f.name}" ${f.required ? 'required' : ''}>${f.options.map(o => `<option value="${esc(o.value)}" ${String(o.value) === String(f.value) ? 'selected' : ''}>${esc(o.label)}</option>`).join('')}</select>`;
+            } else {
+                input = `<input class="input" name="${f.name}" type="${f.type || 'text'}" value="${esc(f.value ?? '')}" ${f.placeholder ? `placeholder="${esc(f.placeholder)}"` : ''} ${f.min !== undefined ? `min="${f.min}"` : ''} ${f.step ? `step="${f.step}"` : ''} ${f.required ? 'required' : ''}>`;
+            }
+            return `<label class="field ${f.full ? 'full' : ''}"><span>${f.label}</span>${input}</label>`;
+        }).join('');
+        showModal(`<div class="modal-head"><div class="modal-icon ${danger ? 'danger' : ''}">${icon(danger ? 'alert' : 'edit')}</div><div><h3>${esc(title)}</h3><p>${esc(subtitle || '')}</p></div></div>
+            <form id="app-form"><div class="form-grid">${body}</div><div class="modal-foot"><button type="button" class="btn ghost" data-close>取消</button><button type="submit" class="btn ${danger ? 'danger' : 'primary'}">保存</button></div></form>`);
+        $('#app-form').addEventListener('submit', e => {
+            e.preventDefault();
+            submit(Object.fromEntries(new FormData(e.currentTarget)));
+        });
+    }
+
+    function confirmDialog(title, message, onOk) {
+        showModal(`<div class="modal-head"><div class="modal-icon danger">${icon('trash')}</div><div><h3>${esc(title)}</h3><p>请确认这一步操作</p></div></div>
+            <div class="confirm-text">${esc(message)}</div>
+            <div class="modal-foot"><button class="btn ghost" data-close>取消</button><button class="btn danger" id="confirm-ok">确认删除</button></div>`);
+        $('#confirm-ok').addEventListener('click', onOk);
+    }
+
+    function toast(msg, bad) {
+        const t = document.createElement('div');
+        t.className = 'toast' + (bad ? ' bad' : '');
+        t.innerHTML = `${icon(bad ? 'alert' : 'check')}<span>${esc(msg)}</span>`;
+        document.body.appendChild(t);
+        setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 260); }, 2200);
+    }
+
+    async function mutate(url, method, body, msg, before) {
+        try {
+            const opt = {method: method || 'POST'};
+            if (body !== null && body !== undefined) {
+                opt.headers = {'Content-Type':'application/json'};
+                opt.body = JSON.stringify(body);
+            }
+            const r = await fetch(url, opt);
+            const d = await r.json().catch(() => ({ok:true}));
+            if (!d.ok) throw new Error(d.error || '操作失败');
+            closeModal();
+            if (before) before();
+            toast(msg || '已保存');
+            await load();
+        } catch (e) { toast(e.message || '操作失败', true); }
+    }
+
+    const relField = value => ({name:'relation_id', label:'关系', type:'select', value, options:(data.relations||[]).map(r => ({value:r.id,label:r.name})), required:true});
+    const cateField = value => ({name:'cate_id', label:'分类', type:'select', value, options:(data.categories||[]).map(c => ({value:c.id,label:c.name})), required:true});
+    const billField = value => ({name:'bill_id', label:'所属礼单', type:'select', value, options:(data.bills||[]).map(b => ({value:b.id,label:b.name})), required:true});
+    const numFields = d => ({...d, amount:Number(d.amount), relation_id:Number(d.relation_id), cate_id:Number(d.cate_id), bill_id:Number(d.bill_id)});
 
     function addBill() {
-        formDialog('创建礼单', `<label>礼单名称<input name="name" required placeholder="例如：爸爸生日"></label><label>日期<input name="date" type="date" required value="${new Date().toISOString().slice(0,10)}"></label>`, d=>post('/api/bill',d))
+        openForm('创建礼单','为这场喜事建一份新的礼单', [
+            {name:'name',label:'礼单名称',placeholder:'例如：生日',required:true},
+            {name:'date',label:'日期',type:'date',value:today,required:true}
+        ], d => mutate('/api/bill','POST',d,'礼单已创建'));
     }
-
-    function editBill(x){formDialog('编辑礼单',`<label>礼单名称<input name="name" required value="${x.name||''}"></label><label>日期<input name="date" type="date" required value="${x.date||''}"></label>`,d=>put('/api/bill/'+x.id,d))}
-
+    function editBill(x) {
+        openForm('编辑礼单',x.name,[
+            {name:'name',label:'礼单名称',value:x.name,required:true},
+            {name:'date',label:'日期',type:'date',value:x.date,required:true}
+        ], d => mutate('/api/bill/'+x.id,'PUT',d,'已保存'));
+    }
     function addPerson(id) {
-        formDialog('添加收礼明细', `<label>姓名<input name="name" required placeholder="请输入姓名"></label><label>关系<select name="relation_id" required>${data.relations.map(x=>`<option value="${x.id}">${x.name}</option>`).join('')}</select></label><label>金额（元）<input name="amount" type="number" min="0" step="0.01" required placeholder="0.00"></label><label>备注<input name="note" placeholder="选填"></label>`, d=>post('/api/person',{...d,bill_id:id,amount:Number(d.amount),relation_id:Number(d.relation_id)}))
+        openForm('添加人员','记录一位来客的礼金',[
+            {name:'name',label:'姓名',placeholder:'请输入姓名',required:true},
+            relField(),
+            {name:'amount',label:'金额（元）',type:'number',min:0,step:'0.01',placeholder:'0.00',required:true},
+            {name:'note',label:'备注',placeholder:'选填',full:true}
+        ], d => mutate('/api/person','POST',{...d,bill_id:id,amount:Number(d.amount),relation_id:Number(d.relation_id)},'已添加'));
     }
-
-    function editPerson(x){formDialog('编辑收礼明细',`<label>所属礼单<select name="bill_id">${data.bills.map(b=>`<option value="${b.id}" ${b.id==x.bill_id?'selected':''}>${b.name}</option>`).join('')}</select></label><label>姓名<input name="name" required value="${x.name||''}"></label><label>关系<select name="relation_id">${data.relations.map(r=>`<option value="${r.id}" ${r.id==x.relation_id?'selected':''}>${r.name}</option>`).join('')}</select></label><label>金额（元）<input name="amount" type="number" min="0" step="0.01" required value="${x.amount}"></label><label>备注<input name="note" value="${x.note||''}"></label>`,d=>put('/api/person/'+x.id,{...d,bill_id:Number(d.bill_id),relation_id:Number(d.relation_id),amount:Number(d.amount)}))}
-
+    function editPerson(x) {
+        openForm('编辑收礼明细',x.name,[
+            billField(x.bill_id), relField(x.relation_id),
+            {name:'name',label:'姓名',value:x.name,required:true},
+            {name:'amount',label:'金额（元）',type:'number',min:0,step:'0.01',value:x.amount,required:true},
+            {name:'note',label:'备注',value:x.note || '',full:true}
+        ], d => mutate('/api/person/'+x.id,'PUT',numFields(d),'已保存'));
+    }
     function addExpense() {
-        formDialog('记录随礼', `<label>姓名<input name="name" required placeholder="请输入姓名"></label><label>分类<select name="cate_id" required>${data.categories.map(x=>`<option value="${x.id}">${x.name}</option>`).join('')}</select></label><label>关系<select name="relation_id" required>${data.relations.map(x=>`<option value="${x.id}">${x.name}</option>`).join('')}</select></label><label>金额（元）<input name="amount" type="number" min="0" step="0.01" required placeholder="0.00"></label><label>日期<input name="date" type="date" required value="${new Date().toISOString().slice(0,10)}"></label>`, d=>post('/api/expense',{...d,amount:Number(d.amount),relation_id:Number(d.relation_id),cate_id:Number(d.cate_id)}))
+        openForm('记录随礼','把送出的祝福记下来',[
+            {name:'name',label:'姓名',placeholder:'请输入姓名',required:true},
+            cateField(), relField(),
+            {name:'amount',label:'金额（元）',type:'number',min:0,step:'0.01',placeholder:'0.00',required:true},
+            {name:'date',label:'日期',type:'date',value:today,required:true}
+        ], d => mutate('/api/expense','POST',{...d,amount:Number(d.amount),relation_id:Number(d.relation_id),cate_id:Number(d.cate_id)},'已记录'));
+    }
+    function editExpense(x) {
+        openForm('编辑随礼记录',x.name,[
+            {name:'name',label:'姓名',value:x.name,required:true},
+            cateField(x.cate_id), relField(x.relation_id),
+            {name:'amount',label:'金额（元）',type:'number',min:0,step:'0.01',value:x.amount,required:true},
+            {name:'date',label:'日期',type:'date',value:x.date,required:true}
+        ], d => mutate('/api/expense/'+x.id,'PUT',numFields(d),'已保存'));
+    }
+    function editManage(kind, x) {
+        const isRel = kind === 'relation';
+        openForm(isRel ? '修改关系' : '修改分类', x.name, [
+            {name:'name',label:'名称',value:x.name,required:true,full:true}
+        ], d => mutate('/api/manage/'+(isRel ? 'relation' : 'category')+'/'+x.id,'PUT',{...d,type:kind},'已保存'));
     }
 
-    function editExpense(x){formDialog('编辑随礼记录',`<label>姓名<input name="name" required value="${x.name||''}"></label><label>分类<select name="cate_id">${data.categories.map(c=>`<option value="${c.id}" ${c.id==x.cate_id?'selected':''}>${c.name}</option>`).join('')}</select></label><label>关系<select name="relation_id">${data.relations.map(r=>`<option value="${r.id}" ${r.id==x.relation_id?'selected':''}>${r.name}</option>`).join('')}</select></label><label>金额（元）<input name="amount" type="number" min="0" step="0.01" required value="${x.amount}"></label><label>日期<input name="date" type="date" required value="${x.date||''}"></label>`,d=>put('/api/expense/'+x.id,{...d,amount:Number(d.amount),relation_id:Number(d.relation_id),cate_id:Number(d.cate_id)}))}
+    /* ---------------- 事件 ---------------- */
+    document.addEventListener('touchstart', e => {
+        const wrap = e.target.closest('.row-wrap');
+        if (!wrap) { closeSwipe(); return; }
+        if (swipedWrap && swipedWrap !== wrap) closeSwipe();
+        const t = e.touches[0];
+        touchStart = {wrap, x:t.clientX, y:t.clientY};
+    }, {passive:true});
 
-    async function put(url,obj){await fetch(url,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(obj)});load()}
+    document.addEventListener('touchend', e => {
+        if (!touchStart) return;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - touchStart.x, dy = t.clientY - touchStart.y;
+        const wrap = touchStart.wrap;
+        touchStart = null;
+        if (Math.abs(dx) < 30 || Math.abs(dx) < Math.abs(dy)) return;
+        if (dx < 0) {
+            if (swipedWrap && swipedWrap !== wrap) closeSwipe();
+            wrap.classList.add('swiped');
+            swipedWrap = wrap;
+        } else {
+            wrap.classList.remove('swiped');
+            if (swipedWrap === wrap) swipedWrap = null;
+        }
+    }, {passive:true});
 
-    function formDialog(title, fields, submit){
-        const host=document.createElement('div');host.className='modal';host.innerHTML=`<section class="dialog"><h3>${title}</h3><form>${fields}<div class="actions"><button type="button" class="secondary" data-cancel>取消</button><button class="primary">保存</button></div></form></section>`;document.body.append(host);host.addEventListener('click',e=>{if(e.target===host||e.target.closest('[data-cancel]'))host.remove()});host.querySelector('form').addEventListener('submit',e=>{e.preventDefault();submit(Object.fromEntries(new FormData(e.currentTarget)));host.remove()});host.querySelector('input')?.focus()
+    document.addEventListener('touchcancel', () => { touchStart = null; }, {passive:true});
+
+    document.addEventListener('click', e => {
+        if (e.target.closest('.row-wrap.swiped') && !e.target.closest('.row-actions')) { closeSwipe(); return; }
+        const nav = e.target.closest('[data-nav]');
+        if (nav) { state.page = nav.dataset.nav; state.billId = null; render(); return; }
+        const el = e.target.closest('[data-action]');
+        if (!el) return;
+        const a = el.dataset.action, id = Number(el.dataset.id);
+        const one = (arr) => (arr || []).find(x => x.id === id);
+
+        if (a === 'new-bill') addBill();
+        else if (a === 'new-expense') addExpense();
+        else if (a === 'open-bill') { state.billId = id; state.personQ = ''; state.personRel = ''; render(); }
+        else if (a === 'back-bills') { state.billId = null; render(); }
+        else if (a === 'edit-bill') { const x = one(data.bills); if (x) editBill(x); }
+        else if (a === 'del-bill') {
+            const x = one(data.bills);
+            if (x) confirmDialog('删除礼单','「'+x.name+'」及其下所有收礼明细都会被删除，且无法恢复。',() =>
+                mutate('/api/bill/'+id,'DELETE',null,'已删除',() => { if (state.billId === id) { state.billId = null; state.page = 'bills'; } }));
+        }
+        else if (a === 'new-person') addPerson(id);
+        else if (a === 'edit-person') { const x = one(data.people); if (x) editPerson(x); }
+        else if (a === 'del-person') confirmDialog('删除收礼明细','确定删除这条人员记录？',() => mutate('/api/person/'+id,'DELETE',null,'已删除'));
+        else if (a === 'edit-expense') { const x = one(data.expenses); if (x) editExpense(x); }
+        else if (a === 'del-expense') confirmDialog('删除随礼记录','确定删除这笔随礼记录？',() => mutate('/api/expense/'+id,'DELETE',null,'已删除'));
+        else if (a === 'edit-relation') { const x = one(data.relations); if (x) editManage('relation',x); }
+        else if (a === 'edit-category') { const x = one(data.categories); if (x) editManage('category',x); }
+        else if (a === 'del-relation') confirmDialog('删除关系','确定删除这个关系？',() => mutate('/api/manage/relation/'+id,'DELETE',null,'已删除'));
+        else if (a === 'del-category') confirmDialog('删除分类','确定删除这个分类？',() => mutate('/api/manage/category/'+id,'DELETE',null,'已删除'));
+        else if (a === 'add-relation' || a === 'add-category') {
+            const isRel = a === 'add-relation';
+            const input = document.getElementById(isRel ? 'relation-name' : 'category-name');
+            const name = input && input.value.trim();
+            if (!name) { toast('请先填写名称', true); return; }
+            mutate('/api/manage','POST',{type:isRel ? 'relation' : 'category',name},'已添加');
+        }
+    });
+
+    document.addEventListener('input', e => {
+        const id = e.target.id;
+        if (id === 'bill-search') { state.q = e.target.value; rerenderKeepFocus(); }
+        else if (id === 'person-search') { state.personQ = e.target.value; rerenderKeepFocus(); }
+        else if (id === 'exp-search') { state.expQ = e.target.value; rerenderKeepFocus(); }
+    });
+    document.addEventListener('change', e => {
+        if (e.target.id === 'bill-sort') { state.sort = e.target.value; render(); }
+        else if (e.target.id === 'person-rel') { state.personRel = e.target.value; render(); }
+        else if (e.target.id === 'exp-cate') { state.expCate = e.target.value; render(); }
+        else if (e.target.id === 'exp-rel') { state.expRel = e.target.value; render(); }
+        else if (e.target.id === 'exp-sort') { state.expSort = e.target.value; render(); }
+    });
+
+    async function load() {
+        try {
+            data = await (await fetch('/api/data')).json();
+            render();
+        } catch (_) {
+            $('#app').innerHTML = '<div class="empty"><div class="empty-icon">!</div><p>无法读取数据，请通过 <b>python3 app.py</b> 启动服务后访问本页。</p></div>';
+        }
     }
-
-    function manage(type, id) {
-        let name = document.getElementById(id).value.trim();
-        if (name) post('/api/manage', {type: type === 'relation' ? 'relation' : 'category', name})
-    }
-
-    function editManage(type,x){formDialog(type==='relation'?'修改关系':'修改分类',`<label>名称<input name="name" required value="${x.name||''}"></label>`,d=>put('/api/manage/'+type+'/'+x.id,d))}
-    async function deleteManage(type,id){if(!confirm('确定删除此项？'))return;let r=await fetch('/api/manage/'+type+'/'+id,{method:'DELETE'}),d=await r.json();if(!d.ok)alert(d.error||'删除失败');load()}
-
     load();
 </script>
+</body>
 </html>
