@@ -493,7 +493,7 @@
             </div>
             <div class="two-col">
                 <section class="card">
-                    <div class="card-head"><div><div class="card-title">最近礼单</div><div class="card-sub">点开可查看每位来客的明细</div></div><button class="btn ghost sm" data-nav="bills">查看全部 ${icon('chevron')}</button></div>
+                    <div class="card-head"><div><div class="card-title">最近礼单</div><div class="card-sub">点开可查看每位来客的明细</div></div><button class="btn ghost sm" data-nav="bills">全部 ${icon('chevron')}</button></div>
                     ${bills.length ? `<div class="list">${bills.slice(0,5).map(b => `
                         <div class="list-row click" data-action="open-bill" data-id="${b.id}">
                             <div class="cell-main"><div class="avatar">${icon('list')}</div><div class="cell-body"><div class="cell-title">${esc(b.name)}</div><div class="cell-sub">${fmtDate(b.date)} · ${b.people} 人</div></div></div>
@@ -501,7 +501,7 @@
                         </div>`).join('')}</div>` : empty('还没有礼单，先创建一份吧。', `<button class="btn primary sm" data-action="new-bill">${icon('plus')} 创建礼单</button>`)}
                 </section>
                 <section class="card">
-                    <div class="card-head"><div><div class="card-title">最近随礼</div><div class="card-sub">送出去的每一份祝福</div></div><button class="btn ghost sm" data-nav="expenses">查看全部 ${icon('chevron')}</button></div>
+                    <div class="card-head"><div><div class="card-title">最近随礼</div><div class="card-sub">送出去的每一份祝福</div></div><button class="btn ghost sm" data-nav="expenses">全部 ${icon('chevron')}</button></div>
                     ${expenses.length ? `<div class="list">${expenses.slice(0,5).map(e => `
                         <div class="list-row">
                             <div class="cell-main"><div class="avatar" style="${styleOf('category',e.cate_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(e.category || catName(e.cate_id))} · ${fmtDate(e.date)}</div></div></div>
@@ -593,7 +593,7 @@
                 <div class="card-head"><div><div class="card-title">礼单明细</div><div class="card-sub">${ps.length} 条记录</div></div>
                     <div class="toolbar" style="margin:0">
                         <div class="search" style="flex:0 0 200px">${icon('search')}<input class="input" id="person-search" placeholder="姓名 / 备注" value="${esc(state.personQ)}"></div>
-                        <select class="select" id="person-rel"><option value="">全部关系</option>${(data.relations||[]).map(r => `<option value="${r.id}" ${state.personRel == r.id ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
+                        <select class="select" id="person-rel"><option value="">关系</option>${(data.relations||[]).map(r => `<option value="${r.id}" ${state.personRel == r.id ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
                     </div>
                 </div>
                 ${shown.length ? `<div class="list">${shown.map(p => `
@@ -635,8 +635,8 @@
             <section class="card">
                 <div class="toolbar">
                     <div class="search">${icon('search')}<input class="input" id="exp-search" placeholder="搜索姓名" value="${esc(state.expQ)}"></div>
-                    <select class="select" id="exp-cate"><option value="">全部分类</option>${(data.categories||[]).map(c => `<option value="${c.id}" ${state.expCate == c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select>
-                    <select class="select" id="exp-rel"><option value="">全部关系</option>${(data.relations||[]).map(r => `<option value="${r.id}" ${state.expRel == r.id ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
+                    <select class="select" id="exp-cate"><option value="">分类</option>${(data.categories||[]).map(c => `<option value="${c.id}" ${state.expCate == c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select>
+                    <select class="select" id="exp-rel"><option value="">关系</option>${(data.relations||[]).map(r => `<option value="${r.id}" ${state.expRel == r.id ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
                     <select class="select" id="exp-sort">
                         <option value="date-desc" ${state.expSort==='date-desc'?'selected':''}>时间↓</option>
                         <option value="date-asc" ${state.expSort==='date-asc'?'selected':''}>时间↑</option>
@@ -681,9 +681,9 @@
                 <span class="chip ${income >= out ? 'red' : 'green'}">${income >= out ? '收礼多于随礼' : '随礼多于收礼'}</span>
             </div>
             <div class="chart-grid">
-                ${chartCard('收礼按关系统计', (data.relations||[]).map(r => [r.name, sum(people.filter(x => x.relation_id == r.id),'amount')]), 'red', '哪些关系带来的礼金最多')}
-                ${chartCard('随礼按关系统计', (data.relations||[]).map(r => [r.name, sum(expenses.filter(x => x.relation_id == r.id),'amount')]), '', '按关系查看送出的礼金')}
-                ${chartCard('随礼按类别统计', (data.categories||[]).map(c => [c.name, sum(expenses.filter(x => x.cate_id == c.id),'amount')]), 'gold', '不同场合的随礼分布')}
+                ${chartCard('收礼(关系)', (data.relations||[]).map(r => [r.name, sum(people.filter(x => x.relation_id == r.id),'amount')]), 'red', '哪些关系带来的礼金最多')}
+                ${chartCard('随礼(关系)', (data.relations||[]).map(r => [r.name, sum(expenses.filter(x => x.relation_id == r.id),'amount')]), '', '按关系查看送出的礼金')}
+                ${chartCard('随礼(类别)', (data.categories||[]).map(c => [c.name, sum(expenses.filter(x => x.cate_id == c.id),'amount')]), 'gold', '不同场合的随礼分布')}
             </div>
             <div class="manage-grid">
                 <section class="card">
