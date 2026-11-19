@@ -100,6 +100,13 @@
         width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;
         background:#fff;color:var(--ink);outline:none;transition:border .15s,box-shadow .15s;
     }
+    /* Mac 的 WKWebView 会渲染原生 select，丢掉圆角/边框；统一去掉原生外观并自绘箭头 */
+    select.input,select.select{
+        -webkit-appearance:none;appearance:none;
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236f4e37' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat:no-repeat;background-position:right 12px center;
+        padding-right:34px;
+    }
     .search input{padding-left:36px}
     select.select{width:auto;min-width:148px;cursor:pointer}
     .input:focus,.select:focus,input:focus,select:focus{border-color:#c3a68a;box-shadow:0 0 0 3px rgba(111,78,55,.09)}

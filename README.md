@@ -1,4 +1,4 @@
-# 礼单管家
+# 礼记
 
 轻量本地礼单记录应用，使用 Python 标准库提供页面与 API，数据保存在当前目录的 SQLite 文件 `gift`。应用直接使用已有 `gift`（礼单）、`income`（礼单明细，按 `gift_id` 关联）、`cate` 和 `relation` 表，不创建业务表。随礼数据使用 `expensex`；兼容当前数据库中的旧表名 `expenses`。
 
@@ -28,15 +28,15 @@ python3 app.py
 
 2. 打开仓库的 **Actions** 页，允许工作流运行；在左侧选择「打包三端安装包」，点击 **Run workflow**。也可以直接推送一个 `v` 开头的标签（如 `git tag v1.0.0 && git push origin v1.0.0`）自动触发。
 
-3. 构建完成后，在对应本次运行的页面底部 **Artifacts** 处分别下载：
+3. 构建完成后，在对应本次运行的页面底部 **Artifacts** 处分别下载（对外分享请到 Releases 页）。注：Release 附件用拼音文件名，因为 GitHub 会把中文附件名改写成 `default.xxx`：
 
-   - `礼单管家-Windows-exe` → `礼单管家.exe`（Windows）
-   - `礼单管家-macOS-dmg` → `礼单管家.dmg`（macOS，双击挂载后拖入「应用程序」；首次打开需在「系统设置 → 隐私与安全性」点「仍要打开」）
-   - `礼单管家-Android-apk` → `app-debug.apk`（Android，安装时允许安装未知来源应用）
+   - `礼记-Windows-exe` → `Liji-Windows.exe`（Windows）
+   - `礼记-macOS-dmg` → `Liji-macOS.dmg`（macOS，双击挂载后拖入「应用程序」；首次打开需在「系统设置 → 隐私与安全性」点「仍要打开」）
+   - `礼记-Android-apk` → `Liji-Android.apk`（Android，安装时允许安装未知来源应用）
 
 **产物说明**
 
-- 桌面版数据存于用户目录（Windows 为 `%APPDATA%/礼单管家`，macOS 为 `~/Library/Application Support/礼单管家`），首次启动会把仓库中的 `gift` 作为初始数据复制过去，之后升级不会覆盖已有记录。
+- 桌面版数据存于用户目录（Windows 为 `%APPDATA%/礼记`，macOS 为 `~/Library/Application Support/礼记`），首次启动会把仓库中的 `gift` 作为初始数据复制过去，之后升级不会覆盖已有记录。
 - Android 版数据存于应用私有目录，同样仅首次解包数据库。
 - 安装包首次构建需下载 Gradle 9.6、Android SDK 与 Python 运行时，耗时较长，属正常现象。
 

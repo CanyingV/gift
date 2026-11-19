@@ -208,7 +208,7 @@ class Handler(SimpleHTTPRequestHandler):
         c.execute('PRAGMA foreign_keys=ON')
         p = urlparse(self.path).path
         if p == '/api/bill':
-            c.execute('INSERT INTO gift(name,date,amount) VALUES(?,?,?)', (d['name'], d.get('date', ''), '0'))
+            c.execute('INSERT INTO gift(name,date) VALUES(?,?)', (d['name'], d.get('date', '')))
         elif p == '/api/person':
             c.execute('INSERT INTO income(gift_id,name,relation_id,amount,"desc") VALUES(?,?,?,?,?)',
                       (d['bill_id'], d['name'], str(d['relation_id']), str(d['amount']), d.get('note', '')))
