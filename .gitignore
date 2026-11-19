@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# PyInstaller
+build/
+dist/
+*.spec.bak
+
+# Android
+android/.gradle/
+android/local.properties
+android/app/build/
+android/.idea/
+android/*.iml
+# 构建时从项目根目录自动同步进来的副本
+android/app/src/main/python/app.py
+android/app/src/main/assets/
+
+# IDE
+.idea/
+.vscode/

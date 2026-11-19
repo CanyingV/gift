@@ -2,14 +2,23 @@ import json, sqlite3, os, zipfile, io
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse, quote
 
-BASE = os.path.dirname(os.path.abspath(__file__))
-DB = os.path.join(BASE, 'gift')
-# Use the supplied schema only. Older copies call the expense table `expenses`
-# installations that use the requested `expensex` name are supported too.
-con = sqlite3.connect(DB)
-tables = {r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-EXPENSE_TABLE = 'expensex' if 'expensex' in tables else 'expenses'
-con.close()
+# 静态资源目录与数据库路径可通过环境变量覆盖，供桌面壳 / Android 复用。
+BASE = os.environ.get('GIFT_BASE_DIR') or os.path.dirname(os.path.abspath(__file__))
+DB = os.environ.get('GIFT_DB_PATH') or os.path.join(BASE, 'gift')
+
+def detect_expense_table(db_path):
+    """兼容旧版 expenses 与新版 expensex 表名；数据库不存在时按 expenses 处理。"""
+    if not os.path.exists(db_path):
+        return 'expenses'
+    try:
+        con = sqlite3.connect(db_path)
+        tables = {r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        con.close()
+        return 'expensex' if 'expensex' in tables else 'expenses'
+    except Exception:
+        return 'expenses'
+
+EXPENSE_TABLE = detect_expense_table(DB)
 
 # SQLite stores dates as text and older rows are not zero-padded (2026-9-19).
 # Build a normalized YYYY-MM-DD key so ORDER BY uses the real date.
@@ -269,6 +278,9 @@ class Handler(SimpleHTTPRequestHandler):
         c.close()
         self.send_json({'ok': True})
 
-if __name__ == '__main__': print('礼单管理已启动: http://127.0.0.1:8765')
-ThreadingHTTPServer(('127.0.0.1', 8765),
-                    Handler).serve_forever()
+def run_server(host='127.0.0.1', port=8765):
+    print('礼单管理已启动: http://%s:%d' % (host, port))
+    ThreadingHTTPServer((host, port), Handler).serve_forever()
+
+if __name__ == '__main__':
+    run_server()

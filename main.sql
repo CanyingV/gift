@@ -10,7 +10,7 @@
  Target Server Version : 3045000 (3.45.0)
  File Encoding         : 65001
 
- Date: 19/11/2026 08:36:49
+ Date: 19/11/2026 10:42:10
 */
 
 PRAGMA foreign_keys = false;
@@ -49,15 +49,6 @@ CREATE TABLE "expenses" (
 -- Records of expenses
 -- ----------------------------
 BEGIN;
-INSERT INTO "expenses" ("id", "name", "amount", "date", "relation_id", "cate_id") VALUES (1, '白孟楠', 188, '2021-10-4', 3, 1);
-INSERT INTO "expenses" ("id", "name", "amount", "date", "relation_id", "cate_id") VALUES (2, '王赏', 188, '2022-10-3', 3, 1);
-INSERT INTO "expenses" ("id", "name", "amount", "date", "relation_id", "cate_id") VALUES (3, '志刚', 200, '2022-10-4', 2, 1);
-INSERT INTO "expenses" ("id", "name", "amount", "date", "relation_id", "cate_id") VALUES (4, '范彩霞', 188, '2023-11-21', 3, 1);
-INSERT INTO "expenses" ("id", "name", "amount", "date", "relation_id", "cate_id") VALUES (5, '朱一飞', 500, '2024-6-15', 3, 1);
-INSERT INTO "expenses" ("id", "name", "amount", "date", "relation_id", "cate_id") VALUES (6, '张迪', 300, '2025-10-18', 2, 1);
-INSERT INTO "expenses" ("id", "name", "amount", "date", "relation_id", "cate_id") VALUES (7, '赵子星', 200, '2026-5-4', 3, 1);
-INSERT INTO "expenses" ("id", "name", "amount", "date", "relation_id", "cate_id") VALUES (8, '刘伟贤', 1000, '2026-9-19', 3, 1);
-INSERT INTO "expenses" ("id", "name", "amount", "date", "relation_id", "cate_id") VALUES (9, '刘志峰', 200, '2026-10-6', 3, 1);
 COMMIT;
 
 -- ----------------------------
@@ -75,7 +66,6 @@ CREATE TABLE "gift" (
 -- Records of gift
 -- ----------------------------
 BEGIN;
-INSERT INTO "gift" ("id", "name", "amount", "date") VALUES (1, '礼单名称', '100', '2026-1-1');
 COMMIT;
 
 -- ----------------------------
@@ -95,8 +85,6 @@ CREATE TABLE "income" (
 -- Records of income
 -- ----------------------------
 BEGIN;
-INSERT INTO "income" ("id", "name", "amount", "relation_id", "desc", "gift_id") VALUES (1, '张三', '30', '1', NULL, 1);
-INSERT INTO "income" ("id", "name", "amount", "relation_id", "desc", "gift_id") VALUES (2, '李四', '70', '2', NULL, 1);
 COMMIT;
 
 -- ----------------------------
@@ -131,8 +119,8 @@ BEGIN;
 INSERT INTO "sqlite_sequence" ("name", "seq") VALUES ('relation', 4);
 INSERT INTO "sqlite_sequence" ("name", "seq") VALUES ('cate', 2);
 INSERT INTO "sqlite_sequence" ("name", "seq") VALUES ('expenses', 9);
-INSERT INTO "sqlite_sequence" ("name", "seq") VALUES ('income', 2);
-INSERT INTO "sqlite_sequence" ("name", "seq") VALUES ('gift', 1);
+INSERT INTO "sqlite_sequence" ("name", "seq") VALUES ('income', 4);
+INSERT INTO "sqlite_sequence" ("name", "seq") VALUES ('gift', 2);
 COMMIT;
 
 -- ----------------------------
@@ -148,12 +136,12 @@ UPDATE "main"."sqlite_sequence" SET seq = 9 WHERE name = 'expenses';
 -- ----------------------------
 -- Auto increment value for gift
 -- ----------------------------
-UPDATE "main"."sqlite_sequence" SET seq = 1 WHERE name = 'gift';
+UPDATE "main"."sqlite_sequence" SET seq = 2 WHERE name = 'gift';
 
 -- ----------------------------
 -- Auto increment value for income
 -- ----------------------------
-UPDATE "main"."sqlite_sequence" SET seq = 2 WHERE name = 'income';
+UPDATE "main"."sqlite_sequence" SET seq = 4 WHERE name = 'income';
 
 -- ----------------------------
 -- Auto increment value for relation
