@@ -124,7 +124,7 @@ jobs:
             - **Android**：下载 `Liji-Android.apk` 传到手机安装（需允许安装未知来源应用；debug 签名，仅供自行使用）
 
             注：文件名用拼音是因为 GitHub 会把中文附件名改写成 default.xxx，应用本身仍叫「礼记」。
-            数据保存在本机，安装包内置初始示例数据。
+            数据保存在本机，安装包内置初始分类与关系，无示例记录，可直接使用。
           files: |
             dist/Liji-Windows.exe
             dist/Liji-macOS.dmg
