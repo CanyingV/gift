@@ -10,7 +10,7 @@
  Target Server Version : 3045000 (3.45.0)
  File Encoding         : 65001
 
- Date: 19/11/2026 10:42:10
+ Date: 19/11/2026 11:34:43
 */
 
 PRAGMA foreign_keys = false;
@@ -49,6 +49,7 @@ CREATE TABLE "expenses" (
 -- Records of expenses
 -- ----------------------------
 BEGIN;
+INSERT INTO "expenses" ("id", "name", "amount", "date", "relation_id", "cate_id") VALUES (1, '张三', 100, '2026-11-11', 1, 1);
 COMMIT;
 
 -- ----------------------------
@@ -58,7 +59,6 @@ DROP TABLE IF EXISTS "gift";
 CREATE TABLE "gift" (
   "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   "name" TEXT,
-  "amount" TEXT,
   "date" DATE
 );
 
@@ -66,6 +66,8 @@ CREATE TABLE "gift" (
 -- Records of gift
 -- ----------------------------
 BEGIN;
+INSERT INTO "gift" ("id", "name", "date") VALUES (1, '礼单名称', '2026-1-1');
+INSERT INTO "gift" ("id", "name", "date") VALUES (2, '礼单2', '2026-11-19');
 COMMIT;
 
 -- ----------------------------
@@ -85,6 +87,10 @@ CREATE TABLE "income" (
 -- Records of income
 -- ----------------------------
 BEGIN;
+INSERT INTO "income" ("id", "name", "amount", "relation_id", "desc", "gift_id") VALUES (1, '张三', '30', '1', NULL, 1);
+INSERT INTO "income" ("id", "name", "amount", "relation_id", "desc", "gift_id") VALUES (2, '李四', '70', '2', NULL, 1);
+INSERT INTO "income" ("id", "name", "amount", "relation_id", "desc", "gift_id") VALUES (3, '王二', '100', '1', '', 2);
+INSERT INTO "income" ("id", "name", "amount", "relation_id", "desc", "gift_id") VALUES (4, '麻子', '200', '2', '', 2);
 COMMIT;
 
 -- ----------------------------
