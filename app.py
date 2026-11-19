@@ -6,19 +6,8 @@ from urllib.parse import urlparse, quote
 BASE = os.environ.get('GIFT_BASE_DIR') or os.path.dirname(os.path.abspath(__file__))
 DB = os.environ.get('GIFT_DB_PATH') or os.path.join(BASE, 'gift')
 
-def detect_expense_table(db_path):
-    """兼容旧版 expenses 与新版 expensex 表名；数据库不存在时按 expenses 处理。"""
-    if not os.path.exists(db_path):
-        return 'expenses'
-    try:
-        con = sqlite3.connect(db_path)
-        tables = {r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-        con.close()
-        return 'expensex' if 'expensex' in tables else 'expenses'
-    except Exception:
-        return 'expenses'
-
-EXPENSE_TABLE = detect_expense_table(DB)
+# 礼单详情表固定为 expenses。
+EXPENSE_TABLE = 'expenses'
 
 # SQLite stores dates as text and older rows are not zero-padded (2026-9-19).
 # Build a normalized YYYY-MM-DD key so ORDER BY uses the real date.

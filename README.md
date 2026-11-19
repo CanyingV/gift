@@ -1,6 +1,6 @@
 # 礼记
 
-轻量本地礼单记录应用，使用 Python 标准库提供页面与 API，数据保存在当前目录的 SQLite 文件 `gift`。应用直接使用已有 `gift`（礼单）、`income`（礼单明细，按 `gift_id` 关联）、`cate` 和 `relation` 表，不创建业务表。随礼数据使用 `expensex`；兼容当前数据库中的旧表名 `expenses`。
+轻量本地礼单记录应用，使用 Python 标准库提供页面与 API，数据保存在当前目录的 SQLite 文件 
 
 ## 启动
 
