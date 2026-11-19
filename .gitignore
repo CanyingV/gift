@@ -21,3 +21,6 @@ android/app/src/main/assets/
 # IDE
 .idea/
 .vscode/
+
+# 工作区内部数据
+.workbuddy/
