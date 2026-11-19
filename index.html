@@ -1824,7 +1824,7 @@
                 <div>
                     <div class="eyebrow">OVERVIEW</div>
                     <h1>每一份心意，都有迹可循</h1>
-                    <p>收礼、随礼、关系往来，都在这里安静地记着。</p>
+                    <p>收礼、随礼、关系往来，都在这里安静地记着</p>
                     <div class="hero-actions">
                         <button class="btn primary" data-action="new-bill">${icon('plus')} 创建礼单</button>
                         <button class="btn ghost" data-action="new-expense">${icon('out')} 记录随礼</button>
@@ -1849,7 +1849,7 @@
                         <div class="list-row click" data-action="open-bill" data-id="${b.id}">
                             <div class="cell-main"><div class="avatar">${icon('list')}</div><div class="cell-body"><div class="cell-title">${esc(b.name)}</div><div class="cell-sub">${fmtDate(b.date)} · ${b.people} 人</div></div></div>
                             <div class="cell-amount money income">${money(b.amount)}</div><div class="icon-btn">${icon('chevron')}</div>
-                        </div>`).join('')}</div>` : empty('还没有礼单，先创建一份吧。', `<button class="btn primary sm" data-action="new-bill">${icon('plus')} 创建礼单</button>`)}
+                        </div>`).join('')}</div>` : empty('还没有礼单，先创建一份吧', `<button class="btn primary sm" data-action="new-bill">${icon('plus')} 创建礼单</button>`)}
                 </section>
                 <section class="card">
                     <div class="card-head"><div><div class="card-title">最近随礼</div><div class="card-sub">送出去的每一份祝福</div></div><button class="btn ghost sm" data-nav="expenses">全部 ${icon('chevron')}</button></div>
@@ -1857,7 +1857,7 @@
                         <div class="list-row">
                             <div class="cell-main"><div class="avatar" style="${styleOf('relation', e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(e.category || catName(e.cate_id))} · ${fmtDate(e.date)}</div></div></div>
                             <div class="cell-amount money expense">${money(e.amount)}</div>
-                        </div>`).join('')}</div>` : empty('还没有随礼记录。', `<button class="btn primary sm" data-action="new-expense">${icon('plus')} 记录随礼</button>`)}
+                        </div>`).join('')}</div>` : empty('还没有随礼记录', `<button class="btn primary sm" data-action="new-expense">${icon('plus')} 记录随礼</button>`)}
                 </section>
             </div>`;
     }
@@ -1871,7 +1871,7 @@
         else if (state.sort === 'amount-asc') sorted.sort((a, b) => Number(a.amount) - Number(b.amount));
         else if (state.sort === 'date-asc') sorted.sort((a, b) => dateKey(a.date).localeCompare(dateKey(b.date)) || a.id - b.id);
         const people = data.people || [];
-        app.innerHTML = pageHead('GIFT LEDGER', '我的礼单', '每一份收礼，都记在对应的人名下。', `<button class="btn primary" data-action="new-bill">${icon('plus')} 创建礼单</button>`) + `
+        app.innerHTML = pageHead('GIFT LEDGER', '我的礼单', '每一份收礼，都记在对应的人名下', `<button class="btn primary" data-action="new-bill">${icon('plus')} 创建礼单</button>`) + `
             <div class="kpis">
                 ${kpi('礼单总数', bills.length, '累计创建的礼单', 'list')}
                 ${kpi('收礼总额', `<span class="income">${money(sum(people, 'amount'))}</span>`, '全部礼单合计', 'wallet', 'in')}
@@ -1901,7 +1901,7 @@
                             <button class="icon-btn" data-action="edit-bill" data-id="${b.id}" title="编辑">${icon('edit')}</button>
                             <button class="icon-btn danger" data-action="del-bill" data-id="${b.id}" title="删除">${icon('trash')}</button>
                         </div>
-                    </div>`).join('')}</div><div class="search-none" id="bill-none" style="display:none">没有找到匹配的礼单</div>` : empty('还没有礼单，点击右上角创建一份。', `<button class="btn primary sm" data-action="new-bill">${icon('plus')} 创建礼单</button>`)}
+                    </div>`).join('')}</div><div class="search-none" id="bill-none" style="display:none">没有找到匹配的礼单</div>` : empty('还没有礼单，点击右上角创建一份', `<button class="btn primary sm" data-action="new-bill">${icon('plus')} 创建礼单</button>`)}
             </section>`;
     }
 
@@ -1927,8 +1927,8 @@
                     <div class="chips-row"><span class="chip">${icon('calendar')} ${esc(fmtDate(bill.date))}</span><span class="chip green">${icon('users')} ${ps.length} 位来客</span><span class="chip gold">${icon('wallet')} ${money(sum(ps, 'amount'))}</span></div>
                 </div>
                 <div class="detail-actions">
-                    <button class="btn ghost" data-action="edit-bill" data-id="${bill.id}">${icon('edit')} 编辑礼单</button>
-                    <button class="btn primary" data-action="new-person" data-id="${bill.id}">${icon('plus')} 添加人员</button>
+                    <button class="btn ghost" data-action="edit-bill" data-id="${bill.id}">${icon('edit')} 编辑</button>
+                    <button class="btn primary" data-action="new-person" data-id="${bill.id}">${icon('plus')} 上礼</button>
                     <button class="btn danger" data-action="del-bill" data-id="${bill.id}">${icon('trash')}</button>
                 </div>
             </div>
@@ -1936,7 +1936,7 @@
                 <div class="card-head"><div><div class="card-title">关系汇总</div><div class="card-sub">按来客关系拆分的礼金占比</div></div></div>
                 ${groups.length ? `<div class="segment">${groups.map(g => `<i style="width:${g.v / total * 100}%;background:${toneOf('relation', g.id).solid}"></i>`).join('')}</div>
                     <div class="legend">${groups.map(g => `<div class="legend-item"><span class="dot" style="background:${toneOf('relation', g.id).solid}"></span>${esc(g.name)} · ${g.n} 人 <b>${money(g.v)}</b></div>`).join('')}</div>`
-            : '<div class="muted" style="font-size:13px">添加人员后，这里会自动汇总各关系的礼金。</div>'}
+            : '<div class="muted" style="font-size:13px">添加人员后，这里会自动汇总各关系的礼金</div>'}
             </section>
             <section class="card">
                 <div class="card-head"><div><div class="card-title">礼单明细</div><div class="card-sub" id="person-count">${ps.length} 条记录</div></div>
@@ -1956,7 +1956,7 @@
                             <button class="icon-btn" data-action="edit-person" data-id="${p.id}" title="编辑">${icon('edit')}</button>
                             <button class="icon-btn danger" data-action="del-person" data-id="${p.id}" title="删除">${icon('trash')}</button>
                         </div>
-                    </div>`).join('')}</div><div class="search-none" id="person-none" style="display:none">没有找到匹配的人员</div>` : empty('这份礼单还没有人，添加第一位来客吧。', `<button class="btn primary sm" data-action="new-person" data-id="${bill.id}">${icon('plus')} 添加人员</button>`)}
+                    </div>`).join('')}</div><div class="search-none" id="person-none" style="display:none">没有找到匹配的人员</div>` : empty('这份礼单还没有人，添加第一位来客吧', `<button class="btn primary sm" data-action="new-person" data-id="${bill.id}">${icon('plus')} 添加人员</button>`)}
             </section>`;
     }
 
@@ -1972,7 +1972,7 @@
         if (state.expSort === 'amount-desc') list.sort((a, b) => Number(b.amount) - Number(a.amount));
         else if (state.expSort === 'amount-asc') list.sort((a, b) => Number(a.amount) - Number(b.amount));
         else if (state.expSort === 'date-asc') list.sort((a, b) => dateKey(a.date).localeCompare(dateKey(b.date)) || a.id - b.id);
-        app.innerHTML = pageHead('OUTGOING', '随礼记录', '送出去的每一份心意，也值得被好好记下。', `<button class="btn primary" data-action="new-expense">${icon('plus')} 记录随礼</button>`) + `
+        app.innerHTML = pageHead('OUTGOING', '随礼记录', '送出去的每一份心意，也值得被好好记下', `<button class="btn primary" data-action="new-expense">${icon('plus')} 记录随礼</button>`) + `
             <div class="kpis">
                 ${kpi('随礼总额', `<span class="expense">${money(sum(data.expenses || [], 'amount'))}</span>`, '累计送出', 'out', 'out')}
                 ${kpi('记录笔数', (data.expenses || []).length, '共多少笔随礼', 'list')}
@@ -2003,7 +2003,7 @@
                             <button class="icon-btn" data-action="edit-expense" data-id="${e.id}" title="编辑">${icon('edit')}</button>
                             <button class="icon-btn danger" data-action="del-expense" data-id="${e.id}" title="删除">${icon('trash')}</button>
                         </div>
-                    </div>`).join('')}</div><div class="search-none" id="exp-none" style="display:none">没有找到匹配的记录</div>` : empty('还没有随礼记录，点击右上角添加一笔。', `<button class="btn primary sm" data-action="new-expense">${icon('plus')} 记录随礼</button>`)}
+                    </div>`).join('')}</div><div class="search-none" id="exp-none" style="display:none">没有找到匹配的记录</div>` : empty('还没有随礼记录，点击右上角添加一笔', `<button class="btn primary sm" data-action="new-expense">${icon('plus')} 记录随礼</button>`)}
             </section>`;
     }
 
@@ -2020,7 +2020,7 @@
     function renderStats(app) {
         const people = data.people || [], expenses = data.expenses || [];
         const income = sum(people, 'amount'), out = sum(expenses, 'amount');
-        app.innerHTML = pageHead('INSIGHTS', '收支统计', '看看心意都流向了哪里。', `<button class="btn ghost" data-action="import">${icon('download')} 导入 Excel</button><button class="btn primary" data-action="export">${icon('upload')} 导出 Excel</button>`) + `
+        app.innerHTML = pageHead('INSIGHTS', '收支统计', '看看心意都流向了哪里', `<button class="btn ghost" data-action="import">${icon('download')} 导入 Excel</button><button class="btn primary" data-action="export">${icon('upload')} 导出 Excel</button>`) + `
             <div class="summary-band">
                 <div class="summary-item"><span>收礼总额</span><b class="income">${money(income)}</b></div>
                 <div class="summary-item"><span>随礼总额</span><b class="expense">${money(out)}</b></div>
@@ -2269,21 +2269,21 @@
     });
 
     function addBill() {
-        openForm('创建礼单', '为这场喜事建一份新的礼单', [
+        openForm('创建礼单', '', [
             {name: 'name', label: '礼单名称', placeholder: '例如：生日', required: true},
             {name: 'date', label: '日期', type: 'date', value: today, required: true}
         ], d => mutate('/api/bill', 'POST', d, '礼单已创建'));
     }
 
     function editBill(x) {
-        openForm('编辑礼单', x.name, [
+        openForm('编辑', x.name, [
             {name: 'name', label: '礼单名称', value: x.name, required: true},
             {name: 'date', label: '日期', type: 'date', value: x.date, required: true}
         ], d => mutate('/api/bill/' + x.id, 'PUT', d, '已保存'));
     }
 
     function addPerson(id) {
-        openForm('添加人员', '记录一位来客的礼金', [
+        openForm('上礼', '', [
             {name: 'name', label: '姓名', placeholder: '请输入姓名', required: true},
             relField(),
             {
@@ -2305,7 +2305,7 @@
     }
 
     function editPerson(x) {
-        openForm('编辑收礼明细', x.name, [
+        openForm('编辑', x.name, [
             billField(x.bill_id), relField(x.relation_id),
             {name: 'name', label: '姓名', value: x.name, required: true},
             {name: 'amount', label: '金额（元）', type: 'number', min: 0, step: '0.01', value: x.amount, required: true},
@@ -2314,7 +2314,7 @@
     }
 
     function addExpense() {
-        openForm('记录随礼', '把送出的祝福记下来', [
+        openForm('记录随礼', '', [
             {name: 'name', label: '姓名', placeholder: '请输入姓名', required: true},
             cateField(), relField(),
             {
@@ -2436,7 +2436,7 @@
             if (x) editBill(x);
         } else if (a === 'del-bill') {
             const x = one(data.bills);
-            if (x) confirmDialog('删除礼单', '「' + x.name + '」及其下所有收礼明细都会被删除，且无法恢复。', () =>
+            if (x) confirmDialog('删除礼单', '「' + x.name + '」及其下所有收礼明细都会被删除，且无法恢复', () =>
                 mutate('/api/bill/' + id, 'DELETE', null, '已删除', () => {
                     if (state.billId === id) {
                         state.billId = null;
@@ -2521,7 +2521,7 @@
             data = await (await fetch('/api/data')).json();
             render();
         } catch (_) {
-            $('#app').innerHTML = '<div class="empty"><div class="empty-icon">!</div><p>无法读取数据，请通过 <b>python3 app.py</b> 启动服务后访问本页。</p></div>';
+            $('#app').innerHTML = '<div class="empty"><div class="empty-icon">!</div><p>无法读取数据，请通过 <b>python3 app.py</b> 启动服务后访问本页</p></div>';
         }
     }
 
