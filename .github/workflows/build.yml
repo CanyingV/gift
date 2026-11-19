@@ -40,8 +40,13 @@ jobs:
         run: pyinstaller desktop.spec --noconfirm
       - name: 制作 dmg
         run: |
+          # 标准结构：App + 指向 /Applications 的软链接，打开后可拖入安装
+          rm -rf dist/dmg-staging
+          mkdir -p dist/dmg-staging
+          cp -R "dist/礼单管家.app" dist/dmg-staging/
+          ln -s /Applications dist/dmg-staging/Applications
           hdiutil create -volname "礼单管家" \
-            -srcfolder "dist/礼单管家.app" \
+            -srcfolder dist/dmg-staging \
             -ov -format UDZO "dist/礼单管家.dmg"
       - name: 上传产物
         uses: actions/upload-artifact@v4
