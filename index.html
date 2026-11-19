@@ -4,378 +4,1629 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>礼记 · 往来有据</title>
 <style>
-    :root{
-        --bg:#f5f3ed;
-        --surface:#fffdf8;
-        --surface-2:#faf8f1;
-        --ink:#222a25;
-        --muted:#89928a;
-        --line:#e8e4d8;
-        --primary:#6f4e37;
-        --primary-2:#936b47;
-        --accent:#c08a3e;
-        --income:#b4533a;
-        --expense:#2f7a63;
-        --danger:#b85c5c;
-        --shadow:0 2px 10px rgba(70,50,35,.06);
-        --radius:18px;
+    :root {
+        --bg: #f5f3ed;
+        --surface: #fffdf8;
+        --surface-2: #faf8f1;
+        --ink: #222a25;
+        --muted: #89928a;
+        --line: #e8e4d8;
+        --primary: #6f4e37;
+        --primary-2: #936b47;
+        --accent: #c08a3e;
+        --income: #b4533a;
+        --expense: #2f7a63;
+        --danger: #b85c5c;
+        --shadow: 0 2px 10px rgba(70, 50, 35, .06);
+        --radius: 18px;
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;min-height:100%}
-    body{
-        background:radial-gradient(ellipse at 88% -10%,#eeeae0 0,transparent 42%),var(--bg);
-        color:var(--ink);
-        font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-        -webkit-font-smoothing:antialiased;
+
+    * {
+        box-sizing: border-box
     }
-    button,input,select{font:inherit}
-    button{cursor:pointer}
-    .ico{width:18px;height:18px;flex:none}
-    .app{display:flex;min-height:100vh}
+
+    html, body {
+        margin: 0;
+        min-height: 100%
+    }
+
+    body {
+        background: radial-gradient(ellipse at 88% -10%, #eeeae0 0, transparent 42%), var(--bg);
+        color: var(--ink);
+        font: 14px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select {
+        font: inherit
+    }
+
+    button {
+        cursor: pointer
+    }
+
+    .ico {
+        width: 18px;
+        height: 18px;
+        flex: none
+    }
+
+    .app {
+        display: flex;
+        min-height: 100vh
+    }
 
     /* ---------- 侧边栏 ---------- */
-    .sidebar{
-        width:244px;flex:0 0 244px;height:100vh;position:sticky;top:0;
-        padding:26px 16px 20px;display:flex;flex-direction:column;
-        background:linear-gradient(180deg,#fffdf8 0%,#faf7ef 100%);
-        border-right:1px solid var(--line);
+    .sidebar {
+        width: 244px;
+        flex: 0 0 244px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        padding: 26px 16px 20px;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(180deg, #fffdf8 0%, #faf7ef 100%);
+        border-right: 1px solid var(--line);
     }
-    .brand{display:flex;align-items:center;gap:12px;padding:0 10px;margin-bottom:34px}
-    .brand-mark{
-        width:42px;height:42px;border-radius:14px;display:grid;place-items:center;
-        background:linear-gradient(145deg,var(--primary-2),var(--primary));color:#fff;
-        box-shadow:0 8px 18px rgba(111,78,55,.24);
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 10px;
+        margin-bottom: 34px
     }
-    .brand-mark .ico{width:22px;height:22px}
-    .brand-name{font-size:16px;font-weight:780;letter-spacing:.01em}
-    .brand-sub{font-size:10px;color:var(--muted);letter-spacing:.16em;margin-top:1px}
-    .nav-label{font-size:10px;letter-spacing:.18em;color:#b0b7ad;padding:0 14px;margin:0 0 10px;font-weight:700}
-    .nav{display:flex;flex-direction:column;gap:5px}
-    .nav button{
-        width:100%;border:0;background:transparent;color:#667169;border-radius:12px;
-        padding:11px 13px;display:flex;align-items:center;gap:11px;
-        font-weight:650;text-align:left;transition:background .16s,color .16s,transform .16s;
+
+    .brand-mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(145deg, var(--primary-2), var(--primary));
+        color: #fff;
+        box-shadow: 0 8px 18px rgba(111, 78, 55, .24);
     }
-    .nav button:hover{background:#f2ece3;color:var(--primary)}
-    .nav button.on{background:var(--primary);color:#fff;box-shadow:0 7px 16px rgba(111,78,55,.2)}
-    .nav button.on:hover{transform:translateX(2px)}
-    .side-foot{margin-top:auto;padding:14px;border-radius:13px;background:#f2f4ed;border:1px solid var(--line)}
-    .side-foot b{display:block;font-size:12px;color:#5f6d63;margin-bottom:3px}
-    .side-foot span{font-size:11px;color:var(--muted)}
+
+    .brand-mark .ico {
+        width: 22px;
+        height: 22px
+    }
+
+    .brand-name {
+        font-size: 16px;
+        font-weight: 780;
+        letter-spacing: .01em
+    }
+
+    .brand-sub {
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: .16em;
+        margin-top: 1px
+    }
+
+    .nav-label {
+        font-size: 10px;
+        letter-spacing: .18em;
+        color: #b0b7ad;
+        padding: 0 14px;
+        margin: 0 0 10px;
+        font-weight: 700
+    }
+
+    .nav {
+        display: flex;
+        flex-direction: column;
+        gap: 5px
+    }
+
+    .nav button {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: #667169;
+        border-radius: 12px;
+        padding: 11px 13px;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        font-weight: 650;
+        text-align: left;
+        transition: background .16s, color .16s, transform .16s;
+    }
+
+    .nav button:hover {
+        background: #f2ece3;
+        color: var(--primary)
+    }
+
+    .nav button.on {
+        background: var(--primary);
+        color: #fff;
+        box-shadow: 0 7px 16px rgba(111, 78, 55, .2)
+    }
+
+    .nav button.on:hover {
+        transform: translateX(2px)
+    }
+
+    .side-foot {
+        margin-top: auto;
+        padding: 14px;
+        border-radius: 13px;
+        background: #f2f4ed;
+        border: 1px solid var(--line)
+    }
+
+    .side-foot b {
+        display: block;
+        font-size: 12px;
+        color: #5f6d63;
+        margin-bottom: 3px
+    }
+
+    .side-foot span {
+        font-size: 11px;
+        color: var(--muted)
+    }
 
     /* ---------- 主体 ---------- */
-    .main{flex:1;min-width:0}
-    .content{max-width:1180px;margin:0 auto;padding:30px 38px 70px}
+    .main {
+        flex: 1;
+        min-width: 0
+    }
+
+    .content {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 30px 38px 70px
+    }
 
     /* ---------- 通用组件 ---------- */
-    .btn{
-        border:1px solid transparent;border-radius:11px;padding:10px 15px;
-        display:inline-flex;align-items:center;justify-content:center;gap:7px;
-        font-weight:680;font-size:13px;white-space:nowrap;transition:transform .14s,background .14s,box-shadow .14s;
+    .btn {
+        border: 1px solid transparent;
+        border-radius: 11px;
+        padding: 10px 15px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        font-weight: 680;
+        font-size: 13px;
+        white-space: nowrap;
+        transition: transform .14s, background .14s, box-shadow .14s;
     }
-    .btn:hover{transform:translateY(-1px)}
-    .btn:active{transform:translateY(0) scale(.98)}
-    .btn.primary{background:var(--primary);color:#fff;box-shadow:0 6px 14px rgba(111,78,55,.18)}
-    .btn.primary:hover{background:var(--primary-2)}
-    .btn.ghost{background:#fff;color:#5d6a61;border-color:var(--line)}
-    .btn.ghost:hover{background:#f8faf6}
-    .btn.danger{background:#fbeeee;color:var(--danger);border-color:#f2dede}
-    .btn.sm{padding:7px 11px;font-size:12px;border-radius:9px}
-    .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
-    .card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-    .card-title{font-size:15px;font-weight:760}
-    .card-sub{font-size:12px;color:var(--muted);margin-top:2px}
-    .page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px}
-    .page-head > div:last-child{display:flex;gap:9px;flex-wrap:wrap}
-    .eyebrow{font-size:10px;font-weight:800;letter-spacing:.18em;color:var(--accent);text-transform:uppercase}
-    h1{font-size:27px;letter-spacing:-.02em;line-height:1.25;margin:6px 0 0}
-    .page-sub{color:var(--muted);font-size:13px;margin-top:5px}
-    .muted{color:var(--muted)}
-    .money{font-weight:760;font-variant-numeric:tabular-nums;white-space:nowrap}
-    .income{color:var(--income)}
-    .expense{color:var(--expense)}
-    .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-    .search{position:relative;flex:0 1 260px}
-    .search .ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#a3aca3}
-    .input,.select,input.input,select.select{
-        width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;
-        background:#fff;color:var(--ink);outline:none;transition:border .15s,box-shadow .15s;
+
+    .btn:hover {
+        transform: translateY(-1px)
     }
+
+    .btn:active {
+        transform: translateY(0) scale(.98)
+    }
+
+    .btn.primary {
+        background: var(--primary);
+        color: #fff;
+        box-shadow: 0 6px 14px rgba(111, 78, 55, .18)
+    }
+
+    .btn.primary:hover {
+        background: var(--primary-2)
+    }
+
+    .btn.ghost {
+        background: #fff;
+        color: #5d6a61;
+        border-color: var(--line)
+    }
+
+    .btn.ghost:hover {
+        background: #f8faf6
+    }
+
+    .btn.danger {
+        background: #fbeeee;
+        color: var(--danger);
+        border-color: #f2dede
+    }
+
+    .btn.sm {
+        padding: 7px 11px;
+        font-size: 12px;
+        border-radius: 9px
+    }
+
+    .card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--shadow)
+    }
+
+    .card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 14px
+    }
+
+    .card-title {
+        font-size: 15px;
+        font-weight: 760
+    }
+
+    .card-sub {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px
+    }
+
+    .page-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 16px;
+        margin-bottom: 22px
+    }
+
+    .page-head > div:last-child {
+        display: flex;
+        gap: 9px;
+        flex-wrap: wrap
+    }
+
+    .eyebrow {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .18em;
+        color: var(--accent);
+        text-transform: uppercase
+    }
+
+    h1 {
+        font-size: 27px;
+        letter-spacing: -.02em;
+        line-height: 1.25;
+        margin: 6px 0 0
+    }
+
+    .page-sub {
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 5px
+    }
+
+    .muted {
+        color: var(--muted)
+    }
+
+    .money {
+        font-weight: 760;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap
+    }
+
+    .income {
+        color: var(--income)
+    }
+
+    .expense {
+        color: var(--expense)
+    }
+
+    .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 14px
+    }
+
+    .search {
+        position: relative;
+        flex: 0 1 260px
+    }
+
+    .search .ico {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        color: #a3aca3
+    }
+
+    .input, .select, input.input, select.select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+        color: var(--ink);
+        outline: none;
+        transition: border .15s, box-shadow .15s;
+    }
+
     /* Mac 的 WKWebView 会渲染原生 select，丢掉圆角/边框；统一去掉原生外观并自绘箭头 */
-    select.input,select.select{
-        -webkit-appearance:none;appearance:none;
-        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236f4e37' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-        background-repeat:no-repeat;background-position:right 12px center;
-        padding-right:34px;
+    select.input, select.select {
+        -webkit-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236f4e37' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 34px;
     }
-    .search input{padding-left:36px}
-    select.select{width:auto;min-width:148px;cursor:pointer}
-    .input:focus,.select:focus,input:focus,select:focus{border-color:#c3a68a;box-shadow:0 0 0 3px rgba(111,78,55,.09)}
-    .chip{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:99px;background:#f3f2ec;color:#6b746c;font-size:12px;white-space:nowrap}
-    .chip.green{background:#f3e9de;color:var(--primary)}
-    .chip.gold{background:#f8f0e1;color:#9a6d2d}
-    .chip.red{background:#f9ece7;color:var(--income)}
-    .empty{text-align:center;padding:42px 18px;color:var(--muted)}
-    .empty-icon{width:52px;height:52px;border-radius:17px;background:#f4efe7;color:#98ab9e;display:grid;place-items:center;margin:0 auto 12px}
-    .empty p{margin:0 0 14px;font-size:13px}
-    .empty .ico{width:24px;height:24px}
+
+    .search input {
+        padding-left: 36px
+    }
+
+    .search-none {
+        padding: 28px 12px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 13px
+    }
+
+    select.select {
+        width: auto;
+        min-width: 148px;
+        cursor: pointer
+    }
+
+    .input:focus, .select:focus, input:focus, select:focus {
+        border-color: #c3a68a;
+        box-shadow: 0 0 0 3px rgba(111, 78, 55, .09)
+    }
+
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 9px;
+        border-radius: 99px;
+        background: #f3f2ec;
+        color: #6b746c;
+        font-size: 12px;
+        white-space: nowrap
+    }
+
+    .chip.green {
+        background: #f3e9de;
+        color: var(--primary)
+    }
+
+    .chip.gold {
+        background: #f8f0e1;
+        color: #9a6d2d
+    }
+
+    .chip.red {
+        background: #f9ece7;
+        color: var(--income)
+    }
+
+    .empty {
+        text-align: center;
+        padding: 42px 18px;
+        color: var(--muted)
+    }
+
+    .empty-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 17px;
+        background: #f4efe7;
+        color: #98ab9e;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 12px
+    }
+
+    .empty p {
+        margin: 0 0 14px;
+        font-size: 13px
+    }
+
+    .empty .ico {
+        width: 24px;
+        height: 24px
+    }
 
     /* ---------- 列表行 ---------- */
-    .list{display:flex;flex-direction:column}
-    .row-wrap{display:flex;align-items:center;position:relative;overflow:hidden;border-bottom:1px solid var(--line);border-radius:10px}
-    .row-wrap:last-child{border-bottom:0}
-    .list-row{
-        display:flex;align-items:center;gap:12px;padding:13px 8px;
-        flex:1;min-width:0;border-radius:10px;transition:background .15s,transform .22s ease;
+    .list {
+        display: flex;
+        flex-direction: column
     }
-    .row-wrap .list-row{border-bottom:0}
-    .list-row.click{cursor:pointer}
-    .list-row:hover{background:var(--surface-2)}
-    .row-actions{display:flex;justify-content:flex-end;align-items:center;gap:6px;flex:none;padding-left:6px}
-    .cell-main{display:flex;align-items:center;gap:11px;min-width:0;flex:1}
-    .cell-body{min-width:0}
-    .cell-title{font-weight:700;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .cell-sub{font-size:12px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .cell-amount{width:118px;text-align:right;font-size:14px}
-    .cell-meta{width:100px;text-align:right;font-size:12px;color:var(--muted)}
-    .cell-count{width:66px;text-align:center;font-size:12px;color:var(--muted)}
-    .cell-tags{width:158px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-start}
-    .cell-tags-mobile{display:none}
-    .cell-actions{width:112px;display:flex;justify-content:flex-end;gap:6px}
-    .avatar{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex:none;background:#f3ebe2;color:var(--primary);font-weight:780;font-size:14px}
-    .avatar.gold{background:#f8f0e1;color:#a87932}
-    .avatar.red{background:#f9ece7;color:var(--income)}
-    .icon-btn{
-        width:31px;height:31px;border-radius:9px;border:1px solid var(--line);
-        background:#fff;color:#6b766d;display:grid;place-items:center;transition:background .14s,color .14s;
+
+    .row-wrap {
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 1px solid var(--line);
+        border-radius: 10px
     }
-    .icon-btn:hover{background:#f4efe7;color:var(--primary)}
-    .icon-btn.danger:hover{background:#fbeeee;color:var(--danger)}
-    .icon-btn .ico{width:15px;height:15px}
+
+    .row-wrap:last-child {
+        border-bottom: 0
+    }
+
+    .list-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 8px;
+        flex: 1;
+        min-width: 0;
+        border-radius: 10px;
+        transition: background .15s, transform .22s ease;
+    }
+
+    .row-wrap .list-row {
+        border-bottom: 0
+    }
+
+    .list-row.click {
+        cursor: pointer
+    }
+
+    .list-row:hover {
+        background: var(--surface-2)
+    }
+
+    .row-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 6px;
+        flex: none;
+        padding-left: 6px
+    }
+
+    .cell-main {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-width: 0;
+        flex: 1
+    }
+
+    .cell-body {
+        min-width: 0
+    }
+
+    .cell-title {
+        font-weight: 700;
+        font-size: 14px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap
+    }
+
+    .cell-sub {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap
+    }
+
+    .cell-amount {
+        width: 118px;
+        text-align: right;
+        font-size: 14px
+    }
+
+    .cell-meta {
+        width: 100px;
+        text-align: right;
+        font-size: 12px;
+        color: var(--muted)
+    }
+
+    .cell-count {
+        width: 66px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--muted)
+    }
+
+    .cell-tags {
+        width: 158px;
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: flex-start
+    }
+
+    .cell-tags-mobile {
+        display: none
+    }
+
+    .cell-actions {
+        width: 112px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 6px
+    }
+
+    .avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 11px;
+        display: grid;
+        place-items: center;
+        flex: none;
+        background: #f3ebe2;
+        color: var(--primary);
+        font-weight: 780;
+        font-size: 14px
+    }
+
+    .avatar.gold {
+        background: #f8f0e1;
+        color: #a87932
+    }
+
+    .avatar.red {
+        background: #f9ece7;
+        color: var(--income)
+    }
+
+    .icon-btn {
+        width: 31px;
+        height: 31px;
+        border-radius: 9px;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: #6b766d;
+        display: grid;
+        place-items: center;
+        transition: background .14s, color .14s;
+    }
+
+    .icon-btn:hover {
+        background: #f4efe7;
+        color: var(--primary)
+    }
+
+    .icon-btn.danger:hover {
+        background: #fbeeee;
+        color: var(--danger)
+    }
+
+    .icon-btn .ico {
+        width: 15px;
+        height: 15px
+    }
 
     /* ---------- 总览 ---------- */
-    .hero{
-        position:relative;overflow:hidden;border-radius:22px;padding:30px 34px;
-        min-height:186px;display:flex;align-items:center;justify-content:space-between;gap:24px;
-        background:linear-gradient(120deg,#543b2a 0%,#6f4e37 56%,#8c6647 100%);color:#fff;
-        box-shadow:0 16px 36px rgba(111,78,55,.17);
+    .hero {
+        position: relative;
+        overflow: hidden;
+        border-radius: 22px;
+        padding: 30px 34px;
+        min-height: 186px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        background: linear-gradient(120deg, #543b2a 0%, #6f4e37 56%, #8c6647 100%);
+        color: #fff;
+        box-shadow: 0 16px 36px rgba(111, 78, 55, .17);
     }
-    .hero::after{content:"";position:absolute;width:290px;height:290px;border-radius:50%;background:rgba(255,255,255,.07);right:-70px;top:-130px}
-    .hero .eyebrow{color:#e8d3bd}
-    .hero h1{color:#fff;font-size:26px;margin:8px 0 6px}
-    .hero p{color:#f0e2d2;margin:0 0 18px;font-size:13px}
-    .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
-    .hero .btn.ghost{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.24)}
-    .hero .btn.ghost:hover{background:rgba(255,255,255,.22)}
-    .hero-art{position:relative;width:190px;height:132px;display:grid;place-items:center;flex:none;z-index:1}
-    .hero-gift{width:86px;height:86px;border-radius:26px;display:grid;place-items:center;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.24);box-shadow:0 12px 30px rgba(0,0,0,.12)}
-    .hero-gift .ico{width:40px;height:40px}
-    .float-chip{position:absolute;background:#fff;color:var(--ink);font-size:11px;font-weight:700;padding:6px 11px;border-radius:99px;box-shadow:0 8px 18px rgba(0,0,0,.14)}
-    .float-chip.a{left:-8px;top:12px}
-    .float-chip.b{right:-12px;bottom:16px}
-    .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0}
-    .kpi{padding:18px 19px}
-    .kpi-top{display:flex;align-items:center;gap:9px}
-    .icon-box{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:#f3ebe2;color:var(--primary)}
-    .icon-box.tone-in{background:#f9ece7;color:var(--income)}
-    .icon-box.tone-out{background:#e9f3ee;color:var(--expense)}
-    .icon-box.tone-gold{background:#f8f0e1;color:#a87932}
-    .icon-box .ico{width:17px;height:17px}
-    .kpi-label{font-size:12px;color:#6c766d;font-weight:650}
-    .kpi .value{font-size:25px;font-weight:780;letter-spacing:-.02em;margin-top:13px;font-variant-numeric:tabular-nums}
-    .kpi .value.tone-in{color:var(--income)}
-    .kpi .value.tone-out{color:var(--expense)}
-    .kpi .foot{font-size:11px;color:var(--muted);margin-top:3px}
-    .two-col{display:grid;grid-template-columns:1.12fr .88fr;gap:14px}
+
+    .hero::after {
+        content: "";
+        position: absolute;
+        width: 290px;
+        height: 290px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .07);
+        right: -70px;
+        top: -130px
+    }
+
+    .hero .eyebrow {
+        color: #e8d3bd
+    }
+
+    .hero h1 {
+        color: #fff;
+        font-size: 26px;
+        margin: 8px 0 6px
+    }
+
+    .hero p {
+        color: #f0e2d2;
+        margin: 0 0 18px;
+        font-size: 13px
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap
+    }
+
+    .hero .btn.ghost {
+        background: rgba(255, 255, 255, .14);
+        color: #fff;
+        border-color: rgba(255, 255, 255, .24)
+    }
+
+    .hero .btn.ghost:hover {
+        background: rgba(255, 255, 255, .22)
+    }
+
+    .hero-art {
+        position: relative;
+        width: 190px;
+        height: 132px;
+        display: grid;
+        place-items: center;
+        flex: none;
+        z-index: 1
+    }
+
+    .hero-gift {
+        width: 86px;
+        height: 86px;
+        border-radius: 26px;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, .15);
+        border: 1px solid rgba(255, 255, 255, .24);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, .12)
+    }
+
+    .hero-gift .ico {
+        width: 40px;
+        height: 40px
+    }
+
+    .float-chip {
+        position: absolute;
+        background: #fff;
+        color: var(--ink);
+        font-size: 11px;
+        font-weight: 700;
+        padding: 6px 11px;
+        border-radius: 99px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, .14)
+    }
+
+    .float-chip.a {
+        left: -8px;
+        top: 12px
+    }
+
+    .float-chip.b {
+        right: -12px;
+        bottom: 16px
+    }
+
+    .kpis {
+        display: grid;
+        grid-template-columns:repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin: 18px 0
+    }
+
+    .kpi {
+        padding: 18px 19px
+    }
+
+    .kpi-top {
+        display: flex;
+        align-items: center;
+        gap: 9px
+    }
+
+    .icon-box {
+        width: 34px;
+        height: 34px;
+        border-radius: 11px;
+        display: grid;
+        place-items: center;
+        background: #f3ebe2;
+        color: var(--primary)
+    }
+
+    .icon-box.tone-in {
+        background: #f9ece7;
+        color: var(--income)
+    }
+
+    .icon-box.tone-out {
+        background: #e9f3ee;
+        color: var(--expense)
+    }
+
+    .icon-box.tone-gold {
+        background: #f8f0e1;
+        color: #a87932
+    }
+
+    .icon-box .ico {
+        width: 17px;
+        height: 17px
+    }
+
+    .kpi-label {
+        font-size: 12px;
+        color: #6c766d;
+        font-weight: 650
+    }
+
+    .kpi .value {
+        font-size: 25px;
+        font-weight: 780;
+        letter-spacing: -.02em;
+        margin-top: 13px;
+        font-variant-numeric: tabular-nums
+    }
+
+    .kpi .value.tone-in {
+        color: var(--income)
+    }
+
+    .kpi .value.tone-out {
+        color: var(--expense)
+    }
+
+    .kpi .foot {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 3px
+    }
+
+    .two-col {
+        display: grid;
+        grid-template-columns:1.12fr .88fr;
+        gap: 14px
+    }
 
     /* ---------- 礼单详情 ---------- */
-    .detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
-    .back{border:0;background:transparent;color:var(--muted);font-size:12px;display:inline-flex;align-items:center;gap:5px;padding:0 0 9px}
-    .back:hover{color:var(--primary)}
-    .back .ico{width:15px;height:15px}
-    .detail-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-    .chips-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .segment{display:flex;height:11px;border-radius:99px;overflow:hidden;background:#eeece4;margin:4px 0 14px}
-    .segment i{display:block;height:100%}
-    .legend{display:flex;flex-wrap:wrap;gap:9px 18px}
-    .legend-item{display:flex;align-items:center;gap:7px;font-size:12px;color:#5f6a61}
-    .legend-item b{font-weight:730;color:var(--ink)}
-    .dot{width:9px;height:9px;border-radius:50%;flex:none}
+    .detail-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 18px
+    }
+
+    .back {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 0 0 9px
+    }
+
+    .back:hover {
+        color: var(--primary)
+    }
+
+    .back .ico {
+        width: 15px;
+        height: 15px
+    }
+
+    .detail-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end
+    }
+
+    .chips-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 10px
+    }
+
+    .segment {
+        display: flex;
+        height: 11px;
+        border-radius: 99px;
+        overflow: hidden;
+        background: #eeece4;
+        margin: 4px 0 14px
+    }
+
+    .segment i {
+        display: block;
+        height: 100%
+    }
+
+    .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px 18px
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 12px;
+        color: #5f6a61
+    }
+
+    .legend-item b {
+        font-weight: 730;
+        color: var(--ink)
+    }
+
+    .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        flex: none
+    }
 
     /* ---------- 统计 ---------- */
-    .summary-band{
-        display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
-        border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;
-        background:linear-gradient(105deg,#fffdf8,#f3f6ef);border:1px solid var(--line);
+    .summary-band {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+        border-radius: var(--radius);
+        padding: 20px 24px;
+        margin-bottom: 16px;
+        background: linear-gradient(105deg, #fffdf8, #f3f6ef);
+        border: 1px solid var(--line);
     }
-    .summary-item{display:flex;flex-direction:column;gap:3px;min-width:130px}
-    .summary-item span{font-size:12px;color:var(--muted)}
-    .summary-item b{font-size:22px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-    .summary-item b.income{color:var(--income)}
-    .summary-item b.expense{color:var(--expense)}
-    .chart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-    .chart-grid>:last-child{grid-column:1/-1}
-    .chart-row+.chart-row{margin-top:15px}
-    .chart-line{display:flex;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:7px}
-    .chart-line b{font-weight:720}
-    .bar-track{height:7px;background:#efeee8;border-radius:99px;overflow:hidden}
-    .bar-fill{height:100%;border-radius:99px;background:var(--primary);min-width:2px;transition:width .35s}
-    .bar-fill.gold{background:var(--accent)}
-    .bar-fill.red{background:var(--income)}
-    .manage-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
-    .tag-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-    .tag{display:inline-flex;align-items:center;gap:3px;padding:5px 6px 5px 11px;border-radius:11px;background:#f6f7f2;border:1px solid var(--line);font-size:12px}
-    .tag .icon-btn{width:23px;height:23px;border:0;background:transparent;border-radius:7px}
-    .tag .icon-btn .ico{width:13px;height:13px}
-    .inline-add{display:flex;gap:8px}
-    .inline-add .input{flex:1}
+
+    .summary-item {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        min-width: 130px
+    }
+
+    .summary-item span {
+        font-size: 12px;
+        color: var(--muted)
+    }
+
+    .summary-item b {
+        font-size: 22px;
+        letter-spacing: -.02em;
+        font-variant-numeric: tabular-nums
+    }
+
+    .summary-item b.income {
+        color: var(--income)
+    }
+
+    .summary-item b.expense {
+        color: var(--expense)
+    }
+
+    .chart-grid {
+        display: grid;
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+        gap: 14px
+    }
+
+    .chart-grid > :last-child {
+        grid-column: 1/-1
+    }
+
+    .chart-row + .chart-row {
+        margin-top: 15px
+    }
+
+    .chart-line {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 12px;
+        margin-bottom: 7px
+    }
+
+    .chart-line b {
+        font-weight: 720
+    }
+
+    .bar-track {
+        height: 7px;
+        background: #efeee8;
+        border-radius: 99px;
+        overflow: hidden
+    }
+
+    .bar-fill {
+        height: 100%;
+        border-radius: 99px;
+        background: var(--primary);
+        min-width: 2px;
+        transition: width .35s
+    }
+
+    .bar-fill.gold {
+        background: var(--accent)
+    }
+
+    .bar-fill.red {
+        background: var(--income)
+    }
+
+    .manage-grid {
+        display: grid;
+        grid-template-columns:1fr 1fr;
+        gap: 14px;
+        margin-top: 16px
+    }
+
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 14px
+    }
+
+    .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        padding: 5px 6px 5px 11px;
+        border-radius: 11px;
+        background: #f6f7f2;
+        border: 1px solid var(--line);
+        font-size: 12px
+    }
+
+    .tag .icon-btn {
+        width: 23px;
+        height: 23px;
+        border: 0;
+        background: transparent;
+        border-radius: 7px
+    }
+
+    .tag .icon-btn .ico {
+        width: 13px;
+        height: 13px
+    }
+
+    .inline-add {
+        display: flex;
+        gap: 8px
+    }
+
+    .inline-add .input {
+        flex: 1
+    }
 
     /* ---------- 弹窗 / 提示 ---------- */
-    .modal-mask{
-        position:fixed;inset:0;z-index:60;padding:18px;display:grid;place-items:center;
-        background:rgba(24,33,27,.46);backdrop-filter:blur(4px);
+    .modal-mask {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        padding: 18px;
+        display: grid;
+        place-items: center;
+        background: rgba(24, 33, 27, .46);
+        backdrop-filter: blur(4px);
     }
-    .modal{width:min(520px,100%);background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:0 26px 70px rgba(17,30,22,.26);animation:pop .18s ease-out}
-    @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
-    .modal-head{padding:23px 24px 0;display:flex;gap:12px;align-items:flex-start}
-    .modal-icon{width:38px;height:38px;border-radius:12px;background:#f3ebe2;color:var(--primary);display:grid;place-items:center;flex:none}
-    .modal-icon.danger{background:#fbeeee;color:var(--danger)}
-    .modal-head h3{margin:1px 0 3px;font-size:17px}
-    .modal-head p{margin:0;color:var(--muted);font-size:12px}
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px 24px}
-    .field{display:flex;flex-direction:column;gap:7px;font-size:12px;color:#667168;font-weight:650}
-    .field.full{grid-column:1/-1}
-    .field input,.field select{font-size:14px;font-weight:500}
-    .modal-foot{display:flex;justify-content:flex-end;gap:9px;padding:14px 24px 22px;border-top:1px solid var(--line)}
-    .confirm-text{padding:8px 24px 4px;color:#5f6a61;font-size:13px;line-height:1.7}
-    .export-list{padding:6px 20px 14px;display:flex;flex-direction:column;gap:9px}
-    .export-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;text-decoration:none;color:inherit;background:var(--surface-2);transition:border-color .15s,transform .15s}
-    .export-item:hover{border-color:var(--primary);transform:translateY(-1px)}
-    .export-item > .ico:last-child{margin-left:auto;color:var(--muted)}
-    .export-icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none}
-    .export-icon.red{background:#f6e8e3;color:#b4533a}
-    .export-icon.green{background:#e4f0e9;color:#2f7a63}
-    .export-txt b{display:block;font-size:13px}
-    .export-txt small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
-    .export-item .btn{margin-left:auto;flex:none}
-    .import-tip{padding:0 24px 12px;font-size:12px;color:var(--muted)}
-    .import-tip a{color:var(--primary);text-decoration:underline;font-weight:650}
-    .toast{
-        position:fixed;left:50%;bottom:32px;transform:translateX(-50%);z-index:90;
-        display:flex;align-items:center;gap:8px;padding:11px 17px;border-radius:12px;
-        background:#20372b;color:#fff;font-size:13px;font-weight:650;box-shadow:0 12px 30px rgba(16,35,25,.3);
-        animation:toastIn .2s ease-out;
-    }
-    .toast.bad{background:#8e3f3f}
-    .toast.out{opacity:0;transform:translateX(-50%) translateY(8px);transition:.25s}
-    .toast .ico{width:16px;height:16px}
-    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%)}}
 
-    .bottom-nav{display:none}
+    .modal {
+        width: min(520px, 100%);
+        background: var(--surface);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 26px 70px rgba(17, 30, 22, .26);
+        animation: pop .18s ease-out
+    }
+
+    @keyframes pop {
+        from {
+            opacity: 0;
+            transform: translateY(10px) scale(.98)
+        }
+        to {
+            opacity: 1;
+            transform: none
+        }
+    }
+
+    .modal-head {
+        padding: 23px 24px 0;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start
+    }
+
+    .modal-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: #f3ebe2;
+        color: var(--primary);
+        display: grid;
+        place-items: center;
+        flex: none
+    }
+
+    .modal-icon.danger {
+        background: #fbeeee;
+        color: var(--danger)
+    }
+
+    .modal-head h3 {
+        margin: 1px 0 3px;
+        font-size: 17px
+    }
+
+    .modal-head p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns:1fr 1fr;
+        gap: 14px;
+        padding: 20px 24px
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        font-size: 12px;
+        color: #667168;
+        font-weight: 650
+    }
+
+    .field.full {
+        grid-column: 1/-1
+    }
+
+    .field input, .field select {
+        font-size: 14px;
+        font-weight: 500
+    }
+
+    .modal-foot {
+        display: flex;
+        justify-content: flex-end;
+        gap: 9px;
+        padding: 14px 24px 22px;
+        border-top: 1px solid var(--line)
+    }
+
+    .confirm-text {
+        padding: 8px 24px 4px;
+        color: #5f6a61;
+        font-size: 13px;
+        line-height: 1.7
+    }
+
+    .export-list {
+        padding: 6px 20px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 9px
+    }
+
+    .export-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        text-decoration: none;
+        color: inherit;
+        background: var(--surface-2);
+        transition: border-color .15s, transform .15s
+    }
+
+    .export-item:hover {
+        border-color: var(--primary);
+        transform: translateY(-1px)
+    }
+
+    .export-item > .ico:last-child {
+        margin-left: auto;
+        color: var(--muted)
+    }
+
+    .export-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        flex: none
+    }
+
+    .export-icon.red {
+        background: #f6e8e3;
+        color: #b4533a
+    }
+
+    .export-icon.green {
+        background: #e4f0e9;
+        color: #2f7a63
+    }
+
+    .export-txt b {
+        display: block;
+        font-size: 13px
+    }
+
+    .export-txt small {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        margin-top: 3px
+    }
+
+    .export-item .btn {
+        margin-left: auto;
+        flex: none
+    }
+
+    .import-tip {
+        padding: 0 24px 12px;
+        font-size: 12px;
+        color: var(--muted)
+    }
+
+    .import-tip a {
+        color: var(--primary);
+        text-decoration: underline;
+        font-weight: 650
+    }
+
+    .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 32px;
+        transform: translateX(-50%);
+        z-index: 90;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 17px;
+        border-radius: 12px;
+        background: #20372b;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 650;
+        box-shadow: 0 12px 30px rgba(16, 35, 25, .3);
+        animation: toastIn .2s ease-out;
+    }
+
+    .toast.bad {
+        background: #8e3f3f
+    }
+
+    .toast.out {
+        opacity: 0;
+        transform: translateX(-50%) translateY(8px);
+        transition: .25s
+    }
+
+    .toast .ico {
+        width: 16px;
+        height: 16px
+    }
+
+    @keyframes toastIn {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(10px)
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%)
+        }
+    }
+
+    .bottom-nav {
+        display: none
+    }
 
     /* ---------- 响应式 ---------- */
-    @media (max-width:1080px){
-        .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
-        .two-col{grid-template-columns:1fr}
-        .content{padding:26px 26px 60px}
+    @media (max-width: 1080px) {
+        .kpis {
+            grid-template-columns:repeat(2, minmax(0, 1fr))
+        }
+
+        .two-col {
+            grid-template-columns:1fr
+        }
+
+        .content {
+            padding: 26px 26px 60px
+        }
     }
-    @media (max-width:760px){
-        .sidebar{display:none}
-        .app{display:block}
-        .content{padding:18px 14px 98px}
-        .hero{padding:23px;min-height:auto;border-radius:18px}
-        .hero h1{font-size:21px}
-        .hero-art{display:none}
-        .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
-        .kpi{padding:14px 15px;border-radius:15px}
-        .kpi .value{font-size:20px;margin-top:10px}
-        .card{padding:16px;border-radius:16px}
-        .page-head{margin-bottom:16px;align-items:flex-start}
-        h1{font-size:22px}
-        .page-head .btn{padding:9px 11px;font-size:12px}
-        .search{flex:1 1 100%}
-        .select{flex:1}
-        select.select{flex:1 1 150px;max-width:220px}
-        .cell-count,.cell-meta,.cell-tags{display:none}
-        .cell-tags-mobile{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
-        .cell-tags-mobile .chip{padding:2px 8px;font-size:11px}
-        .cell-amount{width:auto;min-width:86px;font-size:13px}
-        .cell-actions{width:auto;gap:4px}
-        .list-row{padding:12px 2px;gap:8px}
-        .row-wrap{overflow:hidden;border-radius:12px}
-        .row-actions{
-            position:absolute;right:0;top:0;bottom:0;width:108px;padding:0 8px;
-            background:linear-gradient(90deg,rgba(255,253,248,0),var(--surface) 18%);
-            transform:translateX(100%);transition:transform .22s ease;
+
+    @media (max-width: 760px) {
+        .sidebar {
+            display: none
         }
-        .row-wrap.swiped .row-actions{transform:translateX(0)}
-        .row-actions .icon-btn{width:36px;height:36px;background:#fff;box-shadow:0 3px 8px rgba(28,44,34,.1)}
-        .cell-main{gap:9px}
-        .chart-grid,.manage-grid{grid-template-columns:1fr}
-        .chart-grid>:last-child{grid-column:auto}
-        .detail-head{flex-direction:column}
-        .detail-actions{justify-content:flex-start}
-        .summary-item{min-width:110px}
-        .summary-item b{font-size:18px}
-        .form-grid{grid-template-columns:1fr;gap:12px;padding:16px 20px}
-        .modal-foot{flex-direction:column-reverse}
-        .modal-foot .btn{width:100%}
-        .modal-head{padding:20px 20px 0}
-        .confirm-text{padding:6px 20px 0}
-        .bottom-nav{
-            display:flex;position:fixed;left:10px;right:10px;bottom:10px;z-index:30;
-            background:rgba(255,253,248,.96);backdrop-filter:blur(14px);
-            border:1px solid var(--line);border-radius:17px;padding:7px 5px calc(7px + env(safe-area-inset-bottom));
-            box-shadow:0 8px 26px rgba(28,44,34,.13);
+
+        .app {
+            display: block
         }
-        .bottom-nav button{
-            flex:1;border:0;background:transparent;color:#8a948b;border-radius:12px;
-            padding:7px 2px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:650;
+
+        .content {
+            padding: 18px 14px 98px
         }
-        .bottom-nav button .ico{width:19px;height:19px}
-        .bottom-nav button.on{background:transparent;color:var(--primary)}
-        .toast{bottom:88px}
+
+        .hero {
+            padding: 23px;
+            min-height: auto;
+            border-radius: 18px
+        }
+
+        .hero h1 {
+            font-size: 21px
+        }
+
+        .hero-art {
+            display: none
+        }
+
+        .kpis {
+            grid-template-columns:repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin: 12px 0
+        }
+
+        .kpi {
+            padding: 14px 15px;
+            border-radius: 15px
+        }
+
+        .kpi .value {
+            font-size: 20px;
+            margin-top: 10px
+        }
+
+        .card {
+            padding: 16px;
+            border-radius: 16px
+        }
+
+        .page-head {
+            margin-bottom: 16px;
+            align-items: flex-start
+        }
+
+        h1 {
+            font-size: 22px
+        }
+
+        .page-head .btn {
+            padding: 9px 11px;
+            font-size: 12px
+        }
+
+        .search {
+            flex: 1 1 100%
+        }
+
+        .select {
+            flex: 1
+        }
+
+        select.select {
+            flex: 1 1 150px;
+            max-width: 220px
+        }
+
+        .cell-count, .cell-meta, .cell-tags {
+            display: none
+        }
+
+        .cell-tags-mobile {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 5px
+        }
+
+        .cell-tags-mobile .chip {
+            padding: 2px 8px;
+            font-size: 11px
+        }
+
+        .cell-amount {
+            width: auto;
+            min-width: 86px;
+            font-size: 13px
+        }
+
+        .cell-actions {
+            width: auto;
+            gap: 4px
+        }
+
+        .list-row {
+            padding: 12px 2px;
+            gap: 8px
+        }
+
+        .row-wrap {
+            overflow: hidden;
+            border-radius: 12px
+        }
+
+        .row-actions {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 108px;
+            padding: 0 8px;
+            background: linear-gradient(90deg, rgba(255, 253, 248, 0), var(--surface) 18%);
+            transform: translateX(100%);
+            transition: transform .22s ease;
+        }
+
+        .row-wrap.swiped .row-actions {
+            transform: translateX(0)
+        }
+
+        .row-actions .icon-btn {
+            width: 36px;
+            height: 36px;
+            background: #fff;
+            box-shadow: 0 3px 8px rgba(28, 44, 34, .1)
+        }
+
+        .cell-main {
+            gap: 9px
+        }
+
+        .chart-grid, .manage-grid {
+            grid-template-columns:1fr
+        }
+
+        .chart-grid > :last-child {
+            grid-column: auto
+        }
+
+        .detail-head {
+            flex-direction: column
+        }
+
+        .detail-actions {
+            justify-content: flex-start
+        }
+
+        .summary-item {
+            min-width: 110px
+        }
+
+        .summary-item b {
+            font-size: 18px
+        }
+
+        .form-grid {
+            grid-template-columns:1fr;
+            gap: 12px;
+            padding: 16px 20px
+        }
+
+        .modal-foot {
+            flex-direction: column-reverse
+        }
+
+        .modal-foot .btn {
+            width: 100%
+        }
+
+        .modal-head {
+            padding: 20px 20px 0
+        }
+
+        .confirm-text {
+            padding: 6px 20px 0
+        }
+
+        .bottom-nav {
+            display: flex;
+            position: fixed;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            z-index: 30;
+            background: rgba(255, 253, 248, .96);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            padding: 7px 5px calc(7px + env(safe-area-inset-bottom));
+            box-shadow: 0 8px 26px rgba(28, 44, 34, .13);
+        }
+
+        .bottom-nav button {
+            flex: 1;
+            border: 0;
+            background: transparent;
+            color: #8a948b;
+            border-radius: 12px;
+            padding: 7px 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            font-size: 11px;
+            font-weight: 650;
+        }
+
+        .bottom-nav button .ico {
+            width: 19px;
+            height: 19px
+        }
+
+        .bottom-nav button.on {
+            background: transparent;
+            color: var(--primary)
+        }
+
+        .toast {
+            bottom: 88px
+        }
     }
 </style>
 </head>
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.6 12 3.5l9 7.1"/><path d="M5.5 9.5V20h13V9.5"/><path d="M9.5 20v-5.5h5V20"/></symbol>
-    <symbol id="i-list" viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/></symbol>
-    <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></symbol>
-    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16"/><rect x="6" y="11" width="3" height="7" rx="1"/><rect x="11" y="7" width="3" height="11" rx="1"/><rect x="16" y="13" width="3" height="5" rx="1"/></symbol>
-    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></symbol>
-    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></symbol>
-    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13M10 11v5M14 11v5"/></symbol>
-    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
-    <symbol id="i-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
-    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></symbol>
-    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 20c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16 6.5a3 3 0 0 1 0 6M17 15c2 .6 3.5 2.3 3.5 5"/></symbol>
-    <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18M7 6V4.5h10"/><circle cx="16.5" cy="14" r="1"/></symbol>
-    <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="11" rx="2"/><path d="M3 13h18M12 9v11"/><path d="M12 9c-3.5 0-5-1.2-5-3 0-1.4 1.2-2.3 2.5-2.3C11 3.7 12 6 12 9Zm0 0c3.5 0 5-1.2 5-3 0-1.4-1.2-2.3-2.5-2.3C13 3.7 12 6 12 9Z"/></symbol>
-    <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12 12 3h8v8l-9 9-8-8Z"/><circle cx="16.5" cy="7.5" r="1.2"/></symbol>
-    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
-    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></symbol>
-    <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></symbol>
-    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/><path d="M19 16l.7 1.8L21.5 18l-1.8.7L19 20.5l-.7-1.8-1.8-.7 1.8-.7L19 16Z"/></symbol>
-    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7.5 10.5 12 15l4.5-4.5"/><path d="M4 17.5V20h16v-2.5"/></symbol>
-    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7.5 8.5 12 4l4.5 4.5"/><path d="M4 16v3.5h16V16"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24">
+        <path d="M3 10.6 12 3.5l9 7.1"/>
+        <path d="M5.5 9.5V20h13V9.5"/>
+        <path d="M9.5 20v-5.5h5V20"/>
+    </symbol>
+    <symbol id="i-list" viewBox="0 0 24 24">
+        <rect x="3.5" y="4" width="17" height="16" rx="3"/>
+        <path d="M8 9h8M8 13h8M8 17h5"/>
+    </symbol>
+    <symbol id="i-out" viewBox="0 0 24 24">
+        <path d="M7 17 17 7"/>
+        <path d="M9 7h8v8"/>
+    </symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24">
+        <path d="M4 20h16"/>
+        <rect x="6" y="11" width="3" height="7" rx="1"/>
+        <rect x="11" y="7" width="3" height="11" rx="1"/>
+        <rect x="16" y="13" width="3" height="5" rx="1"/>
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14"/>
+    </symbol>
+    <symbol id="i-search" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="6.5"/>
+        <path d="m16 16 4 4"/>
+    </symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24">
+        <path d="M4 20h4l10-10-4-4L4 16v4Z"/>
+        <path d="m13.5 6.5 4 4"/>
+    </symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24">
+        <path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13M10 11v5M14 11v5"/>
+    </symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24">
+        <path d="m9 6 6 6-6 6"/>
+    </symbol>
+    <symbol id="i-left" viewBox="0 0 24 24">
+        <path d="M19 12H5M11 6l-6 6 6 6"/>
+    </symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24">
+        <rect x="3.5" y="5" width="17" height="15" rx="3"/>
+        <path d="M8 3v4M16 3v4M3.5 10h17"/>
+    </symbol>
+    <symbol id="i-users" viewBox="0 0 24 24">
+        <circle cx="9" cy="8" r="3"/>
+        <path d="M3.5 20c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/>
+        <path d="M16 6.5a3 3 0 0 1 0 6M17 15c2 .6 3.5 2.3 3.5 5"/>
+    </symbol>
+    <symbol id="i-wallet" viewBox="0 0 24 24">
+        <rect x="3" y="6" width="18" height="13" rx="3"/>
+        <path d="M3 10h18M7 6V4.5h10"/>
+        <circle cx="16.5" cy="14" r="1"/>
+    </symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24">
+        <rect x="3" y="9" width="18" height="11" rx="2"/>
+        <path d="M3 13h18M12 9v11"/>
+        <path d="M12 9c-3.5 0-5-1.2-5-3 0-1.4 1.2-2.3 2.5-2.3C11 3.7 12 6 12 9Zm0 0c3.5 0 5-1.2 5-3 0-1.4-1.2-2.3-2.5-2.3C13 3.7 12 6 12 9Z"/>
+    </symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24">
+        <path d="M3 12 12 3h8v8l-9 9-8-8Z"/>
+        <circle cx="16.5" cy="7.5" r="1.2"/>
+    </symbol>
+    <symbol id="i-close" viewBox="0 0 24 24">
+        <path d="M6 6l12 12M18 6 6 18"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24">
+        <path d="m5 13 4 4L19 7"/>
+    </symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M12 8v5M12 16.5v.5"/>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24">
+        <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/>
+        <path d="M19 16l.7 1.8L21.5 18l-1.8.7L19 20.5l-.7-1.8-1.8-.7 1.8-.7L19 16Z"/>
+    </symbol>
+    <symbol id="i-download" viewBox="0 0 24 24">
+        <path d="M12 3v12M7.5 10.5 12 15l4.5-4.5"/>
+        <path d="M4 17.5V20h16v-2.5"/>
+    </symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24">
+        <path d="M12 16V4M7.5 8.5 12 4l4.5 4.5"/>
+        <path d="M4 16v3.5h16V16"/>
+    </symbol>
 </svg>
 
 <div class="app">
     <aside class="sidebar">
         <div class="brand">
-            <div class="brand-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-gift"></use></svg></div>
-            <div><div class="brand-name">礼记</div><div class="brand-sub">GIFT LEDGER</div></div>
+            <div class="brand-mark">
+                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <use href="#i-gift"></use>
+                </svg>
+            </div>
+            <div>
+                <div class="brand-name">礼记</div>
+                <div class="brand-sub">GIFT LEDGER</div>
+            </div>
         </div>
         <div class="nav-label">工作台</div>
         <nav class="nav">
-            <button data-nav="dashboard"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-home"></use></svg>总览</button>
-            <button data-nav="bills"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-list"></use></svg>礼单</button>
-            <button data-nav="expenses"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out"></use></svg>随礼</button>
-            <button data-nav="stats"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chart"></use></svg>统计</button>
+            <button data-nav="dashboard">
+                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <use href="#i-home"></use>
+                </svg>
+                总览
+            </button>
+            <button data-nav="bills">
+                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <use href="#i-list"></use>
+                </svg>
+                礼单
+            </button>
+            <button data-nav="expenses">
+                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <use href="#i-out"></use>
+                </svg>
+                随礼
+            </button>
+            <button data-nav="stats">
+                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <use href="#i-chart"></use>
+                </svg>
+                统计
+            </button>
         </nav>
         <div class="side-foot"><b>数据保存在本机</b><span>页面 · 服务 · 数据库均在本地运行</span></div>
     </aside>
@@ -386,63 +1637,118 @@
 </div>
 
 <nav class="bottom-nav">
-    <button data-nav="dashboard"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-home"></use></svg>总览</button>
-    <button data-nav="bills"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-list"></use></svg>礼单</button>
-    <button data-nav="expenses"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out"></use></svg>随礼</button>
-    <button data-nav="stats"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chart"></use></svg>统计</button>
+    <button data-nav="dashboard">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+             stroke-linejoin="round">
+            <use href="#i-home"></use>
+        </svg>
+        总览
+    </button>
+    <button data-nav="bills">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+             stroke-linejoin="round">
+            <use href="#i-list"></use>
+        </svg>
+        礼单
+    </button>
+    <button data-nav="expenses">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+             stroke-linejoin="round">
+            <use href="#i-out"></use>
+        </svg>
+        随礼
+    </button>
+    <button data-nav="stats">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+             stroke-linejoin="round">
+            <use href="#i-chart"></use>
+        </svg>
+        统计
+    </button>
 </nav>
 
 <script>
-    const state = {page:'dashboard', billId:null, q:'', sort:'date-desc', personQ:'', personRel:'', expQ:'', expCate:'', expRel:'', expSort:'date-desc'};
+    const state = {
+        page: 'dashboard',
+        billId: null,
+        q: '',
+        sort: 'date-desc',
+        personQ: '',
+        personRel: '',
+        expQ: '',
+        expCate: '',
+        expRel: '',
+        expSort: 'date-desc'
+    };
     let data = {};
     let swipedWrap = null, touchStart = null;
 
     function closeSwipe() {
-        if (swipedWrap) { swipedWrap.classList.remove('swiped'); swipedWrap = null; }
+        if (swipedWrap) {
+            swipedWrap.classList.remove('swiped');
+            swipedWrap = null;
+        }
     }
 
     const $ = s => document.querySelector(s);
-    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[c]));
     const icon = n => `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-${n}"></use></svg>`;
-    const money = n => '¥' + Number(n || 0).toLocaleString('zh-CN', {minimumFractionDigits:0, maximumFractionDigits:2});
+    const money = n => '¥' + Number(n || 0).toLocaleString('zh-CN', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    });
     const sum = (xs, k) => (xs || []).reduce((s, x) => s + Number(x[k] || 0), 0);
     const relName = id => (data.relations || []).find(x => x.id == id)?.name || '其他';
     const catName = id => (data.categories || []).find(x => x.id == id)?.name || '其他';
     const findBill = id => (data.bills || []).find(x => x.id == id);
 
     const now = new Date();
-    const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
     function fmtDate(s) {
         if (!s) return '—';
         const p = String(s).split('-');
-        return p.length >= 3 ? `${p[0]}.${p[1].padStart(2,'0')}.${p[2].padStart(2,'0')}` : String(s);
+        return p.length >= 3 ? `${p[0]}.${p[1].padStart(2, '0')}.${p[2].padStart(2, '0')}` : String(s);
     }
 
     function dateKey(s) {
         const p = String(s || '').split('-');
-        return p.length >= 3 ? `${p[0]}-${p[1].padStart(2,'0')}-${p[2].padStart(2,'0')}` : String(s || '');
+        return p.length >= 3 ? `${p[0]}-${p[1].padStart(2, '0')}-${p[2].padStart(2, '0')}` : String(s || '');
     }
 
     const TONES = {
-        green:{bg:'#eaf3ed', fg:'#276b4d', solid:'#2f7a63'},
-        gold:{bg:'#f8f0e1', fg:'#9a6d2d', solid:'#c08a3e'},
-        rust:{bg:'#f9ece7', fg:'#a9503a', solid:'#b4533a'},
-        blue:{bg:'#eaf0f6', fg:'#4b6f92', solid:'#6c8fb3'},
-        purple:{bg:'#f1ecf7', fg:'#775ba0', solid:'#8d6e9f'},
-        teal:{bg:'#e9f4f3', fg:'#2f7a72', solid:'#4a9b91'}
+        green: {bg: '#eaf3ed', fg: '#276b4d', solid: '#2f7a63'},
+        gold: {bg: '#f8f0e1', fg: '#9a6d2d', solid: '#c08a3e'},
+        rust: {bg: '#f9ece7', fg: '#a9503a', solid: '#b4533a'},
+        blue: {bg: '#eaf0f6', fg: '#4b6f92', solid: '#6c8fb3'},
+        purple: {bg: '#f1ecf7', fg: '#775ba0', solid: '#8d6e9f'},
+        teal: {bg: '#e9f4f3', fg: '#2f7a72', solid: '#4a9b91'}
     };
-    const REL_ORDER = ['green','gold','rust','blue','purple','teal'];
-    const CAT_ORDER = ['gold','blue','purple','green','rust','teal'];
+    const REL_ORDER = ['green', 'gold', 'rust', 'blue', 'purple', 'teal'];
+    const CAT_ORDER = ['gold', 'blue', 'purple', 'green', 'rust', 'teal'];
+
     function toneOf(kind, id) {
         const order = kind === 'category' ? CAT_ORDER : REL_ORDER;
         return TONES[order[(Math.max(0, Number(id) - 1)) % order.length]];
     }
-    const styleOf = (kind, id) => { const t = toneOf(kind, id); return `background:${t.bg};color:${t.fg}`; };
-    const initial = name => { const chars = Array.from(String(name || '').trim()); return chars.length ? chars[chars.length - 1] : '?'; };
+
+    const styleOf = (kind, id) => {
+        const t = toneOf(kind, id);
+        return `background:${t.bg};color:${t.fg}`;
+    };
+    const initial = name => {
+        const chars = Array.from(String(name || '').trim());
+        return chars.length ? chars[chars.length - 1] : '?';
+    };
 
     function kpi(label, value, foot, ic, tone) {
-        return `<div class="card kpi"><div class="kpi-top"><span class="icon-box ${tone ? 'tone-'+tone : ''}">${icon(ic)}</span><span class="kpi-label">${label}</span></div><div class="value ${tone || ''}">${value}</div><div class="foot">${foot}</div></div>`;
+        return `<div class="card kpi"><div class="kpi-top"><span class="icon-box ${tone ? 'tone-' + tone : ''}">${icon(ic)}</span><span class="kpi-label">${label}</span></div><div class="value ${tone || ''}">${value}</div><div class="foot">${foot}</div></div>`;
     }
 
     function empty(text, action) {
@@ -462,8 +1768,37 @@
         closeSwipe();
         renderTop();
         const app = $('#app');
-        if (state.billId) return renderBillDetail(app);
-        ({dashboard:renderDashboard, bills:renderBills, expenses:renderExpenses, stats:renderStats}[state.page] || renderDashboard)(app);
+        if (state.billId) renderBillDetail(app);
+        else ({
+            dashboard: renderDashboard,
+            bills: renderBills,
+            expenses: renderExpenses,
+            stats: renderStats
+        }[state.page] || renderDashboard)(app);
+        restoreFilters();
+    }
+
+    // 重新渲染后按当前搜索词恢复行的显示状态（不改 state）
+    function restoreFilters() {
+        const apply = (listId, countId, noneId, query) => {
+            const list = document.getElementById(listId);
+            if (!list) return;
+            const q = String(query || '').trim().toLowerCase();
+            const rows = list.querySelectorAll('.row-wrap');
+            let shown = 0;
+            rows.forEach(row => {
+                const hit = !q || (row.getAttribute('data-search') || '').includes(q);
+                row.style.display = hit ? '' : 'none';
+                if (hit) shown++;
+            });
+            const count = document.getElementById(countId);
+            if (count) count.textContent = shown + ' 条记录';
+            const none = document.getElementById(noneId);
+            if (none) none.style.display = (rows.length && shown === 0) ? '' : 'none';
+        };
+        apply('bill-list', 'bill-count', 'bill-none', state.q);
+        apply('person-list', 'person-count', 'person-none', state.personQ);
+        apply('exp-list', 'exp-count', 'exp-none', state.expQ);
     }
 
     function rerenderKeepFocus() {
@@ -472,7 +1807,13 @@
         render();
         if (id) {
             const next = document.getElementById(id);
-            if (next) { next.focus(); try { next.setSelectionRange(pos, pos); } catch (_) {} }
+            if (next) {
+                next.focus();
+                try {
+                    next.setSelectionRange(pos, pos);
+                } catch (_) {
+                }
+            }
         }
     }
 
@@ -506,7 +1847,7 @@
             <div class="two-col">
                 <section class="card">
                     <div class="card-head"><div><div class="card-title">最近礼单</div><div class="card-sub">点开可查看每位来客的明细</div></div><button class="btn ghost sm" data-nav="bills">全部 ${icon('chevron')}</button></div>
-                    ${bills.length ? `<div class="list">${bills.slice(0,5).map(b => `
+                    ${bills.length ? `<div class="list">${bills.slice(0, 5).map(b => `
                         <div class="list-row click" data-action="open-bill" data-id="${b.id}">
                             <div class="cell-main"><div class="avatar">${icon('list')}</div><div class="cell-body"><div class="cell-title">${esc(b.name)}</div><div class="cell-sub">${fmtDate(b.date)} · ${b.people} 人</div></div></div>
                             <div class="cell-amount money income">${money(b.amount)}</div><div class="icon-btn">${icon('chevron')}</div>
@@ -514,9 +1855,9 @@
                 </section>
                 <section class="card">
                     <div class="card-head"><div><div class="card-title">最近随礼</div><div class="card-sub">送出去的每一份祝福</div></div><button class="btn ghost sm" data-nav="expenses">全部 ${icon('chevron')}</button></div>
-                    ${expenses.length ? `<div class="list">${expenses.slice(0,5).map(e => `
+                    ${expenses.length ? `<div class="list">${expenses.slice(0, 5).map(e => `
                         <div class="list-row">
-                            <div class="cell-main"><div class="avatar" style="${styleOf('relation',e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(e.category || catName(e.cate_id))} · ${fmtDate(e.date)}</div></div></div>
+                            <div class="cell-main"><div class="avatar" style="${styleOf('relation', e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(e.category || catName(e.cate_id))} · ${fmtDate(e.date)}</div></div></div>
                             <div class="cell-amount money expense">${money(e.amount)}</div>
                         </div>`).join('')}</div>` : empty('还没有随礼记录。', `<button class="btn primary sm" data-action="new-expense">${icon('plus')} 记录随礼</button>`)}
                 </section>
@@ -526,33 +1867,32 @@
     /* ---------------- 礼单列表 ---------------- */
     function renderBills(app) {
         const bills = [...(data.bills || [])];
-        const q = state.q.trim().toLowerCase();
-        const sorted = bills.filter(b => String(b.name || '').toLowerCase().includes(q));
+        const sorted = bills;
         // 默认按后端返回的日期倒序；只有用户主动切换排序时才在前端重排
-        if (state.sort === 'amount-desc') sorted.sort((a,b) => Number(b.amount) - Number(a.amount));
-        else if (state.sort === 'amount-asc') sorted.sort((a,b) => Number(a.amount) - Number(b.amount));
-        else if (state.sort === 'date-asc') sorted.sort((a,b) => dateKey(a.date).localeCompare(dateKey(b.date)) || a.id - b.id);
+        if (state.sort === 'amount-desc') sorted.sort((a, b) => Number(b.amount) - Number(a.amount));
+        else if (state.sort === 'amount-asc') sorted.sort((a, b) => Number(a.amount) - Number(b.amount));
+        else if (state.sort === 'date-asc') sorted.sort((a, b) => dateKey(a.date).localeCompare(dateKey(b.date)) || a.id - b.id);
         const people = data.people || [];
-        app.innerHTML = pageHead('GIFT LEDGER','我的礼单','每一份收礼，都记在对应的人名下。', `<button class="btn primary" data-action="new-bill">${icon('plus')} 创建礼单</button>`) + `
+        app.innerHTML = pageHead('GIFT LEDGER', '我的礼单', '每一份收礼，都记在对应的人名下。', `<button class="btn primary" data-action="new-bill">${icon('plus')} 创建礼单</button>`) + `
             <div class="kpis">
                 ${kpi('礼单总数', bills.length, '累计创建的礼单', 'list')}
-                ${kpi('收礼总额', `<span class="income">${money(sum(people,'amount'))}</span>`, '全部礼单合计', 'wallet', 'in')}
+                ${kpi('收礼总额', `<span class="income">${money(sum(people, 'amount'))}</span>`, '全部礼单合计', 'wallet', 'in')}
                 ${kpi('来客人数', people.length, '按明细条数统计', 'users')}
-                ${kpi('平均每单', money(bills.length ? sum(people,'amount') / bills.length : 0), '礼金均值', 'chart', 'gold')}
+                ${kpi('平均每单', money(bills.length ? sum(people, 'amount') / bills.length : 0), '礼金均值', 'chart', 'gold')}
             </div>
             <section class="card">
                 <div class="toolbar">
                     <div class="search">${icon('search')}<input class="input" id="bill-search" placeholder="搜索礼单名称" value="${esc(state.q)}"></div>
                     <select class="select" id="bill-sort">
-                        <option value="date-desc" ${state.sort==='date-desc'?'selected':''}>时间↓</option>
-                        <option value="date-asc" ${state.sort==='date-asc'?'selected':''}>时间↑</option>
-                        <option value="amount-desc" ${state.sort==='amount-desc'?'selected':''}>金额↓</option>
-                        <option value="amount-asc" ${state.sort==='amount-asc'?'selected':''}>金额↑</option>
+                        <option value="date-desc" ${state.sort === 'date-desc' ? 'selected' : ''}>时间↓</option>
+                        <option value="date-asc" ${state.sort === 'date-asc' ? 'selected' : ''}>时间↑</option>
+                        <option value="amount-desc" ${state.sort === 'amount-desc' ? 'selected' : ''}>金额↓</option>
+                        <option value="amount-asc" ${state.sort === 'amount-asc' ? 'selected' : ''}>金额↑</option>
                     </select>
-                    <span class="muted" style="font-size:12px;margin-left:auto">${sorted.length} 条记录</span>
+                    <span class="muted" style="font-size:12px;margin-left:auto" id="bill-count">${sorted.length} 条记录</span>
                 </div>
-                ${sorted.length ? `<div class="list">${sorted.map(b => `
-                    <div class="row-wrap">
+                ${sorted.length ? `<div class="list" id="bill-list">${sorted.map(b => `
+                    <div class="row-wrap" data-search="${esc(String(b.name || '').toLowerCase())}">
                         <div class="list-row click" data-action="open-bill" data-id="${b.id}">
                             <div class="cell-main"><div class="avatar">${icon('gift')}</div><div class="cell-body"><div class="cell-title">${esc(b.name)}</div><div class="cell-sub">${esc(fmtDate(b.date))}</div></div></div>
                             <div class="cell-count">${b.people} 人</div>
@@ -563,23 +1903,22 @@
                             <button class="icon-btn" data-action="edit-bill" data-id="${b.id}" title="编辑">${icon('edit')}</button>
                             <button class="icon-btn danger" data-action="del-bill" data-id="${b.id}" title="删除">${icon('trash')}</button>
                         </div>
-                    </div>`).join('')}</div>` : empty(q ? '没有找到匹配的礼单。' : '还没有礼单，点击右上角创建一份。', q ? '' : `<button class="btn primary sm" data-action="new-bill">${icon('plus')} 创建礼单</button>`)}
+                    </div>`).join('')}</div><div class="search-none" id="bill-none" style="display:none">没有找到匹配的礼单</div>` : empty('还没有礼单，点击右上角创建一份。', `<button class="btn primary sm" data-action="new-bill">${icon('plus')} 创建礼单</button>`)}
             </section>`;
     }
 
     /* ---------------- 礼单详情 ---------------- */
     function renderBillDetail(app) {
         const bill = findBill(state.billId);
-        if (!bill) { state.billId = null; return render(); }
+        if (!bill) {
+            state.billId = null;
+            return render();
+        }
         const ps = (data.people || []).filter(x => x.bill_id == bill.id);
-        const q = state.personQ.trim().toLowerCase();
-        const shown = ps.filter(x => {
-            if (state.personRel && String(x.relation_id) !== state.personRel) return false;
-            return (String(x.name || '') + relName(x.relation_id) + String(x.note || '')).toLowerCase().includes(q);
-        });
+        const shown = ps.filter(x => !state.personRel || String(x.relation_id) === state.personRel);
         const groups = (data.relations || []).map(r => ({
-            id:r.id, name:r.name, n:ps.filter(p => p.relation_id == r.id).length,
-            v:sum(ps.filter(p => p.relation_id == r.id), 'amount')
+            id: r.id, name: r.name, n: ps.filter(p => p.relation_id == r.id).length,
+            v: sum(ps.filter(p => p.relation_id == r.id), 'amount')
         })).filter(x => x.n);
         const total = sum(ps, 'amount') || 1;
         app.innerHTML = `
@@ -587,7 +1926,7 @@
                 <div>
                     <button class="back" data-action="back-bills">${icon('left')} 返回</button>
                     <h1>${esc(bill.name)}</h1>
-                    <div class="chips-row"><span class="chip">${icon('calendar')} ${esc(fmtDate(bill.date))}</span><span class="chip green">${icon('users')} ${ps.length} 位来客</span><span class="chip gold">${icon('wallet')} ${money(sum(ps,'amount'))}</span></div>
+                    <div class="chips-row"><span class="chip">${icon('calendar')} ${esc(fmtDate(bill.date))}</span><span class="chip green">${icon('users')} ${ps.length} 位来客</span><span class="chip gold">${icon('wallet')} ${money(sum(ps, 'amount'))}</span></div>
                 </div>
                 <div class="detail-actions">
                     <button class="btn ghost" data-action="edit-bill" data-id="${bill.id}">${icon('edit')} 编辑礼单</button>
@@ -597,78 +1936,76 @@
             </div>
             <section class="card" style="margin-bottom:14px">
                 <div class="card-head"><div><div class="card-title">关系汇总</div><div class="card-sub">按来客关系拆分的礼金占比</div></div></div>
-                ${groups.length ? `<div class="segment">${groups.map(g => `<i style="width:${g.v/total*100}%;background:${toneOf('relation',g.id).solid}"></i>`).join('')}</div>
-                    <div class="legend">${groups.map(g => `<div class="legend-item"><span class="dot" style="background:${toneOf('relation',g.id).solid}"></span>${esc(g.name)} · ${g.n} 人 <b>${money(g.v)}</b></div>`).join('')}</div>`
-                    : '<div class="muted" style="font-size:13px">添加人员后，这里会自动汇总各关系的礼金。</div>'}
+                ${groups.length ? `<div class="segment">${groups.map(g => `<i style="width:${g.v / total * 100}%;background:${toneOf('relation', g.id).solid}"></i>`).join('')}</div>
+                    <div class="legend">${groups.map(g => `<div class="legend-item"><span class="dot" style="background:${toneOf('relation', g.id).solid}"></span>${esc(g.name)} · ${g.n} 人 <b>${money(g.v)}</b></div>`).join('')}</div>`
+            : '<div class="muted" style="font-size:13px">添加人员后，这里会自动汇总各关系的礼金。</div>'}
             </section>
             <section class="card">
-                <div class="card-head"><div><div class="card-title">礼单明细</div><div class="card-sub">${ps.length} 条记录</div></div>
+                <div class="card-head"><div><div class="card-title">礼单明细</div><div class="card-sub" id="person-count">${ps.length} 条记录</div></div>
                     <div class="toolbar" style="margin:0">
                         <div class="search" style="flex:0 0 200px">${icon('search')}<input class="input" id="person-search" placeholder="姓名 / 备注" value="${esc(state.personQ)}"></div>
-                        <select class="select" id="person-rel"><option value="">关系</option>${(data.relations||[]).map(r => `<option value="${r.id}" ${state.personRel == r.id ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
+                        <select class="select" id="person-rel"><option value="">关系</option>${(data.relations || []).map(r => `<option value="${r.id}" ${state.personRel == r.id ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
                     </div>
                 </div>
-                ${shown.length ? `<div class="list">${shown.map(p => `
-                    <div class="row-wrap">
+                ${shown.length ? `<div class="list" id="person-list">${shown.map(p => `
+                    <div class="row-wrap" data-search="${esc((String(p.name || '') + relName(p.relation_id) + String(p.note || '')).toLowerCase())}">
                         <div class="list-row">
-                            <div class="cell-main"><div class="avatar" style="${styleOf('relation',p.relation_id)}">${esc(initial(p.name))}</div><div class="cell-body"><div class="cell-title">${esc(p.name)}</div>${p.note ? `<div class="cell-sub">${esc(p.note)}</div>` : ''}</div></div>
-                            <span class="chip" style="${styleOf('relation',p.relation_id)}">${esc(relName(p.relation_id))}</span>
+                            <div class="cell-main"><div class="avatar" style="${styleOf('relation', p.relation_id)}">${esc(initial(p.name))}</div><div class="cell-body"><div class="cell-title">${esc(p.name)}</div>${p.note ? `<div class="cell-sub">${esc(p.note)}</div>` : ''}</div></div>
+                            <span class="chip" style="${styleOf('relation', p.relation_id)}">${esc(relName(p.relation_id))}</span>
                             <div class="cell-amount money income">${money(p.amount)}</div>
                         </div>
                         <div class="row-actions">
                             <button class="icon-btn" data-action="edit-person" data-id="${p.id}" title="编辑">${icon('edit')}</button>
                             <button class="icon-btn danger" data-action="del-person" data-id="${p.id}" title="删除">${icon('trash')}</button>
                         </div>
-                    </div>`).join('')}</div>` : empty(ps.length ? '没有找到匹配的人员。' : '这份礼单还没有人，添加第一位来客吧。', ps.length ? '' : `<button class="btn primary sm" data-action="new-person" data-id="${bill.id}">${icon('plus')} 添加人员</button>`)}
+                    </div>`).join('')}</div><div class="search-none" id="person-none" style="display:none">没有找到匹配的人员</div>` : empty('这份礼单还没有人，添加第一位来客吧。', `<button class="btn primary sm" data-action="new-person" data-id="${bill.id}">${icon('plus')} 添加人员</button>`)}
             </section>`;
     }
 
     /* ---------------- 随礼 ---------------- */
     function renderExpenses(app) {
         let list = [...(data.expenses || [])];
-        const q = state.expQ.trim().toLowerCase();
         list = list.filter(e => {
-            if (q && !String(e.name || '').toLowerCase().includes(q)) return false;
             if (state.expCate && String(e.cate_id) !== state.expCate) return false;
             if (state.expRel && String(e.relation_id) !== state.expRel) return false;
             return true;
         });
         // 默认按后端返回的日期倒序；切换排序时仅在前端重排
-        if (state.expSort === 'amount-desc') list.sort((a,b) => Number(b.amount) - Number(a.amount));
-        else if (state.expSort === 'amount-asc') list.sort((a,b) => Number(a.amount) - Number(b.amount));
-        else if (state.expSort === 'date-asc') list.sort((a,b) => dateKey(a.date).localeCompare(dateKey(b.date)) || a.id - b.id);
-        app.innerHTML = pageHead('OUTGOING','随礼记录','送出去的每一份心意，也值得被好好记下。', `<button class="btn primary" data-action="new-expense">${icon('plus')} 记录随礼</button>`) + `
+        if (state.expSort === 'amount-desc') list.sort((a, b) => Number(b.amount) - Number(a.amount));
+        else if (state.expSort === 'amount-asc') list.sort((a, b) => Number(a.amount) - Number(b.amount));
+        else if (state.expSort === 'date-asc') list.sort((a, b) => dateKey(a.date).localeCompare(dateKey(b.date)) || a.id - b.id);
+        app.innerHTML = pageHead('OUTGOING', '随礼记录', '送出去的每一份心意，也值得被好好记下。', `<button class="btn primary" data-action="new-expense">${icon('plus')} 记录随礼</button>`) + `
             <div class="kpis">
-                ${kpi('随礼总额', `<span class="expense">${money(sum(data.expenses || [],'amount'))}</span>`, '累计送出', 'out', 'out')}
+                ${kpi('随礼总额', `<span class="expense">${money(sum(data.expenses || [], 'amount'))}</span>`, '累计送出', 'out', 'out')}
                 ${kpi('记录笔数', (data.expenses || []).length, '共多少笔随礼', 'list')}
-                ${kpi('平均每笔', money((data.expenses || []).length ? sum(data.expenses || [],'amount') / data.expenses.length : 0), '礼金均值', 'chart', 'gold')}
+                ${kpi('平均每笔', money((data.expenses || []).length ? sum(data.expenses || [], 'amount') / data.expenses.length : 0), '礼金均值', 'chart', 'gold')}
                 ${kpi('最大一笔', money(Math.max(0, ...(data.expenses || []).map(e => Number(e.amount || 0)))), '单笔最高', 'wallet')}
             </div>
             <section class="card">
                 <div class="toolbar">
                     <div class="search">${icon('search')}<input class="input" id="exp-search" placeholder="搜索姓名" value="${esc(state.expQ)}"></div>
-                    <select class="select" id="exp-cate"><option value="">分类</option>${(data.categories||[]).map(c => `<option value="${c.id}" ${state.expCate == c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select>
-                    <select class="select" id="exp-rel"><option value="">关系</option>${(data.relations||[]).map(r => `<option value="${r.id}" ${state.expRel == r.id ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
+                    <select class="select" id="exp-cate"><option value="">分类</option>${(data.categories || []).map(c => `<option value="${c.id}" ${state.expCate == c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select>
+                    <select class="select" id="exp-rel"><option value="">关系</option>${(data.relations || []).map(r => `<option value="${r.id}" ${state.expRel == r.id ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
                     <select class="select" id="exp-sort">
-                        <option value="date-desc" ${state.expSort==='date-desc'?'selected':''}>时间↓</option>
-                        <option value="date-asc" ${state.expSort==='date-asc'?'selected':''}>时间↑</option>
-                        <option value="amount-desc" ${state.expSort==='amount-desc'?'selected':''}>金额↓</option>
-                        <option value="amount-asc" ${state.expSort==='amount-asc'?'selected':''}>金额↑</option>
+                        <option value="date-desc" ${state.expSort === 'date-desc' ? 'selected' : ''}>时间↓</option>
+                        <option value="date-asc" ${state.expSort === 'date-asc' ? 'selected' : ''}>时间↑</option>
+                        <option value="amount-desc" ${state.expSort === 'amount-desc' ? 'selected' : ''}>金额↓</option>
+                        <option value="amount-asc" ${state.expSort === 'amount-asc' ? 'selected' : ''}>金额↑</option>
                     </select>
-                    <span class="muted" style="font-size:12px;margin-left:auto">${list.length} 条记录</span>
+                    <span class="muted" style="font-size:12px;margin-left:auto" id="exp-count">${list.length} 条记录</span>
                 </div>
-                ${list.length ? `<div class="list">${list.map(e => `
-                    <div class="row-wrap">
+                ${list.length ? `<div class="list" id="exp-list">${list.map(e => `
+                    <div class="row-wrap" data-search="${esc(String(e.name || '').toLowerCase())}">
                         <div class="list-row">
-                            <div class="cell-main"><div class="avatar" style="${styleOf('relation',e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(fmtDate(e.date))}</div><div class="cell-tags-mobile"><span class="chip" style="${styleOf('relation',e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span><span class="chip" style="${styleOf('category',e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span></div></div></div>
-                            <div class="cell-tags"><span class="chip" style="${styleOf('relation',e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span><span class="chip" style="${styleOf('category',e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span></div>
+                            <div class="cell-main"><div class="avatar" style="${styleOf('relation', e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(fmtDate(e.date))}</div><div class="cell-tags-mobile"><span class="chip" style="${styleOf('relation', e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span><span class="chip" style="${styleOf('category', e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span></div></div></div>
+                            <div class="cell-tags"><span class="chip" style="${styleOf('relation', e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span><span class="chip" style="${styleOf('category', e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span></div>
                             <div class="cell-amount money expense">${money(e.amount)}</div>
                         </div>
                         <div class="row-actions">
                             <button class="icon-btn" data-action="edit-expense" data-id="${e.id}" title="编辑">${icon('edit')}</button>
                             <button class="icon-btn danger" data-action="del-expense" data-id="${e.id}" title="删除">${icon('trash')}</button>
                         </div>
-                    </div>`).join('')}</div>` : empty(q || state.expCate || state.expRel ? '没有找到匹配的记录。' : '还没有随礼记录，点击右上角添加一笔。', (q || state.expCate || state.expRel) ? '' : `<button class="btn primary sm" data-action="new-expense">${icon('plus')} 记录随礼</button>`)}
+                    </div>`).join('')}</div><div class="search-none" id="exp-none" style="display:none">没有找到匹配的记录</div>` : empty('还没有随礼记录，点击右上角添加一笔。', `<button class="btn primary sm" data-action="new-expense">${icon('plus')} 记录随礼</button>`)}
             </section>`;
     }
 
@@ -676,16 +2013,16 @@
     function chartCard(title, rows, tone, foot) {
         const active = rows.filter(r => Number(r[1]) > 0);
         return `<section class="card"><div class="card-head"><div><div class="card-title">${title}</div><div class="card-sub">${foot}</div></div></div>
-            ${active.length ? active.map((r,i) => {
-                const max = Math.max(...active.map(x => Number(x[1])), 1);
-                return `<div class="chart-row"><div class="chart-line"><span>${esc(r[0])}</span><b class="${tone === 'red' ? 'income' : tone === 'gold' ? '' : 'expense'}">${money(r[1])}</b></div><div class="bar-track"><div class="bar-fill ${tone || ''}" style="width:${Number(r[1])/max*100}%"></div></div></div>`;
-            }).join('') : '<div class="muted" style="font-size:12px;padding:14px 0">暂无数据</div>'}</section>`;
+            ${active.length ? active.map((r, i) => {
+            const max = Math.max(...active.map(x => Number(x[1])), 1);
+            return `<div class="chart-row"><div class="chart-line"><span>${esc(r[0])}</span><b class="${tone === 'red' ? 'income' : tone === 'gold' ? '' : 'expense'}">${money(r[1])}</b></div><div class="bar-track"><div class="bar-fill ${tone || ''}" style="width:${Number(r[1]) / max * 100}%"></div></div></div>`;
+        }).join('') : '<div class="muted" style="font-size:12px;padding:14px 0">暂无数据</div>'}</section>`;
     }
 
     function renderStats(app) {
         const people = data.people || [], expenses = data.expenses || [];
         const income = sum(people, 'amount'), out = sum(expenses, 'amount');
-        app.innerHTML = pageHead('INSIGHTS','收支统计','看看心意都流向了哪里。', `<button class="btn ghost" data-action="import">${icon('download')} 导入 Excel</button><button class="btn primary" data-action="export">${icon('upload')} 导出 Excel</button>`) + `
+        app.innerHTML = pageHead('INSIGHTS', '收支统计', '看看心意都流向了哪里。', `<button class="btn ghost" data-action="import">${icon('download')} 导入 Excel</button><button class="btn primary" data-action="export">${icon('upload')} 导出 Excel</button>`) + `
             <div class="summary-band">
                 <div class="summary-item"><span>收礼总额</span><b class="income">${money(income)}</b></div>
                 <div class="summary-item"><span>随礼总额</span><b class="expense">${money(out)}</b></div>
@@ -693,21 +2030,21 @@
                 <span class="chip ${income >= out ? 'red' : 'green'}">${income >= out ? '收礼多于随礼' : '随礼多于收礼'}</span>
             </div>
             <div class="chart-grid">
-                ${chartCard('收礼(关系)', (data.relations||[]).map(r => [r.name, sum(people.filter(x => x.relation_id == r.id),'amount')]), 'red', '哪些关系带来的礼金最多')}
-                ${chartCard('随礼(关系)', (data.relations||[]).map(r => [r.name, sum(expenses.filter(x => x.relation_id == r.id),'amount')]), '', '按关系查看送出的礼金')}
-                ${chartCard('随礼(类别)', (data.categories||[]).map(c => [c.name, sum(expenses.filter(x => x.cate_id == c.id),'amount')]), 'gold', '不同场合的随礼分布')}
+                ${chartCard('收礼(关系)', (data.relations || []).map(r => [r.name, sum(people.filter(x => x.relation_id == r.id), 'amount')]), 'red', '哪些关系带来的礼金最多')}
+                ${chartCard('随礼(关系)', (data.relations || []).map(r => [r.name, sum(expenses.filter(x => x.relation_id == r.id), 'amount')]), '', '按关系查看送出的礼金')}
+                ${chartCard('随礼(类别)', (data.categories || []).map(c => [c.name, sum(expenses.filter(x => x.cate_id == c.id), 'amount')]), 'gold', '不同场合的随礼分布')}
             </div>
             <div class="manage-grid">
                 <section class="card">
                     <div class="card-head"><div><div class="card-title">关系管理</div><div class="card-sub">用于礼单和随礼的关系分类</div></div></div>
-                    <div class="tag-list">${(data.relations||[]).map(x => `<span class="tag">${esc(x.name)}
+                    <div class="tag-list">${(data.relations || []).map(x => `<span class="tag">${esc(x.name)}
                         <button class="icon-btn" data-action="edit-relation" data-id="${x.id}" title="编辑">${icon('edit')}</button>
                         <button class="icon-btn danger" data-action="del-relation" data-id="${x.id}" title="删除">${icon('trash')}</button></span>`).join('') || '<span class="muted" style="font-size:12px">暂无关系</span>'}</div>
                     <div class="inline-add"><input class="input" id="relation-name" placeholder="新增关系名称"><button class="btn primary" data-action="add-relation">${icon('plus')} 添加</button></div>
                 </section>
                 <section class="card">
                     <div class="card-head"><div><div class="card-title">随礼分类</div><div class="card-sub">例如结婚、生日、乔迁</div></div></div>
-                    <div class="tag-list">${(data.categories||[]).map(x => `<span class="tag">${esc(x.name)}
+                    <div class="tag-list">${(data.categories || []).map(x => `<span class="tag">${esc(x.name)}
                         <button class="icon-btn" data-action="edit-category" data-id="${x.id}" title="编辑">${icon('edit')}</button>
                         <button class="icon-btn danger" data-action="del-category" data-id="${x.id}" title="删除">${icon('trash')}</button></span>`).join('') || '<span class="muted" style="font-size:12px">暂无分类</span>'}</div>
                     <div class="inline-add"><input class="input" id="category-name" placeholder="新增分类名称"><button class="btn primary" data-action="add-category">${icon('plus')} 添加</button></div>
@@ -721,14 +2058,21 @@
         if (host) host.remove();
         document.removeEventListener('keydown', onEsc);
     }
-    function onEsc(e) { if (e.key === 'Escape') closeModal(); }
+
+    function onEsc(e) {
+        if (e.key === 'Escape') closeModal();
+    }
+
     function showModal(html) {
         closeModal();
         const host = document.createElement('div');
-        host.className = 'modal-mask'; host.id = 'modal-host';
+        host.className = 'modal-mask';
+        host.id = 'modal-host';
         host.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}</div>`;
         document.body.appendChild(host);
-        host.addEventListener('click', e => { if (e.target === host || e.target.closest('[data-close]')) closeModal(); });
+        host.addEventListener('click', e => {
+            if (e.target === host || e.target.closest('[data-close]')) closeModal();
+        });
         document.addEventListener('keydown', onEsc);
     }
 
@@ -828,7 +2172,7 @@
                 if (s.categories) parts.push('分类 ' + s.categories);
             }
             const msg = '导入成功' + (parts.length ? '：' + parts.join('、') : '（无新增）') +
-                        (s.skipped ? '；跳过重复 ' + s.skipped : '');
+                (s.skipped ? '；跳过重复 ' + s.skipped : '');
             closeModal();
             toast(msg);
             await load();
@@ -856,8 +2200,11 @@
             }
         } else {
             const a = document.createElement('a');
-            a.href = url; a.download = name;
-            document.body.appendChild(a); a.click(); a.remove();
+            a.href = url;
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
         }
     }
 
@@ -866,90 +2213,160 @@
         t.className = 'toast' + (bad ? ' bad' : '');
         t.innerHTML = `${icon(bad ? 'alert' : 'check')}<span>${esc(msg)}</span>`;
         document.body.appendChild(t);
-        setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 260); }, 2200);
+        setTimeout(() => {
+            t.classList.add('out');
+            setTimeout(() => t.remove(), 260);
+        }, 2200);
     }
 
     async function mutate(url, method, body, msg, before) {
         try {
             const opt = {method: method || 'POST'};
             if (body !== null && body !== undefined) {
-                opt.headers = {'Content-Type':'application/json'};
+                opt.headers = {'Content-Type': 'application/json'};
                 opt.body = JSON.stringify(body);
             }
             const r = await fetch(url, opt);
-            const d = await r.json().catch(() => ({ok:true}));
+            const d = await r.json().catch(() => ({ok: true}));
             if (!d.ok) throw new Error(d.error || '操作失败');
             closeModal();
             if (before) before();
             toast(msg || '已保存');
             await load();
-        } catch (e) { toast(e.message || '操作失败', true); }
+        } catch (e) {
+            toast(e.message || '操作失败', true);
+        }
     }
 
-    const relField = value => ({name:'relation_id', label:'关系', type:'select', value, options:(data.relations||[]).map(r => ({value:r.id,label:r.name})), required:true});
-    const cateField = value => ({name:'cate_id', label:'分类', type:'select', value, options:(data.categories||[]).map(c => ({value:c.id,label:c.name})), required:true});
-    const billField = value => ({name:'bill_id', label:'所属礼单', type:'select', value, options:(data.bills||[]).map(b => ({value:b.id,label:b.name})), required:true});
-    const numFields = d => ({...d, amount:Number(d.amount), relation_id:Number(d.relation_id), cate_id:Number(d.cate_id), bill_id:Number(d.bill_id)});
+    const relField = value => ({
+        name: 'relation_id',
+        label: '关系',
+        type: 'select',
+        value,
+        options: (data.relations || []).map(r => ({value: r.id, label: r.name})),
+        required: true
+    });
+    const cateField = value => ({
+        name: 'cate_id',
+        label: '分类',
+        type: 'select',
+        value,
+        options: (data.categories || []).map(c => ({value: c.id, label: c.name})),
+        required: true
+    });
+    const billField = value => ({
+        name: 'bill_id',
+        label: '所属礼单',
+        type: 'select',
+        value,
+        options: (data.bills || []).map(b => ({value: b.id, label: b.name})),
+        required: true
+    });
+    const numFields = d => ({
+        ...d,
+        amount: Number(d.amount),
+        relation_id: Number(d.relation_id),
+        cate_id: Number(d.cate_id),
+        bill_id: Number(d.bill_id)
+    });
 
     function addBill() {
-        openForm('创建礼单','为这场喜事建一份新的礼单', [
-            {name:'name',label:'礼单名称',placeholder:'例如：生日',required:true},
-            {name:'date',label:'日期',type:'date',value:today,required:true}
-        ], d => mutate('/api/bill','POST',d,'礼单已创建'));
+        openForm('创建礼单', '为这场喜事建一份新的礼单', [
+            {name: 'name', label: '礼单名称', placeholder: '例如：生日', required: true},
+            {name: 'date', label: '日期', type: 'date', value: today, required: true}
+        ], d => mutate('/api/bill', 'POST', d, '礼单已创建'));
     }
+
     function editBill(x) {
-        openForm('编辑礼单',x.name,[
-            {name:'name',label:'礼单名称',value:x.name,required:true},
-            {name:'date',label:'日期',type:'date',value:x.date,required:true}
-        ], d => mutate('/api/bill/'+x.id,'PUT',d,'已保存'));
+        openForm('编辑礼单', x.name, [
+            {name: 'name', label: '礼单名称', value: x.name, required: true},
+            {name: 'date', label: '日期', type: 'date', value: x.date, required: true}
+        ], d => mutate('/api/bill/' + x.id, 'PUT', d, '已保存'));
     }
+
     function addPerson(id) {
-        openForm('添加人员','记录一位来客的礼金',[
-            {name:'name',label:'姓名',placeholder:'请输入姓名',required:true},
+        openForm('添加人员', '记录一位来客的礼金', [
+            {name: 'name', label: '姓名', placeholder: '请输入姓名', required: true},
             relField(),
-            {name:'amount',label:'金额（元）',type:'number',min:0,step:'0.01',placeholder:'0.00',required:true},
-            {name:'note',label:'备注',placeholder:'选填',full:true}
-        ], d => mutate('/api/person','POST',{...d,bill_id:id,amount:Number(d.amount),relation_id:Number(d.relation_id)},'已添加'));
+            {
+                name: 'amount',
+                label: '金额（元）',
+                type: 'number',
+                min: 0,
+                step: '0.01',
+                placeholder: '0.00',
+                required: true
+            },
+            {name: 'note', label: '备注', placeholder: '选填', full: true}
+        ], d => mutate('/api/person', 'POST', {
+            ...d,
+            bill_id: id,
+            amount: Number(d.amount),
+            relation_id: Number(d.relation_id)
+        }, '已添加'));
     }
+
     function editPerson(x) {
-        openForm('编辑收礼明细',x.name,[
+        openForm('编辑收礼明细', x.name, [
             billField(x.bill_id), relField(x.relation_id),
-            {name:'name',label:'姓名',value:x.name,required:true},
-            {name:'amount',label:'金额（元）',type:'number',min:0,step:'0.01',value:x.amount,required:true},
-            {name:'note',label:'备注',value:x.note || '',full:true}
-        ], d => mutate('/api/person/'+x.id,'PUT',numFields(d),'已保存'));
+            {name: 'name', label: '姓名', value: x.name, required: true},
+            {name: 'amount', label: '金额（元）', type: 'number', min: 0, step: '0.01', value: x.amount, required: true},
+            {name: 'note', label: '备注', value: x.note || '', full: true}
+        ], d => mutate('/api/person/' + x.id, 'PUT', numFields(d), '已保存'));
     }
+
     function addExpense() {
-        openForm('记录随礼','把送出的祝福记下来',[
-            {name:'name',label:'姓名',placeholder:'请输入姓名',required:true},
+        openForm('记录随礼', '把送出的祝福记下来', [
+            {name: 'name', label: '姓名', placeholder: '请输入姓名', required: true},
             cateField(), relField(),
-            {name:'amount',label:'金额（元）',type:'number',min:0,step:'0.01',placeholder:'0.00',required:true},
-            {name:'date',label:'日期',type:'date',value:today,required:true}
-        ], d => mutate('/api/expense','POST',{...d,amount:Number(d.amount),relation_id:Number(d.relation_id),cate_id:Number(d.cate_id)},'已记录'));
+            {
+                name: 'amount',
+                label: '金额（元）',
+                type: 'number',
+                min: 0,
+                step: '0.01',
+                placeholder: '0.00',
+                required: true
+            },
+            {name: 'date', label: '日期', type: 'date', value: today, required: true}
+        ], d => mutate('/api/expense', 'POST', {
+            ...d,
+            amount: Number(d.amount),
+            relation_id: Number(d.relation_id),
+            cate_id: Number(d.cate_id)
+        }, '已记录'));
     }
+
     function editExpense(x) {
-        openForm('编辑随礼记录',x.name,[
-            {name:'name',label:'姓名',value:x.name,required:true},
+        openForm('编辑随礼记录', x.name, [
+            {name: 'name', label: '姓名', value: x.name, required: true},
             cateField(x.cate_id), relField(x.relation_id),
-            {name:'amount',label:'金额（元）',type:'number',min:0,step:'0.01',value:x.amount,required:true},
-            {name:'date',label:'日期',type:'date',value:x.date,required:true}
-        ], d => mutate('/api/expense/'+x.id,'PUT',numFields(d),'已保存'));
+            {name: 'amount', label: '金额（元）', type: 'number', min: 0, step: '0.01', value: x.amount, required: true},
+            {name: 'date', label: '日期', type: 'date', value: x.date, required: true}
+        ], d => mutate('/api/expense/' + x.id, 'PUT', numFields(d), '已保存'));
     }
+
     function editManage(kind, x) {
         const isRel = kind === 'relation';
         openForm(isRel ? '修改关系' : '修改分类', x.name, [
-            {name:'name',label:'名称',value:x.name,required:true,full:true}
-        ], d => mutate('/api/manage/'+(isRel ? 'relation' : 'category')+'/'+x.id,'PUT',{...d,type:kind},'已保存'));
+            {name: 'name', label: '名称', value: x.name, required: true, full: true}
+        ], d => mutate('/api/manage/' + (isRel ? 'relation' : 'category') + '/' + x.id, 'PUT', {
+            ...d,
+            type: kind
+        }, '已保存'));
     }
 
     /* ---------------- 事件 ---------------- */
     document.addEventListener('touchstart', e => {
         const wrap = e.target.closest('.row-wrap');
-        if (!wrap) { closeSwipe(); return; }
+        if (!wrap) {
+            closeSwipe();
+            return;
+        }
         if (swipedWrap && swipedWrap !== wrap) closeSwipe();
         const t = e.touches[0];
-        touchStart = {wrap, x:t.clientX, y:t.clientY};
-    }, {passive:true});
+        touchStart = {wrap, x: t.clientX, y: t.clientY};
+    }, {passive: true});
 
     document.addEventListener('touchend', e => {
         if (!touchStart) return;
@@ -966,63 +2383,139 @@
             wrap.classList.remove('swiped');
             if (swipedWrap === wrap) swipedWrap = null;
         }
-    }, {passive:true});
+    }, {passive: true});
 
-    document.addEventListener('touchcancel', () => { touchStart = null; }, {passive:true});
+    document.addEventListener('touchcancel', () => {
+        touchStart = null;
+    }, {passive: true});
 
     document.addEventListener('click', e => {
-        if (e.target.closest('.row-wrap.swiped') && !e.target.closest('.row-actions')) { closeSwipe(); return; }
+        if (e.target.closest('.row-wrap.swiped') && !e.target.closest('.row-actions')) {
+            closeSwipe();
+            return;
+        }
         const nav = e.target.closest('[data-nav]');
-        if (nav) { state.page = nav.dataset.nav; state.billId = null; render(); return; }
+        if (nav) {
+            state.page = nav.dataset.nav;
+            state.billId = null;
+            render();
+            return;
+        }
         const el = e.target.closest('[data-action]');
         if (!el) return;
         const a = el.dataset.action, id = Number(el.dataset.id);
         const one = (arr) => (arr || []).find(x => x.id === id);
 
-        if (a === 'export') { exportDialog(); return; }
-        if (a === 'import') { importDialog(); return; }
-        if (a === 'dl') { e.preventDefault(); downloadFile(el.dataset.url, el.dataset.name); return; }
-        if (a === 'pick-file') { $('#file-' + el.dataset.kind).click(); return; }
+        if (a === 'export') {
+            exportDialog();
+            return;
+        }
+        if (a === 'import') {
+            importDialog();
+            return;
+        }
+        if (a === 'dl') {
+            e.preventDefault();
+            downloadFile(el.dataset.url, el.dataset.name);
+            return;
+        }
+        if (a === 'pick-file') {
+            $('#file-' + el.dataset.kind).click();
+            return;
+        }
         if (a === 'new-bill') addBill();
         else if (a === 'new-expense') addExpense();
-        else if (a === 'open-bill') { state.billId = id; state.personQ = ''; state.personRel = ''; render(); }
-        else if (a === 'back-bills') { state.billId = null; render(); }
-        else if (a === 'edit-bill') { const x = one(data.bills); if (x) editBill(x); }
-        else if (a === 'del-bill') {
+        else if (a === 'open-bill') {
+            state.billId = id;
+            state.personQ = '';
+            state.personRel = '';
+            render();
+        } else if (a === 'back-bills') {
+            state.billId = null;
+            render();
+        } else if (a === 'edit-bill') {
             const x = one(data.bills);
-            if (x) confirmDialog('删除礼单','「'+x.name+'」及其下所有收礼明细都会被删除，且无法恢复。',() =>
-                mutate('/api/bill/'+id,'DELETE',null,'已删除',() => { if (state.billId === id) { state.billId = null; state.page = 'bills'; } }));
-        }
-        else if (a === 'new-person') addPerson(id);
-        else if (a === 'edit-person') { const x = one(data.people); if (x) editPerson(x); }
-        else if (a === 'del-person') confirmDialog('删除收礼明细','确定删除这条人员记录？',() => mutate('/api/person/'+id,'DELETE',null,'已删除'));
-        else if (a === 'edit-expense') { const x = one(data.expenses); if (x) editExpense(x); }
-        else if (a === 'del-expense') confirmDialog('删除随礼记录','确定删除这笔随礼记录？',() => mutate('/api/expense/'+id,'DELETE',null,'已删除'));
-        else if (a === 'edit-relation') { const x = one(data.relations); if (x) editManage('relation',x); }
-        else if (a === 'edit-category') { const x = one(data.categories); if (x) editManage('category',x); }
-        else if (a === 'del-relation') confirmDialog('删除关系','确定删除这个关系？',() => mutate('/api/manage/relation/'+id,'DELETE',null,'已删除'));
-        else if (a === 'del-category') confirmDialog('删除分类','确定删除这个分类？',() => mutate('/api/manage/category/'+id,'DELETE',null,'已删除'));
+            if (x) editBill(x);
+        } else if (a === 'del-bill') {
+            const x = one(data.bills);
+            if (x) confirmDialog('删除礼单', '「' + x.name + '」及其下所有收礼明细都会被删除，且无法恢复。', () =>
+                mutate('/api/bill/' + id, 'DELETE', null, '已删除', () => {
+                    if (state.billId === id) {
+                        state.billId = null;
+                        state.page = 'bills';
+                    }
+                }));
+        } else if (a === 'new-person') addPerson(id);
+        else if (a === 'edit-person') {
+            const x = one(data.people);
+            if (x) editPerson(x);
+        } else if (a === 'del-person') confirmDialog('删除收礼明细', '确定删除这条人员记录？', () => mutate('/api/person/' + id, 'DELETE', null, '已删除'));
+        else if (a === 'edit-expense') {
+            const x = one(data.expenses);
+            if (x) editExpense(x);
+        } else if (a === 'del-expense') confirmDialog('删除随礼记录', '确定删除这笔随礼记录？', () => mutate('/api/expense/' + id, 'DELETE', null, '已删除'));
+        else if (a === 'edit-relation') {
+            const x = one(data.relations);
+            if (x) editManage('relation', x);
+        } else if (a === 'edit-category') {
+            const x = one(data.categories);
+            if (x) editManage('category', x);
+        } else if (a === 'del-relation') confirmDialog('删除关系', '确定删除这个关系？', () => mutate('/api/manage/relation/' + id, 'DELETE', null, '已删除'));
+        else if (a === 'del-category') confirmDialog('删除分类', '确定删除这个分类？', () => mutate('/api/manage/category/' + id, 'DELETE', null, '已删除'));
         else if (a === 'add-relation' || a === 'add-category') {
             const isRel = a === 'add-relation';
             const input = document.getElementById(isRel ? 'relation-name' : 'category-name');
             const name = input && input.value.trim();
-            if (!name) { toast('请先填写名称', true); return; }
-            mutate('/api/manage','POST',{type:isRel ? 'relation' : 'category',name},'已添加');
+            if (!name) {
+                toast('请先填写名称', true);
+                return;
+            }
+            mutate('/api/manage', 'POST', {type: isRel ? 'relation' : 'category', name}, '已添加');
         }
     });
 
+    // 搜索只在现有 DOM 上过滤行，不重建页面——避免桌面 WKWebView 下输入法被打断、焦点丢失
+    function filterRows(listId, countId, noneId, query, stateKey) {
+        state[stateKey] = query;
+        const list = document.getElementById(listId);
+        if (!list) return;
+        const q = String(query || '').trim().toLowerCase();
+        const rows = list.querySelectorAll('.row-wrap');
+        let shown = 0;
+        rows.forEach(row => {
+            const hit = !q || (row.getAttribute('data-search') || '').includes(q);
+            row.style.display = hit ? '' : 'none';
+            if (hit) shown++;
+        });
+        const count = document.getElementById(countId);
+        if (count) count.textContent = shown + ' 条记录';
+        const none = document.getElementById(noneId);
+        if (none) none.style.display = (rows.length && shown === 0) ? '' : 'none';
+    }
+
     document.addEventListener('input', e => {
         const id = e.target.id;
-        if (id === 'bill-search') { state.q = e.target.value; rerenderKeepFocus(); }
-        else if (id === 'person-search') { state.personQ = e.target.value; rerenderKeepFocus(); }
-        else if (id === 'exp-search') { state.expQ = e.target.value; rerenderKeepFocus(); }
+        if (id === 'bill-search') filterRows('bill-list', 'bill-count', 'bill-none', e.target.value, 'q');
+        else if (id === 'person-search') filterRows('person-list', 'person-count', 'person-none', e.target.value, 'personQ');
+        else if (id === 'exp-search') filterRows('exp-list', 'exp-count', 'exp-none', e.target.value, 'expQ');
     });
     document.addEventListener('change', e => {
-        if (e.target.id === 'bill-sort') { state.sort = e.target.value; render(); }
-        else if (e.target.id === 'person-rel') { state.personRel = e.target.value; render(); }
-        else if (e.target.id === 'exp-cate') { state.expCate = e.target.value; render(); }
-        else if (e.target.id === 'exp-rel') { state.expRel = e.target.value; render(); }
-        else if (e.target.id === 'exp-sort') { state.expSort = e.target.value; render(); }
+        if (e.target.id === 'bill-sort') {
+            state.sort = e.target.value;
+            render();
+        } else if (e.target.id === 'person-rel') {
+            state.personRel = e.target.value;
+            render();
+        } else if (e.target.id === 'exp-cate') {
+            state.expCate = e.target.value;
+            render();
+        } else if (e.target.id === 'exp-rel') {
+            state.expRel = e.target.value;
+            render();
+        } else if (e.target.id === 'exp-sort') {
+            state.expSort = e.target.value;
+            render();
+        }
     });
 
     async function load() {
@@ -1033,6 +2526,7 @@
             $('#app').innerHTML = '<div class="empty"><div class="empty-icon">!</div><p>无法读取数据，请通过 <b>python3 app.py</b> 启动服务后访问本页。</p></div>';
         }
     }
+
     load();
 </script>
 </body>
