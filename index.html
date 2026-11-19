@@ -50,6 +50,8 @@
         cursor: pointer
     }
 
+    .item.expense-row{grid-template-columns:1.3fr 1fr 1fr 1fr 1fr auto}
+
     .tabs .on, .primary {
         background: #246b4c !important;
         color: #fff !important
@@ -184,6 +186,8 @@
             font-size: 13px
         }
 
+        .panel:has(.expense-row){overflow-x:auto}.item.expense-row,.item.expense-head{grid-template-columns:110px 80px 80px 85px 100px 130px;min-width:625px}.item.expense-row > *:nth-child(4){display:block}
+
         .item > *:nth-child(4) {
             display: none
         }
@@ -248,6 +252,7 @@
     function render() {
         let a = document.querySelector('#app'), bills = data.bills || [], people = data.people || [],
             expenses = data.expenses || [], sum = (xs, k) => xs.reduce((s, x) => s + Number(x[k] || 0), 0);
+        document.querySelectorAll('.tabs button').forEach((btn,i)=>btn.classList.toggle('on', ['bills','expenses','stats'][i]===page));
         if (bill) {
             let ps = people.filter(x => x.bill_id == bill.id), rs = data.relations.map(r => ({
                 name: r.name,
@@ -257,11 +262,11 @@
             a.innerHTML = `<div class="row"><div><button onclick="bill=null;render()">← 返回</button><h2>${bill.name}</h2><span class="muted">${bill.date} · ${ps.length} 人 · ${money(sum(ps, 'amount'))}</span></div><div><button class="secondary" onclick='editBill(${JSON.stringify(bill)})'>编辑礼单</button> <button class="primary" onclick="addPerson(${bill.id})">＋ 添加人员</button></div></div><div class="panel"><div class="sectiontitle">关系汇总</div>${rs.map(x => `<div class="item"><b>${x.name}</b><span>${x.n} 人</span><b>${money(x.v)}</b></div>`).join('')}<div class="row"><b>礼单明细</b><input type="search" placeholder="搜索姓名或关系" oninput="filter=this.value;render()"></div><div class="item head"><span>姓名</span><span>关系</span><span>金额</span><span>备注</span><span>操作</span></div>${ps.filter(x => (x.name + rel(x.relation_id)).includes(filter)).map(x => `<div class="item"><b>${x.name}</b><span>${rel(x.relation_id)}</span><b>${money(x.amount)}</b><span>${x.note || '—'}</span><span><button class="secondary" onclick='editPerson(${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick="del('/api/person/${x.id}')">删除</button></span></div>`).join('')}</div>`;
             return
         }
-        if (page === 'bills') a.innerHTML = `<div class="cards"><div class="card"><div class="label">礼单总数</div><div class="num">${bills.length}</div></div><div class="card"><div class="label">礼金总额</div><div class="num">${money(sum(people, 'amount'))}</div></div></div><div class="row"><h2>我的礼单</h2><button class="primary" onclick="addBill()">＋ 创建礼单</button></div><div class="panel"><div class="item head"><span>礼单名称</span><span>人数</span><span>时间</span><span>操作</span></div>${bills.map(x => `<div class="item click" onclick="bill=${JSON.stringify(x).replaceAll('"', '&quot;')};render()"><b>${x.name}</b><span>${x.people} 人</span><span>${x.date}</span><span><button class="secondary" onclick='event.stopPropagation();editBill(${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick="event.stopPropagation();del('/api/bill/${x.id}')">删除</button></span></div>`).join('') || '<p class="muted">还没有礼单，点击“创建礼单”开始记录。</p>'}</div>`;
-        else if (page === 'expenses') a.innerHTML = `<div class="cards"><div class="card"><div class="label">随礼总金额</div><div class="num">${money(sum(expenses, 'amount'))}</div></div><div class="card"><div class="label">随礼人数</div><div class="num">${expenses.length}</div></div></div><div class="row"><h2>随礼记录</h2><button class="primary" onclick="addExpense()">＋ 记录随礼</button></div><div class="panel"><div class="item head"><span>姓名</span><span>分类</span><span>关系</span><span>金额</span><span>时间 / 操作</span></div>${expenses.map(x => `<div class="item"><b>${x.name}</b><span>${x.category || cat(x.cate_id)}</span><span>${x.relation || rel(x.relation_id)}</span><b>${money(x.amount)}</b><span>${x.date}<br><button class="secondary" onclick='editExpense(${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick="del('/api/expense/${x.id}')">删除</button></span></div>`).join('')}</div>`;
+        if (page === 'bills') a.innerHTML = `<div class="cards"><div class="card"><div class="label">礼单总数</div><div class="num">${bills.length}</div></div><div class="card"><div class="label">礼金总额</div><div class="num">${money(sum(people, 'amount'))}</div></div></div><div class="row"><h2>我的礼单</h2><button class="primary" onclick="addBill()">＋ 创建礼单</button></div><div class="panel"><div class="item head"><span>礼单名称</span><span>人数</span><span>金额</span><span>时间</span><span>操作</span></div>${bills.map(x => `<div class="item click" onclick="bill=${JSON.stringify(x).replaceAll('"', '&quot;')};render()"><b>${x.name}</b><span>${x.people} 人</span><b>${money(x.amount)}</b><span>${x.date}</span><span><button class="secondary" onclick='event.stopPropagation();editBill(${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick="event.stopPropagation();del('/api/bill/${x.id}')">删除</button></span></div>`).join('') || '<p class="muted">还没有礼单，点击“创建礼单”开始记录。</p>'}</div>`;
+        else if (page === 'expenses') a.innerHTML = `<div class="cards"><div class="card"><div class="label">随礼总金额</div><div class="num">${money(sum(expenses, 'amount'))}</div></div><div class="card"><div class="label">随礼人数</div><div class="num">${expenses.length}</div></div></div><div class="row"><h2>随礼记录</h2><button class="primary" onclick="addExpense()">＋ 记录随礼</button></div><div class="panel"><div class="item head expense-head"><span>姓名</span><span>分类</span><span>关系</span><span>金额</span><span>时间</span><span>操作</span></div>${expenses.map(x => `<div class="item expense-row"><b>${x.name}</b><span>${x.category || cat(x.cate_id)}</span><span>${x.relation || rel(x.relation_id)}</span><b>${money(x.amount)}</b><span>${x.date}</span><span><button class="secondary" onclick='editExpense(${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick="del('/api/expense/${x.id}')">删除</button></span></div>`).join('')}</div>`;
         else if (page === 'stats') {
             let total = sum(people, 'amount'), out = sum(expenses, 'amount');
-            a.innerHTML = `<h2>收支统计</h2><div class="cards"><div class="card"><div class="label">收礼总金额</div><div class="num">${money(total)}</div></div><div class="card"><div class="label">随礼总金额</div><div class="num">${money(out)}</div></div></div>${chart('收礼按关系统计', data.relations.map(r => [r.name, sum(people.filter(x => x.relation_id == r.id), 'amount')]))}${chart('随礼按关系统计', data.relations.map(r => [r.name, sum(expenses.filter(x => x.relation_id == r.id), 'amount')]))}${chart('随礼按类别统计', data.categories.map(c => [c.name, sum(expenses.filter(x => x.cate_id == c.id), 'amount')]))}<div class="panel" style="margin-top:18px"><h3>基础管理</h3><div class="sectiontitle">关系</div><div class="form">${data.relations.map(x => `<span class="card">${x.name}</span>`).join('')}<input id="rn" placeholder="新增关系"><button class="primary" onclick="manage('relation','rn')">添加</button></div><div class="sectiontitle">随礼分类</div><div class="form">${data.categories.map(x => `<span class="card">${x.name}</span>`).join('')}<input id="cn" placeholder="新增分类"><button class="primary" onclick="manage('category','cn')">添加</button></div></div>`
+            a.innerHTML = `<h2>收支统计</h2><div class="cards"><div class="card"><div class="label">收礼总金额</div><div class="num">${money(total)}</div></div><div class="card"><div class="label">随礼总金额</div><div class="num">${money(out)}</div></div></div>${chart('收礼按关系统计', data.relations.map(r => [r.name, sum(people.filter(x => x.relation_id == r.id), 'amount')]))}${chart('随礼按关系统计', data.relations.map(r => [r.name, sum(expenses.filter(x => x.relation_id == r.id), 'amount')]))}${chart('随礼按类别统计', data.categories.map(c => [c.name, sum(expenses.filter(x => x.cate_id == c.id), 'amount')]))}<div class="panel" style="margin-top:18px"><h3>基础管理</h3><div class="sectiontitle">关系</div><div class="form">${data.relations.map(x => `<span class="card">${x.name} <button class="secondary" onclick='editManage("relation",${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick='deleteManage("relation",${x.id})'>删除</button></span>`).join('')}<input id="rn" placeholder="新增关系"><button class="primary" onclick="manage('relation','rn')">添加</button></div><div class="sectiontitle">随礼分类</div><div class="form">${data.categories.map(x => `<span class="card">${x.name} <button class="secondary" onclick='editManage("category",${JSON.stringify(x)})'>编辑</button> <button class="danger" onclick='deleteManage("category",${x.id})'>删除</button></span>`).join('')}<input id="cn" placeholder="新增分类"><button class="primary" onclick="manage('category','cn')">添加</button></div></div>`
         }
     }
 
@@ -298,6 +303,9 @@
         let name = document.getElementById(id).value.trim();
         if (name) post('/api/manage', {type: type === 'relation' ? 'relation' : 'category', name})
     }
+
+    function editManage(type,x){formDialog(type==='relation'?'修改关系':'修改分类',`<label>名称<input name="name" required value="${x.name||''}"></label>`,d=>put('/api/manage/'+type+'/'+x.id,d))}
+    async function deleteManage(type,id){if(!confirm('确定删除此项？'))return;let r=await fetch('/api/manage/'+type+'/'+id,{method:'DELETE'}),d=await r.json();if(!d.ok)alert(d.error||'删除失败');load()}
 
     load();
 </script>

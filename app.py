@@ -76,6 +76,9 @@ class Handler(SimpleHTTPRequestHandler):
         elif kind == 'expense':
             c.execute('UPDATE ' + EXPENSE_TABLE + ' SET name=?,amount=?,date=?,relation_id=?,cate_id=? WHERE id=?',
                       (d['name'], d['amount'], d['date'], d['relation_id'], d['cate_id'], row_id))
+        elif kind == 'manage':
+            table = 'relation' if d['type'] == 'relation' else 'cate'
+            c.execute('UPDATE ' + table + ' SET name=? WHERE id=?', (d['name'], row_id))
         c.commit()
         c.close()
         self.send_json({'ok': True})
@@ -83,6 +86,17 @@ class Handler(SimpleHTTPRequestHandler):
     def do_DELETE(self):
         p = urlparse(self.path).path.split('/');
         c = sqlite3.connect(DB);
+        if len(p) > 3 and p[2] == 'manage':
+            kind, row_id = p[3], p[4]
+            if kind == 'relation':
+                used = c.execute('SELECT EXISTS(SELECT 1 FROM income WHERE relation_id=? UNION ALL SELECT 1 FROM '+EXPENSE_TABLE+' WHERE relation_id=?)', (row_id,row_id)).fetchone()[0]
+                table = 'relation'
+            else:
+                used = c.execute('SELECT EXISTS(SELECT 1 FROM '+EXPENSE_TABLE+' WHERE cate_id=?)', (row_id,)).fetchone()[0]
+                table = 'cate'
+            if used:
+                c.close(); self.send_json({'ok':False,'error':'该项已有记录使用，暂不能删除'}); return
+            c.execute('DELETE FROM '+table+' WHERE id=?', (row_id,)); c.commit(); c.close(); self.send_json({'ok':True}); return
         table = {'bill': 'gift', 'person': 'income', 'expense': EXPENSE_TABLE}.get(p[2]);
         if table == 'gift': c.execute('DELETE FROM income WHERE gift_id=?', (p[3],))
         c.execute('DELETE FROM ' + table + ' WHERE id=?', (p[3],));
