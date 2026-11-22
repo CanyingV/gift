@@ -541,6 +541,10 @@
         color: var(--muted)
     }
 
+    .cell-count-mobile {
+        display: none
+    }
+
     .cell-tags {
         width: 158px;
         display: flex;
@@ -1343,16 +1347,26 @@
             display: none
         }
 
+        .cell-count-mobile {
+            display: inline
+        }
+
         .cell-tags-mobile {
             display: flex;
-            gap: 5px;
+            flex: 0 0 100%;
+            box-sizing: border-box;
+            padding-left: 45px;
+            align-items: center;
+            gap: 9px;
             flex-wrap: wrap;
-            margin-top: 5px
+            margin-top: -2px
         }
 
         .cell-tags-mobile .chip {
-            padding: 2px 8px;
-            font-size: 11px
+            padding: 4px 10px;
+            font-size: 12px;
+            line-height: 1.3;
+            border: 1px solid rgba(111, 78, 55, .1)
         }
 
         .cell-amount {
@@ -1368,7 +1382,8 @@
 
         .list-row {
             padding: 12px 2px;
-            gap: 8px
+            gap: 8px;
+            flex-wrap: wrap
         }
 
         .row-wrap {
@@ -1592,7 +1607,6 @@
             </div>
             <div>
                 <div class="brand-name">礼记</div>
-                <div class="brand-sub">GIFT LEDGER</div>
             </div>
         </div>
         <div class="nav-label">工作台</div>
@@ -1822,9 +1836,8 @@
         app.innerHTML = `
             <section class="hero">
                 <div>
-                    <div class="eyebrow">OVERVIEW</div>
                     <h1>每一份心意，都有迹可循</h1>
-                    <p>收礼、随礼、关系往来，都在这里安静地记着</p>
+                    <p></p>
                     <div class="hero-actions">
                         <button class="btn primary" data-action="new-bill">${icon('plus')} 创建礼单</button>
                         <button class="btn ghost" data-action="new-expense">${icon('out')} 记录随礼</button>
@@ -1844,7 +1857,7 @@
             </div>
             <div class="two-col">
                 <section class="card">
-                    <div class="card-head"><div><div class="card-title">最近礼单</div><div class="card-sub">点开可查看每位来客的明细</div></div><button class="btn ghost sm" data-nav="bills">全部 ${icon('chevron')}</button></div>
+                    <div class="card-head"><div><div class="card-title">最近礼单</div></div><button class="btn ghost sm" data-nav="bills">全部 ${icon('chevron')}</button></div>
                     ${bills.length ? `<div class="list">${bills.slice(0, 5).map(b => `
                         <div class="list-row click" data-action="open-bill" data-id="${b.id}">
                             <div class="cell-main"><div class="avatar">${icon('list')}</div><div class="cell-body"><div class="cell-title">${esc(b.name)}</div><div class="cell-sub">${fmtDate(b.date)} · ${b.people} 人</div></div></div>
@@ -1852,7 +1865,7 @@
                         </div>`).join('')}</div>` : empty('还没有礼单，先创建一份吧', `<button class="btn primary sm" data-action="new-bill">${icon('plus')} 创建礼单</button>`)}
                 </section>
                 <section class="card">
-                    <div class="card-head"><div><div class="card-title">最近随礼</div><div class="card-sub">送出去的每一份祝福</div></div><button class="btn ghost sm" data-nav="expenses">全部 ${icon('chevron')}</button></div>
+                    <div class="card-head"><div><div class="card-title">最近随礼</div></div><button class="btn ghost sm" data-nav="expenses">全部 ${icon('chevron')}</button></div>
                     ${expenses.length ? `<div class="list">${expenses.slice(0, 5).map(e => `
                         <div class="list-row">
                             <div class="cell-main"><div class="avatar" style="${styleOf('relation', e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(e.category || catName(e.cate_id))} · ${fmtDate(e.date)}</div></div></div>
@@ -1871,12 +1884,12 @@
         else if (state.sort === 'amount-asc') sorted.sort((a, b) => Number(a.amount) - Number(b.amount));
         else if (state.sort === 'date-asc') sorted.sort((a, b) => dateKey(a.date).localeCompare(dateKey(b.date)) || a.id - b.id);
         const people = data.people || [];
-        app.innerHTML = pageHead('GIFT LEDGER', '我的礼单', '每一份收礼，都记在对应的人名下', `<button class="btn primary" data-action="new-bill">${icon('plus')} 创建礼单</button>`) + `
+        app.innerHTML = pageHead('', '礼单', '', `<button class="btn primary" data-action="new-bill">${icon('plus')} 创建礼单</button>`) + `
             <div class="kpis">
-                ${kpi('礼单总数', bills.length, '累计创建的礼单', 'list')}
-                ${kpi('收礼总额', `<span class="income">${money(sum(people, 'amount'))}</span>`, '全部礼单合计', 'wallet', 'in')}
-                ${kpi('来客人数', people.length, '按明细条数统计', 'users')}
-                ${kpi('平均每单', money(bills.length ? sum(people, 'amount') / bills.length : 0), '礼金均值', 'chart', 'gold')}
+                ${kpi('礼单总数', bills.length, '', 'list')}
+                ${kpi('收礼总额', `<span class="income">${money(sum(people, 'amount'))}</span>`, '', 'wallet', 'in')}
+                ${kpi('来客人数', people.length, '', 'users')}
+                ${kpi('平均每单', money(bills.length ? sum(people, 'amount') / bills.length : 0), '', 'chart', 'gold')}
             </div>
             <section class="card">
                 <div class="toolbar">
@@ -1892,9 +1905,8 @@
                 ${sorted.length ? `<div class="list" id="bill-list">${sorted.map(b => `
                     <div class="row-wrap" data-search="${esc(String(b.name || '').toLowerCase())}">
                         <div class="list-row click" data-action="open-bill" data-id="${b.id}">
-                            <div class="cell-main"><div class="avatar">${icon('gift')}</div><div class="cell-body"><div class="cell-title">${esc(b.name)}</div><div class="cell-sub">${esc(fmtDate(b.date))}</div></div></div>
+                            <div class="cell-main"><div class="avatar">${icon('gift')}</div><div class="cell-body"><div class="cell-title">${esc(b.name)}</div><div class="cell-sub">${esc(fmtDate(b.date))}<span class="cell-count-mobile"> · ${b.people} 人</span></div></div></div>
                             <div class="cell-count">${b.people} 人</div>
-                            <div class="cell-meta">${esc(fmtDate(b.date))}</div>
                             <div class="cell-amount money income">${money(b.amount)}</div>
                         </div>
                         <div class="row-actions">
@@ -1972,12 +1984,12 @@
         if (state.expSort === 'amount-desc') list.sort((a, b) => Number(b.amount) - Number(a.amount));
         else if (state.expSort === 'amount-asc') list.sort((a, b) => Number(a.amount) - Number(b.amount));
         else if (state.expSort === 'date-asc') list.sort((a, b) => dateKey(a.date).localeCompare(dateKey(b.date)) || a.id - b.id);
-        app.innerHTML = pageHead('OUTGOING', '随礼记录', '送出去的每一份心意，也值得被好好记下', `<button class="btn primary" data-action="new-expense">${icon('plus')} 记录随礼</button>`) + `
+        app.innerHTML = pageHead('', '随礼', '', `<button class="btn primary" data-action="new-expense">${icon('plus')} 记录随礼</button>`) + `
             <div class="kpis">
-                ${kpi('随礼总额', `<span class="expense">${money(sum(data.expenses || [], 'amount'))}</span>`, '累计送出', 'out', 'out')}
-                ${kpi('记录笔数', (data.expenses || []).length, '共多少笔随礼', 'list')}
-                ${kpi('平均每笔', money((data.expenses || []).length ? sum(data.expenses || [], 'amount') / data.expenses.length : 0), '礼金均值', 'chart', 'gold')}
-                ${kpi('最大一笔', money(Math.max(0, ...(data.expenses || []).map(e => Number(e.amount || 0)))), '单笔最高', 'wallet')}
+                ${kpi('随礼总额', `<span class="expense">${money(sum(data.expenses || [], 'amount'))}</span>`, '', 'out', 'out')}
+                ${kpi('记录笔数', (data.expenses || []).length, '', 'list')}
+                ${kpi('平均每笔', money((data.expenses || []).length ? sum(data.expenses || [], 'amount') / data.expenses.length : 0), '', 'chart', 'gold')}
+                ${kpi('最大一笔', money(Math.max(0, ...(data.expenses || []).map(e => Number(e.amount || 0)))), '', 'wallet')}
             </div>
             <section class="card">
                 <div class="toolbar">
@@ -1995,9 +2007,10 @@
                 ${list.length ? `<div class="list" id="exp-list">${list.map(e => `
                     <div class="row-wrap" data-search="${esc(String(e.name || '').toLowerCase())}">
                         <div class="list-row">
-                            <div class="cell-main"><div class="avatar" style="${styleOf('relation', e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(fmtDate(e.date))}</div><div class="cell-tags-mobile"><span class="chip" style="${styleOf('relation', e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span><span class="chip" style="${styleOf('category', e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span></div></div></div>
+                            <div class="cell-main"><div class="avatar" style="${styleOf('relation', e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(fmtDate(e.date))}</div></div></div>
                             <div class="cell-tags"><span class="chip" style="${styleOf('relation', e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span><span class="chip" style="${styleOf('category', e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span></div>
                             <div class="cell-amount money expense">${money(e.amount)}</div>
+                            <div class="cell-tags-mobile"><span class="chip" style="${styleOf('relation', e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span><span class="chip" style="${styleOf('category', e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span></div>
                         </div>
                         <div class="row-actions">
                             <button class="icon-btn" data-action="edit-expense" data-id="${e.id}" title="编辑">${icon('edit')}</button>
@@ -2020,7 +2033,7 @@
     function renderStats(app) {
         const people = data.people || [], expenses = data.expenses || [];
         const income = sum(people, 'amount'), out = sum(expenses, 'amount');
-        app.innerHTML = pageHead('INSIGHTS', '收支统计', '看看心意都流向了哪里', `<button class="btn ghost" data-action="import">${icon('download')} 导入 Excel</button><button class="btn primary" data-action="export">${icon('upload')} 导出 Excel</button>`) + `
+        app.innerHTML = pageHead('', '统计', '', `<button class="btn ghost" data-action="import">${icon('download')} 导入 Excel</button><button class="btn primary" data-action="export">${icon('upload')} 导出 Excel</button>`) + `
             <div class="summary-band">
                 <div class="summary-item"><span>收礼总额</span><b class="income">${money(income)}</b></div>
                 <div class="summary-item"><span>随礼总额</span><b class="expense">${money(out)}</b></div>
@@ -2028,24 +2041,24 @@
                 <span class="chip ${income >= out ? 'red' : 'green'}">${income >= out ? '收礼多于随礼' : '随礼多于收礼'}</span>
             </div>
             <div class="chart-grid">
-                ${chartCard('收礼(关系)', (data.relations || []).map(r => [r.name, sum(people.filter(x => x.relation_id == r.id), 'amount')]), 'red', '哪些关系带来的礼金最多')}
-                ${chartCard('随礼(关系)', (data.relations || []).map(r => [r.name, sum(expenses.filter(x => x.relation_id == r.id), 'amount')]), '', '按关系查看送出的礼金')}
-                ${chartCard('随礼(类别)', (data.categories || []).map(c => [c.name, sum(expenses.filter(x => x.cate_id == c.id), 'amount')]), 'gold', '不同场合的随礼分布')}
+                ${chartCard('收礼(关系)', (data.relations || []).map(r => [r.name, sum(people.filter(x => x.relation_id == r.id), 'amount')]), 'red', '')}
+                ${chartCard('随礼(关系)', (data.relations || []).map(r => [r.name, sum(expenses.filter(x => x.relation_id == r.id), 'amount')]), '', '')}
+                ${chartCard('随礼(类别)', (data.categories || []).map(c => [c.name, sum(expenses.filter(x => x.cate_id == c.id), 'amount')]), 'gold', '')}
             </div>
             <div class="manage-grid">
                 <section class="card">
-                    <div class="card-head"><div><div class="card-title">关系管理</div><div class="card-sub">用于礼单和随礼的关系分类</div></div></div>
+                    <div class="card-head"><div><div class="card-title">关系</div></div></div>
                     <div class="tag-list">${(data.relations || []).map(x => `<span class="tag">${esc(x.name)}
                         <button class="icon-btn" data-action="edit-relation" data-id="${x.id}" title="编辑">${icon('edit')}</button>
                         <button class="icon-btn danger" data-action="del-relation" data-id="${x.id}" title="删除">${icon('trash')}</button></span>`).join('') || '<span class="muted" style="font-size:12px">暂无关系</span>'}</div>
-                    <div class="inline-add"><input class="input" id="relation-name" placeholder="新增关系名称"><button class="btn primary" data-action="add-relation">${icon('plus')} 添加</button></div>
+                    <div class="inline-add"><input class="input" id="relation-name" placeholder="关系名称"><button class="btn primary" data-action="add-relation">${icon('plus')} 添加</button></div>
                 </section>
                 <section class="card">
-                    <div class="card-head"><div><div class="card-title">随礼分类</div><div class="card-sub">例如结婚、生日、乔迁</div></div></div>
+                    <div class="card-head"><div><div class="card-title">分类</div></div></div>
                     <div class="tag-list">${(data.categories || []).map(x => `<span class="tag">${esc(x.name)}
                         <button class="icon-btn" data-action="edit-category" data-id="${x.id}" title="编辑">${icon('edit')}</button>
                         <button class="icon-btn danger" data-action="del-category" data-id="${x.id}" title="删除">${icon('trash')}</button></span>`).join('') || '<span class="muted" style="font-size:12px">暂无分类</span>'}</div>
-                    <div class="inline-add"><input class="input" id="category-name" placeholder="新增分类名称"><button class="btn primary" data-action="add-category">${icon('plus')} 添加</button></div>
+                    <div class="inline-add"><input class="input" id="category-name" placeholder="分类名称"><button class="btn primary" data-action="add-category">${icon('plus')} 添加</button></div>
                 </section>
             </div>`;
     }
