@@ -1351,15 +1351,22 @@
             display: inline
         }
 
+        .cell-meta-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
         .cell-tags-mobile {
             display: flex;
-            flex: 0 0 100%;
-            box-sizing: border-box;
-            padding-left: 45px;
+            flex: none;
             align-items: center;
+            justify-content: flex-end;
             gap: 9px;
             flex-wrap: wrap;
-            margin-top: -2px
+            margin-top: 2px
         }
 
         .cell-tags-mobile .chip {
@@ -1382,8 +1389,7 @@
 
         .list-row {
             padding: 12px 2px;
-            gap: 8px;
-            flex-wrap: wrap
+            gap: 8px
         }
 
         .row-wrap {
@@ -2007,10 +2013,9 @@
                 ${list.length ? `<div class="list" id="exp-list">${list.map(e => `
                     <div class="row-wrap" data-search="${esc(String(e.name || '').toLowerCase())}">
                         <div class="list-row">
-                            <div class="cell-main"><div class="avatar" style="${styleOf('relation', e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-sub">${esc(fmtDate(e.date))}</div></div></div>
+                            <div class="cell-main"><div class="avatar" style="${styleOf('relation', e.relation_id)}">${esc(initial(e.name))}</div><div class="cell-body"><div class="cell-title">${esc(e.name)}</div><div class="cell-meta-line"><div class="cell-sub">${esc(fmtDate(e.date))}</div><div class="cell-tags-mobile"><span class="chip" style="${styleOf('relation', e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span><span class="chip" style="${styleOf('category', e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span></div></div></div></div>
                             <div class="cell-tags"><span class="chip" style="${styleOf('relation', e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span><span class="chip" style="${styleOf('category', e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span></div>
                             <div class="cell-amount money expense">${money(e.amount)}</div>
-                            <div class="cell-tags-mobile"><span class="chip" style="${styleOf('relation', e.relation_id)}">${esc(e.relation || relName(e.relation_id))}</span><span class="chip" style="${styleOf('category', e.cate_id)}">${esc(e.category || catName(e.cate_id))}</span></div>
                         </div>
                         <div class="row-actions">
                             <button class="icon-btn" data-action="edit-expense" data-id="${e.id}" title="编辑">${icon('edit')}</button>
