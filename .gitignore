@@ -7,6 +7,7 @@ __pycache__/
 build/
 dist/
 *.spec.bak
+.venv
 
 # Android
 android/.gradle/
@@ -16,6 +17,7 @@ android/.idea/
 android/*.iml
 # 构建时从项目根目录自动同步进来的副本
 android/app/src/main/python/app.py
+android/app/src/main/python/server/
 android/app/src/main/assets/
 
 # IDE

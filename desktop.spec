@@ -17,8 +17,11 @@ a = Analysis(
     ['desktop.py'],
     pathex=[],
     binaries=[],
-    datas=[('index.html', '.'), ('gift', '.')],
-    hiddenimports=[],
+    # 前端页面按模块拆到了 templates/ 与 static/；后端包 server/ 由 import 自动收集
+    datas=[('templates', 'templates'), ('static', 'static'), ('gift', '.')],
+    hiddenimports=['peewee', 'server', 'server.config', 'server.models', 'server.repository',
+                   'server.xlsx', 'server.importer', 'server.exporter', 'server.routes',
+                   'server.handler'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

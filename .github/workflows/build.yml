@@ -17,7 +17,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: 安装依赖
-        run: pip install pyinstaller pywebview
+        run: pip install -r requirements.txt pyinstaller pywebview
       - name: 打包 exe
         run: pyinstaller desktop.spec --noconfirm
       - name: 上传产物
@@ -35,7 +35,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: 安装依赖
-        run: pip install pyinstaller pywebview
+        run: pip install -r requirements.txt pyinstaller pywebview
       - name: 打包 app
         run: pyinstaller desktop.spec --noconfirm
       - name: 制作 dmg

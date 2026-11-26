@@ -60,7 +60,25 @@ public class MainActivity extends Activity {
         if (!www.exists()) www.mkdirs();
 
         copyAsset("index.html", new File(www, "index.html"), true);
+        copyAssetDir("templates", new File(www, "templates"));
+        copyAssetDir("static", new File(www, "static"));
         copyAsset("gift", new File(filesDir, "gift"), false);
+    }
+
+    /** 递归解包 assets 中的页面模板与静态资源目录。 */
+    private void copyAssetDir(String assetDir, File destDir) throws IOException {
+        String[] children = getAssets().list(assetDir);
+        if (children == null) return; // 不是目录
+        if (!destDir.exists()) destDir.mkdirs();
+        for (String child : children) {
+            String assetPath = assetDir + "/" + child;
+            File dest = new File(destDir, child);
+            if (getAssets().list(assetPath) != null) {
+                copyAssetDir(assetPath, dest);
+            } else {
+                copyAsset(assetPath, dest, true);
+            }
+        }
     }
 
     private void copyAsset(String asset, File dest, boolean overwrite) throws IOException {

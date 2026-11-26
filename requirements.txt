@@ -1,0 +1,2 @@
+# 数据访问层使用 peewee ORM（单文件纯 Python，无 C 扩展）
+peewee==4.5.3

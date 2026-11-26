@@ -1,0 +1,21 @@
+<div class="page-head">
+    <div><div class="eyebrow"></div><h1>统计</h1><div class="page-sub"></div></div>
+    <div>
+        <button class="btn ghost" data-action="import"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-download"></use></svg> 导入 Excel</button>
+        <button class="btn primary" data-action="export"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-upload"></use></svg> 导出 Excel</button>
+    </div>
+</div>
+<div class="summary-band">{{summary}}</div>
+<div class="chart-grid">{{charts}}</div>
+<div class="manage-grid">
+    <section class="card">
+        <div class="card-head"><div><div class="card-title">关系</div></div></div>
+        <div class="tag-list">{{relationTags}}</div>
+        <div class="inline-add"><input class="input" id="relation-name" placeholder="关系名称"><button class="btn primary" data-action="add-relation"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-plus"></use></svg> 添加</button></div>
+    </section>
+    <section class="card">
+        <div class="card-head"><div><div class="card-title">分类</div></div></div>
+        <div class="tag-list">{{categoryTags}}</div>
+        <div class="inline-add"><input class="input" id="category-name" placeholder="分类名称"><button class="btn primary" data-action="add-category"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-plus"></use></svg> 添加</button></div>
+    </section>
+</div>

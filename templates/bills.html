@@ -1,0 +1,13 @@
+<div class="page-head">
+    <div><div class="eyebrow"></div><h1>礼单</h1><div class="page-sub"></div></div>
+    <div><button class="btn primary" data-action="new-bill"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-plus"></use></svg> 创建礼单</button></div>
+</div>
+<div class="kpis">{{kpis}}</div>
+<section class="card">
+    <div class="toolbar">
+        <div class="search"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"></use></svg><input class="input" id="bill-search" placeholder="搜索礼单名称" value="{{query}}"></div>
+        <select class="select" id="bill-sort">{{sortOptions}}</select>
+        <span class="muted" style="font-size:12px;margin-left:auto" id="bill-count">{{count}} 条记录</span>
+    </div>
+    {{listBlock}}
+</section>

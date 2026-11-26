@@ -1,0 +1,26 @@
+<section class="hero">
+    <div>
+        <h1>每一份心意，都有迹可循</h1>
+        <p></p>
+        <div class="hero-actions">
+            <button class="btn primary" data-action="new-bill"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-plus"></use></svg> 创建礼单</button>
+            <button class="btn ghost" data-action="new-expense"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-out"></use></svg> 记录随礼</button>
+        </div>
+    </div>
+    <div class="hero-art">
+        <div class="hero-gift"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gift"></use></svg></div>
+        <div class="float-chip a">往来 · 清晰</div>
+        <div class="float-chip b">心意 · 被记住</div>
+    </div>
+</section>
+<div class="kpis">{{kpis}}</div>
+<div class="two-col">
+    <section class="card">
+        <div class="card-head"><div><div class="card-title">最近礼单</div></div><button class="btn ghost sm" data-nav="bills">全部 <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chevron"></use></svg></button></div>
+        {{recentBills}}
+    </section>
+    <section class="card">
+        <div class="card-head"><div><div class="card-title">最近随礼</div></div><button class="btn ghost sm" data-nav="expenses">全部 <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chevron"></use></svg></button></div>
+        {{recentExpenses}}
+    </section>
+</div>

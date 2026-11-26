@@ -1,0 +1,30 @@
+<div class="detail-head">
+    <div>
+        <button class="back" data-action="back-bills"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-left"></use></svg> 返回</button>
+        <h1>{{billName}}</h1>
+        <div class="chips-row">
+            <span class="chip"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"></use></svg> {{billDate}}</span>
+            <span class="chip green"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-users"></use></svg> {{peopleCount}} 位来客</span>
+            <span class="chip gold"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wallet"></use></svg> {{peopleAmount}}</span>
+        </div>
+    </div>
+    <div class="detail-actions">
+        <button class="btn ghost" data-action="edit-bill" data-id="{{billId}}"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-edit"></use></svg> 编辑</button>
+        <button class="btn primary" data-action="new-person" data-id="{{billId}}"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-plus"></use></svg> 上礼</button>
+        <button class="btn danger" data-action="del-bill" data-id="{{billId}}"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-trash"></use></svg></button>
+    </div>
+</div>
+<section class="card" style="margin-bottom:14px">
+    <div class="card-head"><div><div class="card-title">关系汇总</div><div class="card-sub">按来客关系拆分的礼金占比</div></div></div>
+    {{relationSummary}}
+</section>
+<section class="card">
+    <div class="card-head">
+        <div><div class="card-title">礼单明细</div><div class="card-sub" id="person-count">{{visibleCount}} 条记录</div></div>
+        <div class="toolbar" style="margin:0">
+            <div class="search" style="flex:0 0 200px"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"></use></svg><input class="input" id="person-search" placeholder="姓名 / 备注" value="{{personQuery}}"></div>
+            <select class="select" id="person-rel"><option value="">关系</option>{{relationOptions}}</select>
+        </div>
+    </div>
+    {{peopleBlock}}
+</section>

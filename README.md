@@ -1,16 +1,62 @@
 # 礼记
 
-轻量本地礼单记录应用，使用 Python 标准库提供页面与 API，数据保存在当前目录的 SQLite 文件 
+轻量本地礼单记录应用，页面与 API 由 Python 标准库提供，数据库操作使用 peewee ORM，数据保存在当前目录的 SQLite 文件中。
 
 ## 启动
 
-需要 Python 3.9 或更新版本。在此目录运行：
+需要 Python 3.9 或更新版本。首次运行先安装依赖：
 
 ```sh
+pip install -r requirements.txt
 python3 app.py
 ```
 
 然后打开 http://127.0.0.1:8765。页面、服务和 SQLite 均在本机运行，无需网络连接。建议先备份 `gift` 数据库文件。
+
+## 项目结构
+
+```
+app.py              薄入口（兼容桌面版 / Android 版）
+server/             后端按模块拆分
+  config.py         路径与环境变量
+  models.py         peewee ORM 模型
+  repository.py     数据访问（增删改查、聚合、排序）
+  importer.py       Excel 导入
+  exporter.py       Excel 导出与模板
+  xlsx.py           xlsx 读写工具
+  handler.py        HTTP 路由与静态资源
+templates/          前端页面模板（每个页面一个 HTML）
+static/             样式与脚本，按页面拆分到 static/js/pages/
+desktop.py          macOS / Windows 桌面壳
+android/            Android 壳（构建时自动同步后端包与前端资源）
+```
+
+## 路由与数据加载
+
+所有 RESTful 接口集中定义在 `server/routes.py`，按模块分组；`server/handler.py` 只负责通用分发，不再写 if/elif 路由。
+
+前端使用 hash 路由，进入哪个页面才请求哪个页面的数据，不再启动时一次性拉取全部数据：
+
+| 页面路由 | 请求接口 |
+| --- | --- |
+| `#/dashboard` | `GET /api/dashboard`（汇总 + 最近 5 条礼单/随礼） |
+| `#/bills` | `GET /api/bills`（礼单列表） |
+| `#/bills/<id>` | `GET /api/bills/<id>`（单个礼单及其人员） |
+| `#/expenses` | `GET /api/expenses`（随礼记录） |
+| `#/stats` | `GET /api/stats`（聚合后的统计结果） |
+
+API 一览：
+
+| 模块 | 方法与路径 |
+| --- | --- |
+| 页面聚合 | `GET /api/dashboard`、`GET /api/stats` |
+| 礼单 | `GET/POST /api/bills`、`GET/PUT/DELETE /api/bills/{id}` |
+| 收礼人员 | `GET/POST /api/bills/{id}/people`、`GET/PUT/DELETE /api/people/{id}` |
+| 随礼 | `GET/POST /api/expenses`、`GET/PUT/DELETE /api/expenses/{id}` |
+| 关系 / 分类 | `GET/POST /api/relations`、`PUT/DELETE /api/relations/{id}`；分类同理为 `/api/categories` |
+| 导入 / 导出 / 模板 | `POST /api/imports/{bills,expenses}`、`GET /api/exports/{bills,expenses}`、`GET /api/templates/{bills,expenses}` |
+
+页面模板也按路由按需加载并缓存；新增/编辑/删除后只刷新当前页，浏览器前进后退会回到对应页面并重新取数。
 
 ## 打包成 apk / exe / dmg
 
@@ -40,9 +86,9 @@ python3 app.py
 - Android 版数据存于应用私有目录，同样仅首次解包数据库。
 - 安装包首次构建需下载 Gradle 9.6、Android SDK 与 Python 运行时，耗时较长，属正常现象。
 
-**本机直接运行桌面版**（需先安装 `pywebview`）：
+**本机直接运行桌面版**（需先安装依赖与 `pywebview`）：
 
 ```sh
-pip install pywebview
+pip install -r requirements.txt pywebview
 python3 desktop.py
 ```
