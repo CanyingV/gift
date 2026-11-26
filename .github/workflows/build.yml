@@ -63,6 +63,10 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+      # Chaquopy 的 installPythonRequirements 需要构建机上有同版本 Python（3.11）
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       # ubuntu-latest 已预装 Android SDK，不要再跑 setup-android@v3：
       # 它会安装已下线的 'tools' 包并导致 sdkmanager 失败。
       - name: 准备 Android SDK
